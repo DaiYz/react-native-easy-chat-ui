@@ -15,7 +15,6 @@ import {
   Dimensions,
   ViewPropTypes as RNViewPropTypes,
 } from 'react-native'
-const ImageSourcePropType = require('ImageSourcePropType')
 import PropTypes from 'prop-types'
 import {getCurrentTime, changeEmojiText} from './utils'
 import Voice from './VoiceView'
