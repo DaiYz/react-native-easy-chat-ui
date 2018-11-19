@@ -50,7 +50,7 @@ class ChatWindow extends Component {
     androidHeaderHeight: PropTypes.number.isRequired,
     userProfile: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      avatar:ImageSourcePropType.isRequired
+      avatar: PropTypes.isRequired
     }),
     panelSource: PropTypes.arrayOf(PropTypes.shape({
       icon: PropTypes.element,
