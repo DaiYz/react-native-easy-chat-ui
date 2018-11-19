@@ -386,7 +386,7 @@ class ChatWindow extends Component {
   _didShow () {
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', (e) => {
       const {emojiShow, panelShow} = this.state
-      this.chatModel.keyboardShow = true
+      this.setState({keyboardShow: true})
       // if (panelShow) {
       //   return this.closePanel(true)
       // }
@@ -399,7 +399,7 @@ class ChatWindow extends Component {
   _didHide () {
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', (e) => {
       const {emojiShow, panelShow} = this.state
-      this.chatModel.keyboardShow = false
+      this.setState({keyboardShow: false})
       if (emojiShow) {
         return this.showEmoji()
       }
@@ -573,8 +573,7 @@ class ChatWindow extends Component {
         if (!keyboardShow) {
           this.showPanel()
         } else {
-          this.chatModel.keyboardShow = false
-          this.chatModel.panelShow = true
+          this.setState({keyboardShow: false, panelShow: true})
           this.InputBar.input && this.InputBar.input.blur()
         }
         if (this.state.showVoice) this.setState({showVoice: false})
