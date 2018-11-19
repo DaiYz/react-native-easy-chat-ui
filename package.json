@@ -1,0 +1,49 @@
+{
+  "name": "react-native-chat",
+  "version": "0.1.0",
+  "description": "chat UI for React Native",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaiYz/react-native-chat.git"
+  },
+  "keywords": [
+    "ios",
+    "android",
+    "react-native",
+    "chat"
+  ],
+  "author": "DaiYz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DaiYz/react-native-chat/issues"
+  },
+  "homepage": "https://github.com/DaiYz/react-native-chat#readme"
+  "peerDependencies": {
+    "prop-types": "*",
+    "react": "*",
+    "react-native": "*"
+  },
+  "dependencies": {
+    "moment": "^2.22.2",
+    "react": "16.2.0",
+    "react-native": "0.52.2",
+    "prop-types": "15.6.2"
+  },
+  "devDependencies": {
+    "babel-jest": "23.6.0",
+    "babel-preset-react-native": "4.0.1",
+    "jest": "23.6.0",
+    "react-test-renderer": "16.2.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+
+}
