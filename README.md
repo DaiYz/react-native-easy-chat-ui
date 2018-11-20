@@ -1,11 +1,14 @@
 # react-native-easy-chat-ui
 
+[中文文档](./cn/README.md)
+
+
 [![npm](https://img.shields.io/npm/v/react-native-easy-chat-ui.svg)](https://www.npmjs.com/package/react-native-easy-chat-ui)
 [![npm](https://img.shields.io/npm/dm/react-native-easy-chat-ui.svg)](https://www.npmjs.com/package/react-native-easy-chat-ui)
 [![npm](https://img.shields.io/npm/dt/react-native-easy-chat-ui.svg)](https://www.npmjs.com/package/react-native-easy-chat-ui)
 [![npm](https://img.shields.io/npm/l/react-native-easy-chat-ui.svg)](https://github.com/DaiYz/react-native-easy-chat-ui/blob/master/LICENSE)
 
-## ScreenShot
+## ScreenShots
 
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/1.png" width="207" height="448" />
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/2.png" width="207" height="448" />
