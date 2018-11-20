@@ -9,13 +9,13 @@
 [![npm](https://img.shields.io/npm/l/react-native-easy-chat-ui.svg)](https://github.com/DaiYz/react-native-easy-chat-ui/blob/master/LICENSE)
 
 ## ScreenShots
-
+<p>
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/1.png" width="207" height="448" />
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/2.png" width="207" height="448" />
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/3.png" width="207" height="448" />
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/4.png" width="207" height="448" />
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/5.png" width="207" height="448" />
-<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/6.png" width="207" height="448" />
+<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/6.png" width="207" height="448" /></p>
 
 ## Installation
 
