@@ -166,7 +166,7 @@ class ChatWindow extends Component {
           {
             title: '删除',
             onPress: () => {
-              that.props.delMessage([index])
+              that.props.delMessage([index], that.state.isInverted)
             }
           },
           {
@@ -184,7 +184,7 @@ class ChatWindow extends Component {
           {
             title: '删除',
             onPress: () => {
-              that.props.delMessage([index])
+              that.props.delMessage([index], that.state.isInverted)
             }
           },
           {
@@ -266,8 +266,8 @@ class ChatWindow extends Component {
     voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{width: 60, height: 60}} />,
     voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{width: 60, height: 60}} />,
     voiceSpeakIcon: <Image source={require('../source/image/speak.png')} style={{width: 60, height: 60, marginVertical: 25}} />,
-    delMessage: (indexs) => {
-      console.log(indexs)
+    delMessage: (indexs, isInverted) => {
+      console.log(indexs, isInverted)
     },
     audioPath: '',
     audioOnProgress: () => {},
@@ -301,7 +301,6 @@ class ChatWindow extends Component {
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
     this.HeaderHeight = isIphoneX ? 112 : Platform.OS === 'android' ? androidHeaderHeight : 64
-    this.inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     this.state = {
       messageContent: '',
       cursorIndex: 0,
@@ -421,14 +420,16 @@ class ChatWindow extends Component {
   }
 
   _sendMessage = (type, messageContent) => {
+    const {messageList} = this.props
+    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     this._userHasBeenInputed = true
     if (type === 'text' && messageContent.trim().length !== 0) {
       messageContent = changeEmojiText(this.state.messageContent).join('')
     }
-    this.props.sendMessage(type, messageContent, this.inverted)
+    this.props.sendMessage(type, messageContent, this.state.isInverted)
     this.InputBar.input && this.InputBar.input.clear()
     this.setState({ messageContent: '' })
-    if (!this.inverted) {
+    if (!inverted) {
       this.time && clearTimeout(this.time)
       this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
     } else {
@@ -456,10 +457,12 @@ class ChatWindow extends Component {
   }
 
   _onContentSizeChange (e) {
+    const {messageList} = this.props
+    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     const changeHeight = e.nativeEvent.contentSize.height
     if (changeHeight === 34) return
     this.setState({ inputChangeSize: changeHeight <= 70 ? changeHeight : 70 })
-    if (!this.inverted) {
+    if (!inverted) {
       this.chatList && this.chatList.scrollToEnd({ animated: true })
     }
   }
@@ -481,6 +484,8 @@ class ChatWindow extends Component {
   }
 
   _scrollToBottom (even) {
+    const {messageList} = this.props
+    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     let scrollProperties = this.chatList.scrollProperties
     if (!scrollProperties.contentLength) { return }
     // if (scrollProperties.contentLength - (height - this.HeaderHeight - 64) > 0) {
@@ -489,7 +494,7 @@ class ChatWindow extends Component {
     //     this.chatList && this.chatList.scrollTo({y: 0, animated: false})
     //   }
     // }
-    if (!this.inverted) {
+    if (!inverted) {
       setTimeout(() => {
         this.chatList && this.chatList.scrollToEnd({
           animated: this._userHasBeenInputed
@@ -734,7 +739,9 @@ class ChatWindow extends Component {
   }
 
   _loadHistory = () => {
-    if (!this.inverted) return
+    const {messageList} = this.props
+    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    if (!inverted) return
     if (this.props.historyLoading) return
     this.props.loadHistory()
   }
@@ -862,10 +869,11 @@ class ChatWindow extends Component {
   }
 
   render () {
-    const {messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow} = this.state
     const {isIphoneX, messageList, allPanelHeight, historyLoading} = this.props
+    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const {messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow} = this.state
     const currentList = messageList[this.targetKey] !== undefined
-      ? messageList[this.targetKey].messages.slice().sort((a, b) => this.inverted
+      ? messageList[this.targetKey].messages.slice().sort((a, b) => inverted
         ? (b.time - a.time)
           : (a.time - b.time))
             : []
@@ -887,7 +895,7 @@ class ChatWindow extends Component {
           <ListView
             ref={e => this.chatList = e}
             onScroll={(e) => {this.props.onScroll(e)}}
-            style={{transform: [{scale: this.inverted ? -1 : 1}]}}
+            style={{transform: [{scale: inverted ? -1 : 1}]}}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={this.props.onEndReachedThreshold}
             onEndReached={() => {
@@ -911,10 +919,10 @@ class ChatWindow extends Component {
               </View>
             }
             onLayout={() => {this._scrollToBottom()}}
-            onContentSizeChange={() => {!this.inverted && this._scrollToBottom()}}
+            onContentSizeChange={() => {!inverted && this._scrollToBottom()}}
             renderRow={(rowData, sectionID, rowId) => {
               return (
-                <View style={{transform: [{scale: this.inverted ? -1 : 1}]}}>
+                <View style={{transform: [{scale: inverted ? -1 : 1}]}}>
                   <ChatItem
                     ref={(e) => this.messageItem = e}
                     user={this.props.userProfile}
@@ -998,7 +1006,7 @@ class ChatWindow extends Component {
               <TouchableOpacity
                 style={{backgroundColor: '#fff', flex: 1, alignItems: 'center', paddingBottom: isIphoneX ? 20: 0, justifyContent: 'center'}}
                 activeOpacity={1}
-                onPress={() => this.props.delMessage(this.state.messageSelected)}
+                onPress={() => this.props.delMessage(this.state.messageSelected, this.state.isInverted)}
               >
                 {this.props.messageDelIcon}
               </TouchableOpacity>
