@@ -119,7 +119,7 @@ _matchEmojiString = (emojiStr, data, reg, type) => {
     emotoins_code = invertKeyValues(EMOJIS_ZH)
   }
   data.push(emotoins_code[castStr[0]])
-  this._matchContentString(emojiStr.substring(emojiLength))
+  this._matchContentString(emojiStr.substring(emojiLength), data, reg, type)
 }
 
 const changeEmojiText = (textContent, type = 'zh') => {
