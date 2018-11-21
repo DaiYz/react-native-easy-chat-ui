@@ -180,6 +180,12 @@ class Example extends React.Component {
   ----- |  ------- | -----
   usePopView | true | 长按消息是否显示一个弹出层
   popoverStyle | {backgroundColor: '#333'} | 弹出层样式
+  renderDelPanel | undefined | 自定义任何样式, (isSelect)=> {}
+  changeHeaderLeft | () => {} | 点击多选之后可以使用此方法改变导航条左上角文字实现关闭多选功能
+  setPopItems | (type, index, text) => {let items = [{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选',onPress: () => {that.multipleSelect(index)}}]if (type === 'text') {items = [{title: '复制',onPress: () => Clipboard.setString(text)},{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选', onPress: () => {that.multipleSelect(index)}}]}return items} | 自定义弹出层的每一个item
+ messageDelIcon | icon element | 自定义底部删除按钮的图标
+ messageSelectIcon | icon element | 自定义消息选中时的图标
+ renderMessageCheck | undefined | 自定义渲染消息选中和未选中的样式, (isSelect)=> {}
   
  * 语音属性 
  
@@ -214,10 +220,10 @@ class Example extends React.Component {
 
 属性名字 | 默认值 | 描述
 ----- |  ------- | -----
-renderTextMessage | undefined | 自定义渲染文本消息
-renderImageMessage | undefined | 自定义渲染图片消息
-renderVoiceMessage | undefined | 自定义渲染语音消息
-renderVoiceView | undefined | 自定义渲染语音外部容器
+renderTextMessage | undefined | 自定义渲染文本消息, (data) => {}
+renderImageMessage | undefined | 自定义渲染图片消息, (data) => {}
+renderVoiceMessage | undefined | 自定义渲染语音消息, (data) => {}
+renderVoiceView | undefined | 自定义渲染语音外部容器, (data) => {}
 
 ## 关于android 键盘设置
 `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:

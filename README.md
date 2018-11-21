@@ -177,9 +177,15 @@ props | default | Info
  * popViewProps
  
   props | default | Info
-  ----- |  ------- | -----
+  ----- |  ------ | -----
   usePopView | true | Display a popView when longPress a message
   popoverStyle | {backgroundColor: '#333'} | popView style
+  renderDelPanel | undefined | Custom any want you want, (isSelect)=> {}
+  changeHeaderLeft | () => {} | Custom headerLeft
+  setPopItems | (type, index, text) => {let items = [{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选',onPress: () => {that.multipleSelect(index)}}]if (type === 'text') {items = [{title: '复制',onPress: () => Clipboard.setString(text)},{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选', onPress: () => {that.multipleSelect(index)}}]}return items} | Custom PopView
+  messageDelIcon | icon element | Custom delete icon
+  messageSelectIcon | icon element | Custom selected icon
+  renderMessageCheck | undefined | Custom selected icon, (isSelect)=> {}
   
  * voiceProps 
  
@@ -215,10 +221,10 @@ props | default | Info
 
 props | default | Info
 ----- |  ------- | -----
-renderTextMessage | undefined | Custom message text
-renderImageMessage | undefined | Custom message image
-renderVoiceMessage | undefined | Custom message voice
-renderVoiceView | undefined | Custom voice container
+renderTextMessage | undefined | Custom message text, (data) => {}
+renderImageMessage | undefined | Custom message image, (data) => {}
+renderVoiceMessage | undefined | Custom message voice, (data) => {}
+renderVoiceView | undefined | Custom voice container, (data) => {}
 
 ## Notes for Android
 * Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:
