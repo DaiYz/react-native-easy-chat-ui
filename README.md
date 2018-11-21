@@ -163,6 +163,8 @@ props | default | Info
  renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | Custom a tab icon
  allPanelHeight | 200 | emojiPanel and plusPanel height
  messageErrorIcon | icon element | Custom a icon when message failed to be sent
+ leftMessageBackground | '#fffff' | Custom background color on left
+ rightMessageBackground | '#a0e75a' | Custom background color on right
  
  * inputBarProps
  
@@ -195,8 +197,8 @@ props | default | Info
    pressInText | '按住 说话' | Custom pressIn text
    pressOutText | '松开 发送' | Custom pressOut text
    voiceIcon | icon element | Custom voice icon
-   voiceLeftIcon | icon element | Custom icon of the message on the left
-   voiceRightIcon | icon element |  Custom icon of the message on the right
+   voiceLeftIcon | undefined | Custom icon of the message on the left
+   voiceRightIcon | undefined |  Custom icon of the message on the right
    voiceErrorIcon | icon element | Custom icon when record error
    voiceErrorText | '说话时间太短' | Custom text when record error
    voiceCancelIcon | icon element | Custom icon when cancel record
@@ -216,6 +218,10 @@ props | default | Info
    setAudioHandle | () => {} | Callback when get handle or not
    audioHasPermission | false | Whether has permission 
    checkAndroidPermission | () => {} | Callback when check permission on android
+   voiceLoading | false | Loading voice or not
+   voicePlaying | false | Playing voice or not
+   voiceLeftLoadingColor | '#cccccc' | Custom background color on left when load voice
+   voiceRightLoadingColor | '#628b42' | Custom background color on right when load voice
    
 * bubbleProps
 
@@ -225,6 +231,9 @@ renderTextMessage | undefined | Custom message text, (data) => {}
 renderImageMessage | undefined | Custom message image, (data) => {}
 renderVoiceMessage | undefined | Custom message voice, (data) => {}
 renderVoiceView | undefined | Custom voice container, (data) => {}
+renderVideoMessage | undefined | Custom message video, (data) => {}
+renderLocationMessage | undefined | Custom message location, (data) => {}
+renderShareMessage| undefined | Custom message share, (data) => {}
 
 ## Notes for Android
 * Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:

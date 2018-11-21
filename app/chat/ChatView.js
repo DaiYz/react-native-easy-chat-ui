@@ -61,6 +61,8 @@ class ChatWindow extends Component {
     messageErrorIcon: PropTypes.element,
     historyLoading: PropTypes.bool,
     loadHistory: PropTypes.func,
+    leftMessageBackground: PropTypes.string,
+    rightMessageBackground: PropTypes.string,
 
     /*popProps*/
     usePopView: PropTypes.bool,
@@ -106,12 +108,18 @@ class ChatWindow extends Component {
     voiceErrorText: PropTypes.string,
     voiceCancelText: PropTypes.string,
     voiceNoteText: PropTypes.string,
-
+    voiceLoading: PropTypes.bool,
+    voicePlaying: PropTypes.bool,
+    voiceLeftLoadingColor: PropTypes.string,
+    voiceRightLoadingColor: PropTypes.string,
     /*bubbleProps*/
     renderTextMessage: PropTypes.func,
     renderImageMessage: PropTypes.func,
     renderVoiceMessage: PropTypes.func,
     renderVoiceView: PropTypes.func,
+    renderVideoMessage: PropTypes.func,
+    renderLocationMessage: PropTypes.func,
+    renderShareMessage: PropTypes.func
   }
 
   static defaultProps = {
@@ -122,6 +130,8 @@ class ChatWindow extends Component {
     reSendMessage: (content) => {
       console.log(content, 'reSend')
     },
+    leftMessageBackground: '#fff',
+    rightMessageBackground: '#a0e75a',
     useVoice: true,
     onEndReachedThreshold: 0.1,
     isIphoneX: true,
@@ -261,8 +271,6 @@ class ChatWindow extends Component {
     voiceIcon: <Image source={require('../source/image/voice.png')} style={{width: 30, height: 30}} />,
     sendIcon: <Image source={require('../source/image/sendAble.png')} style={{width: 30, height: 30}} />,
     messageErrorIcon: <Image source={require('../source/image/waring.png')} style={{width: 20, height: 20}} />,
-    voiceLeftIcon: <Image source={require('../source/image/voiceLeft.png')} style={{width: 26, height: 26}} />,
-    voiceRightIcon: <Image source={require('../source/image/voiceRight.png')} style={{width: 26, height: 26}} />,
     voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{width: 60, height: 60}} />,
     voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{width: 60, height: 60}} />,
     voiceSpeakIcon: <Image source={require('../source/image/speak.png')} style={{width: 60, height: 60, marginVertical: 25}} />,
@@ -284,7 +292,11 @@ class ChatWindow extends Component {
     checkAndroidPermission: () => {},
     voiceErrorText: '说话时间太短',
     voiceCancelText: '松开手指取消发送',
-    voiceNoteText: '手指上划，取消发送'
+    voiceNoteText: '手指上划，取消发送',
+    voiceLoading: false,
+    voicePlaying: false,
+    voiceLeftLoadingColor: '#ccc',
+    voiceRightLoadingColor: '#628b42'
   }
 
 
@@ -328,7 +340,8 @@ class ChatWindow extends Component {
       panelShow: false,
       emojiShow: false,
       messageSelected: [],
-      currentIndex: -1
+      currentIndex: -1,
+      pressIndex: -1
     }
   }
 
@@ -868,6 +881,10 @@ class ChatWindow extends Component {
     })
   }
 
+  savePressIndex = (id) => {
+    this.setState({pressIndex: id})
+  }
+
   render () {
     const {isIphoneX, messageList, allPanelHeight, historyLoading} = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
@@ -948,6 +965,17 @@ class ChatWindow extends Component {
                     renderTextMessage={this.props.renderTextMessage}
                     renderImageMessage={this.props.renderImageMessage}
                     renderVoiceMessage={this.props.renderVoiceMessage}
+                    renderVideoMessage={this.props.renderVideoMessage}
+                    renderLocationMessage={this.props.renderLocationMessage}
+                    renderShareMessage={this.props.renderShareMessage}
+                    rightMessageBackground={this.props.rightMessageBackground}
+                    leftMessageBackground={this.props.leftMessageBackground}
+                    voiceLoading={this.props.voiceLoading}
+                    voicePlaying={this.props.voicePlaying}
+                    savePressIndex={this.savePressIndex}
+                    pressIndex={this.state.pressIndex}
+                    voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
+                    voiceRightLoadingColor={this.props.voiceRightLoadingColor}
                   />
                 </View>
               )

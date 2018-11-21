@@ -163,6 +163,8 @@ class Example extends React.Component {
  renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | 自定义渲染每个数据源的内容
  allPanelHeight | 200 | 所有键盘下方面板的高度(表情面板，更多面板)
  messageErrorIcon | icon element | 自定义消息发送失败时显示的图标默认为红色圆形感叹号
+ leftMessageBackground | '#fffff' | 自定义左侧消息的背景色
+  rightMessageBackground | '#a0e75a' | 自定义右侧消息的背景色
  
  * 输入组件属性
  
@@ -215,7 +217,11 @@ class Example extends React.Component {
    audioHandle | true | 是否获取到录音的具柄
    setAudioHandle | () => {} | 修改是否获取录音具柄的状态
    audioHasPermission | false | 是否有录音权限
-   checkAndroidPermission | () => {} | android检查录音权限的回调  
+   checkAndroidPermission | () => {} | android检查录音权限的回调
+   voiceLoading | false | 是否正在加载语音
+   voicePlaying | false | 是否正在播放语音
+   voiceLeftLoadingColor | '#cccccc' | 自定义语音加载时左侧消息颜色
+   voiceRightLoadingColor | '#628b42' | 自定义语音加载时右侧消息颜色
 * 聊天气泡属性
 
 属性名字 | 默认值 | 描述
@@ -224,7 +230,9 @@ renderTextMessage | undefined | 自定义渲染文本消息, (data) => {}
 renderImageMessage | undefined | 自定义渲染图片消息, (data) => {}
 renderVoiceMessage | undefined | 自定义渲染语音消息, (data) => {}
 renderVoiceView | undefined | 自定义渲染语音外部容器, (data) => {}
-
+renderVideoMessage | undefined | 自定义视频消息, (data) => {}
+renderLocationMessage | undefined | 自定义定位消息, (data) => {}
+renderShareMessage| undefined | 自定义分享消息, (data) => {}
 ## 关于android 键盘设置
 `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:
 ```xml

@@ -111,6 +111,8 @@ export default class ChatItem extends Component {
         if (this.props.renderTextMessage === undefined) {
           return (
             <TextMessage
+              rightMessageBackground={this.props.rightMessageBackground}
+              leftMessageBackground={this.props.leftMessageBackground}
               reSendMessage={reSendMessage}
               isOpen={isOpen}
               isSelf={isSelf}
@@ -129,6 +131,8 @@ export default class ChatItem extends Component {
         if (this.props.renderImageMessage === undefined) {
           return (
             <ImageMessage
+              rightMessageBackground={this.props.rightMessageBackground}
+              leftMessageBackground={this.props.leftMessageBackground}
               reSendMessage={reSendMessage}
               isOpen={isOpen}
               isSelf={isSelf}
@@ -148,6 +152,8 @@ export default class ChatItem extends Component {
             <VoiceMessage
               reSendMessage={reSendMessage}
               loading={loading}
+              rightMessageBackground={this.props.rightMessageBackground}
+              leftMessageBackground={this.props.leftMessageBackground}
               isOpen={isOpen}
               isSelf={isSelf}
               messageErrorIcon={messageErrorIcon}
@@ -157,10 +163,34 @@ export default class ChatItem extends Component {
               rowId={this.props.rowId}
               voiceLeftIcon={this.props.voiceLeftIcon}
               voiceRightIcon={this.props.voiceRightIcon}
+              voiceLoading={this.props.voiceLoading}
+              voicePlaying={this.props.voicePlaying}
+              savePressIndex={this.props.savePressIndex}
+              pressIndex={this.props.pressIndex}
+              voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
+              voiceRightLoadingColor={this.props.voiceRightLoadingColor}
             />
           )
         } else {
           return this.props.renderVoiceMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+        }
+      case 'video' :
+        if (this.props.renderVideoMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderVideoMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+        }
+      case 'location':
+        if (this.props.renderLocationMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderLocationMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+        }
+      case 'share':
+        if (this.props.renderShareMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderShareMessage({isOpen, isSelf, message, index: parseInt(rowId)})
         }
     }
   }

@@ -18,7 +18,7 @@ const PATTERNS = {
 export default class TextMessage extends Component {
 
   render(){
-    const {isSelf, message, messageErrorIcon, views, isOpen} = this.props
+    const {isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground} = this.props
     return (
       <View style={[isSelf ? styles.right : styles.left]} ref={(e) => this[`item_${this.props.rowId}`] = e}>
         <View
@@ -28,6 +28,7 @@ export default class TextMessage extends Component {
               isSelf
                 ? styles.right_triangle
                 : styles.left_triangle,
+              {borderColor: isSelf ? rightMessageBackground : leftMessageBackground}
             ]}
         />
         <TouchableOpacity
@@ -40,7 +41,8 @@ export default class TextMessage extends Component {
             this.props.onMessagePress('text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''))
           }}
         >
-          <View style={[styles.container, {backgroundColor: isSelf ? '#a0e75a' : '#fff'}]}>
+          <View style={[styles.container, {backgroundColor: isSelf ? rightMessageBackground
+              : leftMessageBackground }]}>
             {views}
           </View>
         </TouchableOpacity>

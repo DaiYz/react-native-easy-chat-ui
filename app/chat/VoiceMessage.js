@@ -10,9 +10,84 @@ const { height, width } = Dimensions.get('window')
 
 export default class VoiceMessage extends Component{
 
+  constructor(props) {
+    super(props)
+    this.playTime = null
+    this.state = {
+      loading: false,
+      progress: 2
+    }
+  }
+
+
+  componentWillReceiveProps(next) {
+    if (next.pressIndex === next.rowId) {
+      this.setState({loading: next.voiceLoading})
+      if(next.voicePlaying) {
+        this._play()
+      } else {
+        this.playTime && clearInterval(this.playTime)
+        this.setState({progress: 2})
+      }
+    } else {
+      this.setState({loading: false, progress: 2})
+      this.playTime && clearInterval(this.playTime)
+    }
+  }
+
+  _play () {
+    this.playTime && clearInterval(this.playTime)
+    let index = 0
+    const {progress} = this.state
+    if (progress === 2) index = 2
+    this.playTime = setInterval(() => {
+      if (index === 2) {
+        index = -1
+      }
+      index += 1
+      this.setState({progress: index})
+    }, 400)
+  }
+
+
+  _renderIcon = () => {
+    const {isSelf, voiceLeftIcon, voiceRightIcon} = this.props
+    const {progress} = this.state
+    if (isSelf) {
+      if (voiceRightIcon) {
+        return voiceRightIcon
+      } else {
+        return <Image
+                source={
+                  progress === 0
+                    ? require('../source/image/voiceRightOne.png')
+                      : progress === 1
+                        ? require('../source/image/voiceRightTwo.png')
+                          : require('../source/image/voiceRight.png')
+                }
+                resizeMode={'cover'}
+                style={{
+                  width: 26, height: 26
+                }} />
+      }
+    } else {
+      if (voiceLeftIcon) {
+        return voiceLeftIcon
+      } else {
+        return <Image source={progress === 0 ? require('../source/image/voiceLeftOne.png') : progress === 1 ?  require('../source/image/voiceLeftTwo.png') : require('../source/image/voiceLeft.png')} resizeMode={'cover'} style={{
+          width: 26, height: 26
+        }} />
+      }
+    }
+  }
+
+  componentWillUnmount() {
+    this.playTime && clearInterval(this.playTime)
+  }
 
   render(){
-    const { message, messageErrorIcon, isSelf, loading = false, isOpen, reSendMessage } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor } = this.props
+    const {loading} = this.state
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <View
@@ -22,7 +97,7 @@ export default class VoiceMessage extends Component{
               isSelf
                 ? styles.right_triangle
                 : styles.left_triangle,
-              loading ? {borderColor: isSelf ? '#628b42' : '#ccc'} : {borderColor: isSelf ? '#a0e75a' : '#fff'}
+              loading ? {borderColor: isSelf ? voiceRightLoadingColor : voiceLeftLoadingColor} : {borderColor: isSelf ? rightMessageBackground : leftMessageBackground}
             ]}
         />
         <View style={{flexDirection: isSelf ? 'row-reverse' : 'row'}} ref={(e) => this[`item_${this.props.rowId}`] = e}
@@ -35,23 +110,27 @@ export default class VoiceMessage extends Component{
                 loading
                   ? {
                     backgroundColor: isSelf
-                      ? '#628b42'
-                      : '#ccc'
+                      ? voiceRightLoadingColor
+                      : voiceLeftLoadingColor
                   }
                   : {
                     backgroundColor: isSelf
-                      ? '#a0e75a'
-                      : '#fff'
+                      ? rightMessageBackground
+                      : leftMessageBackground
                   }
               ]
             }
-            onPress={() => this.props.onMessagePress('voice', parseInt(this.props.rowId), message.per.content.uri)}
+            onPress={() => {
+              this.props.savePressIndex(this.props.rowId)
+              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.per.content.uri)}
+            }
             onLongPress={() => {
               this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.per.content.uri)
             }}
           >
-            <View style={[{width: 40 + (message.per.content.length > 1 ? message.per.content.length * 2 : 0), alignItems: isSelf ? 'flex-end' : 'flex-start'}, isSelf ? {alignItems: 'flex-end', right: 5} : {alignItems: 'flex-start', left: 5}, {maxWidth: width - 160}]}>
-              {isSelf ? this.props.voiceRightIcon : this.props.voiceLeftIcon}
+            <View style={[{width: 40 + (message.per.content.length > 1 ? message.per.content.length * 2 : 0), }, {maxWidth: width - 160},                 {flexDirection: isSelf ? 'row-reverse' : 'row'}
+            ]}>
+              {this._renderIcon()}
             </View>
           </TouchableOpacity>
           <View style={{justifyContent: 'flex-end'}}>
