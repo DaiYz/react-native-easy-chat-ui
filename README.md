@@ -182,7 +182,7 @@ props | default | Info
   ----- |  ------ | -----
   usePopView | true | Display a popView when longPress a message
   popoverStyle | {backgroundColor: '#333'} | popView style
-  renderDelPanel | undefined | Custom any want you want, (isSelect)=> {}
+  renderDelPanel | undefined | Custom any what you want, (isSelect)=> {}
   changeHeaderLeft | () => {} | Custom headerLeft
   setPopItems | (type, index, text) => {let items = [{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选',onPress: () => {that.multipleSelect(index)}}]if (type === 'text') {items = [{title: '复制',onPress: () => Clipboard.setString(text)},{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选', onPress: () => {that.multipleSelect(index)}}]}return items} | Custom PopView
   messageDelIcon | icon element | Custom delete icon
