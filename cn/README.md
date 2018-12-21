@@ -182,10 +182,10 @@ class Example extends React.Component {
   ----- |  ------- | -----
   usePopView | true | 长按消息是否显示一个弹出层
   popoverStyle | {backgroundColor: '#333'} | 弹出层样式
-  renderDelPanel | undefined | 自定义任何样式, (isSelect)=> {}
   changeHeaderLeft | () => {} | 点击多选之后可以使用此方法改变导航条左上角文字实现关闭多选功能
   setPopItems | (type, index, text) => {let items = [{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选',onPress: () => {that.multipleSelect(index)}}]if (type === 'text') {items = [{title: '复制',onPress: () => Clipboard.setString(text)},{title: '删除',onPress: () => {that.props.delMessage([index])}},{title: '多选', onPress: () => {that.multipleSelect(index)}}]}return items} | 自定义弹出层的每一个item
  messageDelIcon | icon element | 自定义底部删除按钮的图标
+ renderDelPanel | undefined | 自定义底部删除面板, (isSelect)=> {}
  messageSelectIcon | icon element | 自定义消息选中时的图标
  renderMessageCheck | undefined | 自定义渲染消息选中和未选中的样式, (isSelect)=> {}
   
