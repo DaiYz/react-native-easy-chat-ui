@@ -128,7 +128,7 @@ class Example extends React.Component {
 * per: 单独消息内容对象(消息类型和具体内容)
 * targetId: 消息谁发的就是谁的用户ID  
 * chatInfo: 与你聊天人的资料(id, 头像)
-* renderTime: 是否在每一条消息上现实消息时间
+* renderTime: 是否在每一条消息上显示消息时间
 * sendStatus: 0 ---> 发送中,  1 ---> 发送成功,  -1 ---> 你被拉黑或者被删除,   -2 ---> 发送失败 (只有发送方为自己的时候才有此条)
 * time: 当前时间，消息将由此值来排序
 * inverted: 当消息长度超出屏幕高度时为true否则为false(请在在componentWillUnmount生命周期中或者删除消息的时候修改此值)
@@ -153,7 +153,7 @@ class Example extends React.Component {
  onMessageLongPress | (type, index, content) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
  pressAvatar | (isSelf) => {} | 点击头像的回调
  isIphoneX | true | 是否是苹果的刘海屏手机
- androidHeaderHeight | 66 | android的当航头高度(加上statusBar高度)
+ androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
  userProfile | {id: '88888888', avatar: 'default.png'} | 你自己的个人资料
  historyLoading | false | 显示一个loading
  loadHistory | () => {} | 下拉获取历史记录的回调
@@ -162,7 +162,7 @@ class Example extends React.Component {
  panelSource | [{icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,title: '照片',onPress: () => { console.log('takePhoto') }}, {icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,title: '拍照',onPress: () => { console.log('takePhoto') }}] | 自定义最右侧面板数据源
  renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | 自定义渲染每个数据源的内容
  allPanelHeight | 200 | 所有键盘下方面板的高度(表情面板，更多面板)
- messageErrorIcon | icon element | 自定义消息发送失败时显示的图标默认为红色圆形感叹号
+ messageErrorIcon | icon element | 自定义消息发送失败时显示的图标，默认为红色圆形感叹号
  leftMessageBackground | '#fffff' | 自定义左侧消息的背景色
   rightMessageBackground | '#a0e75a' | 自定义右侧消息的背景色
  
