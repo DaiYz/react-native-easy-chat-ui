@@ -1,16 +1,15 @@
-import React, { Component, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import {
   View,
   TouchableOpacity,
   Image, StyleSheet,
   Text,
   ActivityIndicator, Dimensions
-} from "react-native"
-const { height, width } = Dimensions.get('window')
+} from 'react-native'
+const { width } = Dimensions.get('window')
 
-export default class VoiceMessage extends Component{
-
-  constructor(props) {
+export default class VoiceMessage extends PureComponent {
+  constructor (props) {
     super(props)
     this.playTime = null
     this.state = {
@@ -19,18 +18,17 @@ export default class VoiceMessage extends Component{
     }
   }
 
-
-  componentWillReceiveProps(next) {
+  componentWillReceiveProps (next) {
     if (next.pressIndex === next.rowId) {
-      this.setState({loading: next.voiceLoading})
-      if(next.voicePlaying) {
+      this.setState({ loading: next.voiceLoading })
+      if (next.voicePlaying) {
         this._play()
       } else {
         this.playTime && clearInterval(this.playTime)
-        this.setState({progress: 2})
+        this.setState({ progress: 2 })
       }
     } else {
-      this.setState({loading: false, progress: 2})
+      this.setState({ loading: false, progress: 2 })
       this.playTime && clearInterval(this.playTime)
     }
   }
@@ -38,56 +36,55 @@ export default class VoiceMessage extends Component{
   _play () {
     this.playTime && clearInterval(this.playTime)
     let index = 0
-    const {progress} = this.state
+    const { progress } = this.state
     if (progress === 2) index = 2
     this.playTime = setInterval(() => {
       if (index === 2) {
         index = -1
       }
       index += 1
-      this.setState({progress: index})
+      this.setState({ progress: index })
     }, 400)
   }
 
-
   _renderIcon = () => {
-    const {isSelf, voiceLeftIcon, voiceRightIcon} = this.props
-    const {progress} = this.state
+    const { isSelf, voiceLeftIcon, voiceRightIcon } = this.props
+    const { progress } = this.state
     if (isSelf) {
       if (voiceRightIcon) {
         return voiceRightIcon
       } else {
         return <Image
-                source={
-                  progress === 0
-                    ? require('../source/image/voiceRightOne.png')
-                      : progress === 1
-                        ? require('../source/image/voiceRightTwo.png')
-                          : require('../source/image/voiceRight.png')
-                }
-                resizeMode={'cover'}
-                style={{
-                  width: 26, height: 26
-                }} />
+          source={
+            progress === 0
+              ? require('../source/image/voiceRightOne.png')
+              : progress === 1
+                ? require('../source/image/voiceRightTwo.png')
+                : require('../source/image/voiceRight.png')
+          }
+          resizeMode={'cover'}
+          style={{
+            width: 26, height: 26
+          }} />
       }
     } else {
       if (voiceLeftIcon) {
         return voiceLeftIcon
       } else {
-        return <Image source={progress === 0 ? require('../source/image/voiceLeftOne.png') : progress === 1 ?  require('../source/image/voiceLeftTwo.png') : require('../source/image/voiceLeft.png')} resizeMode={'cover'} style={{
+        return <Image source={progress === 0 ? require('../source/image/voiceLeftOne.png') : progress === 1 ? require('../source/image/voiceLeftTwo.png') : require('../source/image/voiceLeft.png')} resizeMode={'cover'} style={{
           width: 26, height: 26
         }} />
       }
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.playTime && clearInterval(this.playTime)
   }
 
-  render(){
+  render () {
     const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor } = this.props
-    const {loading} = this.state
+    const { loading } = this.state
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <View
@@ -97,10 +94,13 @@ export default class VoiceMessage extends Component{
               isSelf
                 ? styles.right_triangle
                 : styles.left_triangle,
-              loading ? {borderColor: isSelf ? voiceRightLoadingColor : voiceLeftLoadingColor} : {borderColor: isSelf ? rightMessageBackground : leftMessageBackground}
+              loading ? { borderColor: isSelf ? voiceRightLoadingColor : voiceLeftLoadingColor } : { borderColor: isSelf ? rightMessageBackground : leftMessageBackground }
             ]}
         />
-        <View style={{flexDirection: isSelf ? 'row-reverse' : 'row'}} ref={(e) => this[`item_${this.props.rowId}`] = e}
+        <View
+          style={{ flexDirection: isSelf ? 'row-reverse' : 'row' }}
+          collapsable={false}
+          ref={(e) => (this[`item_${this.props.rowId}`] = e)}
         >
           <TouchableOpacity
             activeOpacity={0.8}
@@ -122,24 +122,25 @@ export default class VoiceMessage extends Component{
             }
             onPress={() => {
               this.props.savePressIndex(this.props.rowId)
-              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.per.content.uri)}
+              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.per.content.uri, message)
+            }
             }
             onLongPress={() => {
-              this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.per.content.uri)
+              this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.per.content.uri, message)
             }}
           >
-            <View style={[{width: 40 + (message.per.content.length > 1 ? message.per.content.length * 2 : 0), }, {maxWidth: width - 160},                 {flexDirection: isSelf ? 'row-reverse' : 'row'}
+            <View style={[{ width: 40 + (message.per.content.length > 1 ? message.per.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
             ]}>
               {this._renderIcon()}
             </View>
           </TouchableOpacity>
-          <View style={{justifyContent: 'flex-end'}}>
-            <Text style={[{color: '#aaa', marginBottom: 4}, isSelf ? {marginRight: 4} : {marginLeft: 4}]}>
+          <View style={{ justifyContent: 'flex-end' }}>
+            <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
               {`${message.per.content.length}"`}
             </Text>
           </View>
         </View>
-        <View style={{alignItems: 'center', justifyContent: 'center', marginRight: 10}}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
           {!isSelf
             ? null
             : message.sendStatus === undefined
@@ -173,13 +174,13 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
-    marginTop: 16,
+    marginTop: 16
   },
   left_triangle: {
     borderLeftWidth: 0
   },
   right_triangle: {
-    borderRightWidth: 0,
+    borderRightWidth: 0
   },
   right: {
     flexDirection: 'row-reverse'

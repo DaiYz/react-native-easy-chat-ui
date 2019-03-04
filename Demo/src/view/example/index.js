@@ -11,7 +11,8 @@ import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
-import { ChatScreen } from 'react-native-chat'
+// import { ChatScreen } from 'react-native-chat'
+import { ChatScreen } from '../../../../app/chat/index'
 export default class Example extends Component {
 
   state = {
@@ -26,7 +27,7 @@ export default class Example extends Component {
             } ,
             targetId: '12345678',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/defaultAvatar.png'),
               id: '12345678'
             },
             renderTime: true,
@@ -41,7 +42,7 @@ export default class Example extends Component {
             } ,
             targetId: '12345678',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/defaultAvatar.png'),
               id: '12345678'
             },
             renderTime: true,
@@ -60,7 +61,7 @@ export default class Example extends Component {
             } ,
             targetId: '12345678',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/defaultAvatar.png'),
               id: '12345678'
             },
             renderTime: false,
@@ -75,7 +76,7 @@ export default class Example extends Component {
             } ,
             targetId: '88886666',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/avatar.png'),
               id: '12345678'
             },
             renderTime: true,
@@ -93,7 +94,7 @@ export default class Example extends Component {
             } ,
             targetId: '12345678',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/defaultAvatar.png'),
               id: '12345678'
             },
             renderTime: true,
@@ -111,7 +112,7 @@ export default class Example extends Component {
             } ,
             targetId: '88886666',
             chatInfo: {
-              avatar: require('../app/source/image/avatar.png'),
+              avatar: require('../../source/avatar.png'),
               id: '12345678'
             },
             renderTime: true,
@@ -247,9 +248,6 @@ export default class Example extends Component {
 
     return (
       <View style={styles.container}>
-        <View style={{height: 44, marginTop: 44, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>Test</Text>
-        </View>
         <ChatScreen
           ref={(e) => this.chat = e}
           messageList={this.state.msg}

@@ -1,7 +1,7 @@
-import React, {Component} from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import {StyleSheet, View, Text, TouchableOpacity, ViewPropTypes} from 'react-native'
-export default class Control extends Component {
+import { StyleSheet, View, ViewPropTypes } from 'react-native'
+export default class Control extends PureComponent {
   static propTypes = {
     ...ViewPropTypes,
     dot: PropTypes.element,
@@ -13,9 +13,9 @@ export default class Control extends Component {
   };
 
   renderDot (dotIndex) {
-    let {dot, carousel} = this.props
+    let { dot, carousel } = this.props
     if (React.isValidElement(dot)) {
-      dot = React.cloneElement(dot, {key: dotIndex, onPress: () => carousel && carousel.scrollToPage(dotIndex)})
+      dot = React.cloneElement(dot, { key: dotIndex, onPress: () => carousel && carousel.scrollToPage(dotIndex) })
       return dot
     }
     return (
@@ -33,9 +33,9 @@ export default class Control extends Component {
   }
 
   renderActiveDot (dotIndex) {
-    let {activeDot, carousel} = this.props
+    let { activeDot } = this.props
     if (React.isValidElement(activeDot)) {
-      activeDot = React.cloneElement(activeDot, {key: dotIndex})
+      activeDot = React.cloneElement(activeDot, { key: dotIndex })
       return activeDot
     }
     return (
@@ -53,7 +53,7 @@ export default class Control extends Component {
   }
 
   renderDots () {
-    let {index, total} = this.props
+    let { index, total } = this.props
     let dots = []
     for (let i = 0; i < total; ++i) {
       if (i === index) dots.push(this.renderActiveDot(i))
@@ -63,10 +63,10 @@ export default class Control extends Component {
   }
 
   render () {
-    let {style, index, total, ...others} = this.props
+    let { style, index, total, ...others } = this.props
     return (
       <View style={[styles.container, style]} pointerEvents='box-none'>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           {this.renderDots()}
         </View>
       </View>

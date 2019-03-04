@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {
   PanResponder,
   Platform,
@@ -10,13 +10,11 @@ import {
   Text, Dimensions
 } from 'react-native'
 
-const { height, width } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
-export default class InputBar extends Component {
+export default class InputBar extends PureComponent {
   constructor (props) {
     super(props)
-    this.state = {
-    }
     this.createPanResponder()
   }
 
@@ -36,13 +34,13 @@ export default class InputBar extends Component {
   }
 
   onPanResponderGrant (e, gestureState) {
-    const {showVoice, voiceStart} = this.props
+    const { showVoice, voiceStart } = this.props
     if (showVoice) {
       voiceStart()
     }
   }
   onPanResponderMove (e, gestureState) {
-    const {showVoice, voiceStatus, changeVoiceStatus} = this.props
+    const { showVoice, voiceStatus, changeVoiceStatus } = this.props
     if (showVoice) {
       if (Math.abs(e.nativeEvent.locationY) > 60) {
         if (!voiceStatus) return undefined
@@ -54,13 +52,20 @@ export default class InputBar extends Component {
     }
   }
   onPanResponderRelease (e, gestureState) {
-    const {showVoice, voiceEnd} = this.props
+    const { showVoice, voiceEnd } = this.props
     if (showVoice) {
       voiceEnd()
     }
   }
 
-
+  renderIcon = () => {
+    const { sendIcon, plusIcon, usePlus, messageContent, sendUnableIcon } = this.props
+    if (usePlus) {
+      return messageContent.trim().length ? sendIcon : plusIcon
+    } else {
+      return messageContent.trim().length ? sendIcon : sendUnableIcon
+    }
+  }
 
   render () {
     const {
@@ -68,10 +73,25 @@ export default class InputBar extends Component {
       onSubmitEditing = () => {},
       textChange = () => {}, onMethodChange = () => {}, onContentSizeChange = () => {},
       showVoice,
+      inputStyle,
+      inputOutContainerStyle,
+      inputContainerStyle,
+      inputHeightFix,
       xHeight,
       isVoiceEnd,
       useVoice,
-      inputChangeSize, placeholder, pressInText, pressOutText, isShowPanel, isPanelShow, paddingHeight, onFocus, isEmojiShow, isIphoneX
+      useEmoji,
+      usePlus,
+      inputChangeSize,
+      placeholder,
+      pressInText,
+      pressOutText,
+      isShowPanel,
+      isPanelShow,
+      paddingHeight,
+      onFocus,
+      isEmojiShow,
+      isIphoneX
     } = this.props
     const enabled = (() => {
       if (Platform.OS === 'android') {
@@ -89,8 +109,9 @@ export default class InputBar extends Component {
     return (
       <Animated.View style={[
         styles.commentBar,
+        inputOutContainerStyle,
         Platform.OS === 'ios'
-          ? {paddingBottom: isIphoneX ? xHeight : 0}
+          ? { paddingBottom: isIphoneX ? xHeight : 0 }
           : {
             paddingBottom: paddingHeight.interpolate({
               inputRange: [0, 1],
@@ -99,23 +120,31 @@ export default class InputBar extends Component {
           }
       ]}
       >
-        <View style={{flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10}}>
+        <View style={[{
+          flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10
+        }, inputContainerStyle]}>
           {
-            useVoice ? <View style={{ height: 34, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>
+            useVoice ? <View style={{ height: 35 + inputHeightFix, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>
               <TouchableOpacity onPress={onMethodChange} activeOpacity={0.7}>
                 {showVoice ? this.props.keyboardIcon : this.props.voiceIcon}
               </TouchableOpacity>
             </View> : null
           }
-          <View style={{marginHorizontal: 8, borderRadius: 18, borderColor: '#ccc', width: (width - 30 - 64 - 16 - (useVoice ? 30 : 0)), borderWidth: StyleSheet.hairlineWidth}}
+          <View style={{ marginHorizontal: 8,
+            borderRadius: 18,
+            borderColor: '#ccc',
+            flex: 1,
+            borderWidth: StyleSheet.hairlineWidth,
+            paddingVertical: 0.8
+          }}
           >
             {showVoice
               ? <View
-                style={{borderRadius: 18, backgroundColor: isVoiceEnd ? '#bbb' : '#f5f5f5'}}
+                style={{ borderRadius: 18, backgroundColor: isVoiceEnd ? '#bbb' : '#f5f5f5' }}
                 {...this.panResponder.panHandlers}
               >
-                <View style={[{justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 35, borderRadius: 18}]}>
-                  <Text style={{fontSize: 16, fontWeight: 'bold', color: '#555'}}>{isVoiceEnd ? `${pressOutText}` : `${pressInText}`}</Text>
+                <View style={[{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', height: 35 + inputHeightFix, borderRadius: 18 }]}>
+                  <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#555' }}>{isVoiceEnd ? `${pressOutText}` : `${pressInText}`}</Text>
                 </View>
               </View>
               : <TouchableOpacity
@@ -126,7 +155,7 @@ export default class InputBar extends Component {
                 }}
               >
                 <TextInput
-                  ref={e => this.input = e}
+                  ref={e => (this.input = e)}
                   multiline
                   blurOnSubmit={false}
                   editable={!enabled}
@@ -136,30 +165,39 @@ export default class InputBar extends Component {
                   underlineColorAndroid='transparent'
                   onChangeText={textChange}
                   value={messageContent}
-                  style={[ styles.commentBar__input, {height: Math.max(35, inputChangeSize), paddingHorizontal: 16, paddingTop: Platform.OS === 'ios' ? 8 : 0} ]}
+                  style={[ styles.commentBar__input, { height: Math.max(35 + inputHeightFix, inputChangeSize), paddingHorizontal: 16, paddingTop: Platform.OS === 'ios' ? 8 : 0 }, inputStyle ]}
                 />
               </TouchableOpacity>
             }
           </View>
-          <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', flex: 1}}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {
+              useEmoji
+                ? <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => this.props.showEmoji()}
+                >
+                  {this.props.isEmojiShow ? this.props.keyboardIcon : this.props.emojiIcon}
+                </TouchableOpacity>
+                : null
+            }
             <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={() => this.props.showEmoji()}
-            >
-              {this.props.isEmojiShow ? this.props.keyboardIcon : this.props.emojiIcon}
-            </TouchableOpacity>
-            <TouchableOpacity
+              style={{ marginLeft: 8 }}
               onPress={
                 () => {
                   if (messageContent.trim().length > 0) {
                     onSubmitEditing('text', messageContent)
                   } else {
-                    isShowPanel(!isPanelShow)
+                    if (usePlus) {
+                      isShowPanel(!isPanelShow)
+                    } else {
+                      return null
+                    }
                   }
                 }
               }
               activeOpacity={0.7} >
-             {messageContent.trim().length ? this.props.sendIcon : this.props.plusIcon}
+              {this.renderIcon()}
             </TouchableOpacity>
           </View>
         </View>
@@ -167,7 +205,6 @@ export default class InputBar extends Component {
     )
   }
 }
-
 
 const styles = StyleSheet.create({
   commentBar: {
@@ -184,72 +221,5 @@ const styles = StyleSheet.create({
     padding: 0,
     paddingHorizontal: 20
     // backgroundColor: '#f9f9f9'
-  },
-  circle: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderColor: '#ddd',
-    borderWidth: 0.8
-  },
-  chat: {
-    paddingHorizontal: 10,
-    paddingVertical: 14
-  },
-  right: {
-    flexDirection: 'row-reverse'
-  },
-  left: {
-    flexDirection: 'row'
-  },
-  txtArea: {
-    borderRadius: 12,
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    maxWidth: width - 160,
-    flexWrap: 'wrap',
-    minHeight: 20,
-    marginLeft: -1
-  },
-  voiceArea: {
-    borderRadius: 12,
-    maxWidth: width - 160,
-    justifyContent: 'center',
-    minHeight: 30
-  },
-  avatar: {
-    marginHorizontal: 8,
-    borderRadius: 24,
-    width: 48,
-    height: 48
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    zIndex: 999,
-    borderWidth: 12,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    marginTop: 12
-  },
-  left_triangle: {
-    borderLeftWidth: 0
-  },
-  right_triangle: {
-    borderRightWidth: 0
-  },
-  sendButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: '#45e2be',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#fff',
-    borderWidth: 2
   }
 })

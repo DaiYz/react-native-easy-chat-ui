@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { PureComponent } from 'react'
 import {
   StyleSheet,
   View,
@@ -17,7 +17,7 @@ const ViewPropTypes = RNViewPropTypes || View.propTypes
 
 const { height } = Dimensions.get('window')
 
-export default class VoiceView extends Component {
+export default class VoiceView extends PureComponent {
   constructor (props) {
     super(props)
     this.timer = null
@@ -33,7 +33,7 @@ export default class VoiceView extends Component {
       error: false,
       hasPermission: undefined,
       waiting: true,
-      volume: 0,
+      volume: 0
     }
   }
 
@@ -59,7 +59,7 @@ export default class VoiceView extends Component {
   }
 
   show () {
-    const {hasPermission} = this.props
+    const { hasPermission } = this.props
     this.setState({
       isShow: true
     })
@@ -107,7 +107,7 @@ export default class VoiceView extends Component {
     ).start(() => {
       this.setState({
         isShow: false,
-        error: false,
+        error: false
       })
       this.props.setAudioHandle(true)
     })
@@ -120,7 +120,7 @@ export default class VoiceView extends Component {
     }
     try {
       await this.props.audioPauseRecord()
-      this.setState({paused: true})
+      this.setState({ paused: true })
     } catch (error) {
       console.log(error)
     }
@@ -133,7 +133,7 @@ export default class VoiceView extends Component {
     }
     try {
       await this.props.audioResumeRecord()
-      this.setState({paused: false})
+      this.setState({ paused: false })
     } catch (error) {
       console.log(error)
     }
@@ -163,11 +163,11 @@ export default class VoiceView extends Component {
 
   _renderContent () {
     const { error } = this.state
-    const {errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView} = this.props
+    const { errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView } = this.props
     if (renderVoiceView === undefined) {
       return (
         error ? (
-          <View style={{justifyContent: 'center', alignItems: 'center', width: 150, height: 150}}>
+          <View style={{ justifyContent: 'center', alignItems: 'center', width: 150, height: 150 }}>
             { errorIcon }
             <Text style={{ color: '#fff', marginTop: 10, textAlign: 'center' }}>{errorText}</Text>
           </View>
@@ -177,7 +177,7 @@ export default class VoiceView extends Component {
             <Text style={{ color: '#fff', marginTop: 10 }}>{voiceCancelText}</Text>
           </View>
         ) : (
-          <View style={{ justifyContent: 'center', alignItems: 'center'}}>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
             {
               audioHandle ? (
                 <View style={{ width: 150, height: 150, justifyContent: 'center', alignItems: 'center' }}>
@@ -194,7 +194,7 @@ export default class VoiceView extends Component {
         )
       )
     } else {
-      return renderVoiceView({error, voiceStatus, audioHandle})
+      return renderVoiceView({ error, voiceStatus, audioHandle })
     }
   }
 

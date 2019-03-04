@@ -1,26 +1,27 @@
-import React, { Component, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import {
   View,
   TouchableOpacity,
-  Text,
-  Image,
   ActivityIndicator,
   StyleSheet, Dimensions
-} from "react-native"
-import {changeEmojiText} from './utils'
-const { height, width } = Dimensions.get('window')
+} from 'react-native'
+import { changeEmojiText } from './utils'
+const { width } = Dimensions.get('window')
 
 const PATTERNS = {
   url: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i,
   phone: /[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,7}/,
   emoji: new RegExp('\\/\\{[a-zA-Z_]{1,14}\\}')
 }
-export default class TextMessage extends Component {
-
-  render(){
-    const {isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground} = this.props
+export default class TextMessage extends PureComponent {
+  render () {
+    const { isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground, reSendMessage } = this.props
     return (
-      <View style={[isSelf ? styles.right : styles.left]} ref={(e) => this[`item_${this.props.rowId}`] = e}>
+      <View
+        style={[isSelf ? styles.right : styles.left]}
+        collapsable={false}
+        ref={(e) => (this[`item_${this.props.rowId}`] = e)}
+      >
         <View
           style={
             [
@@ -28,25 +29,25 @@ export default class TextMessage extends Component {
               isSelf
                 ? styles.right_triangle
                 : styles.left_triangle,
-              {borderColor: isSelf ? rightMessageBackground : leftMessageBackground}
+              { borderColor: isSelf ? rightMessageBackground : leftMessageBackground }
             ]}
         />
         <TouchableOpacity
           activeOpacity={1}
           disabled={isOpen}
           onLongPress={() => {
-            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''))
+            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''), message)
           }}
           onPress={() => {
-            this.props.onMessagePress('text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''))
+            this.props.onMessagePress('text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''), message)
           }}
         >
-          <View style={[styles.container, {backgroundColor: isSelf ? rightMessageBackground
-              : leftMessageBackground }]}>
+          <View style={[styles.container, { backgroundColor: isSelf ? rightMessageBackground
+            : leftMessageBackground }]}>
             {views}
           </View>
         </TouchableOpacity>
-        <View style={{alignItems: 'center', justifyContent: 'center', marginRight: 10}}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
           {!isSelf
             ? null
             : message.sendStatus === undefined
@@ -59,7 +60,7 @@ export default class TextMessage extends Component {
                     activeOpacity={0.7}
                     onPress={() => {
                       if (message.sendStatus === -2) {
-                        reSend(message)
+                        reSendMessage(message)
                       }
                     }}>
                     {messageErrorIcon}
@@ -70,14 +71,13 @@ export default class TextMessage extends Component {
       </View>
     )
   }
-
 }
 const styles = StyleSheet.create({
 
   container: {
-    flexDirection:'row',
-    alignItems:'center',
-    flexWrap:'wrap',
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
     borderRadius: 12,
     paddingHorizontal: 15,
     paddingVertical: 15,
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     marginLeft: -1
   },
 
-  subEmojiStyle:{
-    width:25,
-    height:25,
+  subEmojiStyle: {
+    width: 25,
+    height: 25
   },
   triangle: {
     width: 0,
@@ -112,5 +112,5 @@ const styles = StyleSheet.create({
   },
   left: {
     flexDirection: 'row'
-  },
-});
+  }
+})

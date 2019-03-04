@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from 'react'
+import React, { PureComponent } from 'react'
 import {
   TouchableWithoutFeedback,
   View,
@@ -6,12 +6,12 @@ import {
   Text,
   Image,
   StyleSheet, Dimensions
-} from "react-native"
+} from 'react-native'
 import TextMessage from './TextMessage'
 import ImageMessage from './ImageMessage'
 import VoiceMessage from './VoiceMessage'
-import {EMOJIS_DATA} from "../source/emojis";
-const { height, width } = Dimensions.get('window')
+import { EMOJIS_DATA } from '../source/emojis'
+const { width } = Dimensions.get('window')
 
 const PATTERNS = {
   url: /(https?:\/\/|www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&\/\/=]*)/i,
@@ -19,9 +19,7 @@ const PATTERNS = {
   emoji: new RegExp('\\/\\{[a-zA-Z_]{1,14}\\}')
 }
 
-
-
-export default class ChatItem extends Component {
+export default class ChatItem extends PureComponent {
   constructor (props) {
     super(props)
     this.state = {
@@ -40,63 +38,59 @@ export default class ChatItem extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.isOpen) {
-      this.setState({isSelect: false})
+      this.setState({ isSelect: false })
     } else {
-      if (nextProps.currentIndex === parseInt(nextProps.rowId) && this.props.currentIndex !== parseInt(nextProps.rowId)){
-        this.setState({isSelect: true})
+      if (nextProps.currentIndex === parseInt(nextProps.rowId) && this.props.currentIndex !== parseInt(nextProps.rowId)) {
+        this.setState({ isSelect: true })
       }
     }
   }
 
-
   _select = () => {
-    this.setState({isSelect: !this.state.isSelect})
+    this.setState({ isSelect: !this.state.isSelect })
   }
 
   changeLoading = (status) => {
-    this.setState({loading: status})
+    this.setState({ loading: status })
   }
 
-  _matchContentString(textContent, views){
-
+  _matchContentString (textContent, views) {
     // 匹配得到index并放入数组中
     if (textContent.length === 0) return
-    let emojiIndex = textContent.search(PATTERNS.emoji);
+    let emojiIndex = textContent.search(PATTERNS.emoji)
 
-    let checkIndexArray = [];
+    let checkIndexArray = []
 
     // 若匹配不到，则直接返回一个全文本
     if (emojiIndex === -1) {
-      views.push(<Text key ={'emptyTextView'+(Math.random()*100)}>{textContent}</Text>)
-
+      views.push(<Text key={'emptyTextView' + (Math.random() * 100)}>{textContent}</Text>)
     } else {
       if (emojiIndex !== -1) {
-        checkIndexArray.push(emojiIndex);
+        checkIndexArray.push(emojiIndex)
       }
       // 取index最小者
-      let minIndex = Math.min(...checkIndexArray);
+      let minIndex = Math.min(...checkIndexArray)
       // 将0-index部分返回文本
-      views.push(<Text key ={'firstTextView'+(Math.random()*100)}>{textContent.substring(0, minIndex)}</Text>);
+      views.push(<Text key={'firstTextView' + (Math.random() * 100)}>{textContent.substring(0, minIndex)}</Text>)
 
       // 将index部分作分别处理
-      this._matchEmojiString(textContent.substring(minIndex), views);
+      this._matchEmojiString(textContent.substring(minIndex), views)
     }
   }
 
-  _matchEmojiString(emojiStr, views) {
+  _matchEmojiString (emojiStr, views) {
+    let castStr = emojiStr.match(PATTERNS.emoji)
+    let emojiLength = castStr[0].length
 
-    let castStr = emojiStr.match(PATTERNS.emoji);
-    let emojiLength = castStr[0].length;
+    let emojiImg = EMOJIS_DATA[castStr[0]]
 
-    let emojiImg=EMOJIS_DATA[castStr[0]];
-
-    if(emojiImg){
-      views.push(<Image key={emojiStr} style={styles.subEmojiStyle} resizeMethod={'auto'} source={emojiImg}/>);
+    if (emojiImg) {
+      views.push(<Image key={emojiStr} style={styles.subEmojiStyle} resizeMethod={'auto'} source={emojiImg} />)
     }
-    this._matchContentString(emojiStr.substring(emojiLength), views);
+    this._matchContentString(emojiStr.substring(emojiLength), views)
   }
 
-  _getActualText(textContent) {
+  _getActualText (textContent) {
     let views = []
     this._matchContentString(textContent, views)
     return views
@@ -125,7 +119,7 @@ export default class ChatItem extends Component {
             />
           )
         } else {
-          return this.props.renderTextMessage({isOpen, isSelf, message, views: this._getActualText(message.per.content), index: parseInt(rowId)})
+          return this.props.renderTextMessage({ isOpen, isSelf, message, views: this._getActualText(message.per.content), index: parseInt(rowId) })
         }
       case 'image':
         if (this.props.renderImageMessage === undefined) {
@@ -144,7 +138,7 @@ export default class ChatItem extends Component {
             />
           )
         } else {
-          return this.props.renderImageMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+          return this.props.renderImageMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
       case 'voice':
         if (this.props.renderVoiceMessage === undefined) {
@@ -172,29 +166,28 @@ export default class ChatItem extends Component {
             />
           )
         } else {
-          return this.props.renderVoiceMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+          return this.props.renderVoiceMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
       case 'video' :
         if (this.props.renderVideoMessage === undefined) {
           return null
         } else {
-          return this.props.renderVideoMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+          return this.props.renderVideoMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
       case 'location':
         if (this.props.renderLocationMessage === undefined) {
           return null
         } else {
-          return this.props.renderLocationMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+          return this.props.renderLocationMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
       case 'share':
         if (this.props.renderShareMessage === undefined) {
           return null
         } else {
-          return this.props.renderShareMessage({isOpen, isSelf, message, index: parseInt(rowId)})
+          return this.props.renderShareMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
     }
   }
-
 
   renderCheck = () => {
     if (this.props.renderMessageCheck === undefined) {
@@ -212,63 +205,59 @@ export default class ChatItem extends Component {
     }
   }
 
-
-
   render () {
-    const { user = {}, message, reSend = () => {}, openMultiple, isOpen, selectMultiple, chatType, inverted, avatarStyle = {}, rowId, reSendMessage } = this.props
-    const msg = message.per
+    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId } = this.props
     const isSelf = user.id === message.targetId
-    const {loading, isSelect} = this.state
     const Element = isOpen ? TouchableWithoutFeedback : View
     return (
       <View>
         <Element
-            onPress={() => {
-              this.setState({isSelect: !this.state.isSelect})
-              selectMultiple(!this.state.isSelect, parseInt(rowId))
-            }}
-          >
-            <View>
+          onPress={() => {
+            this.setState({ isSelect: !this.state.isSelect })
+            selectMultiple(!this.state.isSelect, parseInt(rowId), message)
+          }}
+        >
+          <View>
+            {
+              message.renderTime ? this.props.renderMessageTime(message.time) : null
+            }
+            <TouchableOpacity
+              onPress={() => this.props.closeAll()}
+              disabled={isOpen}
+              activeOpacity={1}
+              style={[styles.chat, isSelf ? styles.right : styles.left]} ref={(e) => (this.content = e)}
+            >
               {
-                message.renderTime ? this.props.renderMessageTime(message.time) : null
-              }
-              <TouchableOpacity
-                onPress={() => this.props.closeAll()}
-                disabled={isOpen}
-                activeOpacity={1}
-                style={[styles.chat, isSelf ? styles.right : styles.left]} ref={(e) => this.content = e}
-              >
-                {
-                  !isSelf && isOpen &&
+                !isSelf && isOpen &&
                   <View>
                     {this.renderCheck()}
                   </View>
-                }
-                <TouchableOpacity
-                  activeOpacity={0.7}
-                  disabled={isOpen}
-                  onPress={() => this.props.onPressAvatar(isSelf)}
-                >
-                  <Image
-                    source={isSelf ? user.avatar : message.chatInfo.avatar}
-                    style={[styles.avatar, avatarStyle]} />
-                </TouchableOpacity>
-                {this._renderContent(isSelf)}
-                {
-                  isSelf && isOpen &&
+              }
+              <TouchableOpacity
+                activeOpacity={0.7}
+                disabled={isOpen}
+                onPress={() => this.props.onPressAvatar(isSelf)}
+              >
+                <Image
+                  source={isSelf ? user.avatar : message.chatInfo.avatar}
+                  style={[styles.avatar, avatarStyle]} />
+              </TouchableOpacity>
+              {this._renderContent(isSelf)}
+              {
+                isSelf && isOpen &&
                   <View
-                    style={{flex: 1}}
+                    style={{ flex: 1 }}
                   >
                     {this.renderCheck()}
                   </View>
-                }
-              </TouchableOpacity>
-
-              {
-                this.props.renderErrorMessage(message.sendStatus)
               }
-            </View>
-          </Element>
+            </TouchableOpacity>
+
+            {
+              this.props.renderErrorMessage(message.sendStatus)
+            }
+          </View>
+        </Element>
       </View>
     )
   }
@@ -282,9 +271,9 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderTopWidth: StyleSheet.hairlineWidth
   },
-  subEmojiStyle:{
-    width:25,
-    height:25,
+  subEmojiStyle: {
+    width: 25,
+    height: 25
   },
   commentBar__input: {
     borderRadius: 18,

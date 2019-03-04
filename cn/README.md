@@ -149,8 +149,8 @@ class Example extends React.Component {
  avatarStyle | undefined | 头像样式
  chatId | '123455678' | 聊天对象的ID
  chatType | 'friend' | 与聊天人的关系
- onMessagePress | (type, index, content) => {} | 点击消息的回调
- onMessageLongPress | (type, index, content) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
+ onMessagePress | (type, index, content, message) => {} | 点击消息的回调
+ onMessageLongPress | (type, index, content, message) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
  pressAvatar | (isSelf) => {} | 点击头像的回调
  isIphoneX | true | 是否是苹果的刘海屏手机
  androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
@@ -165,6 +165,7 @@ class Example extends React.Component {
  messageErrorIcon | icon element | 自定义消息发送失败时显示的图标，默认为红色圆形感叹号
  leftMessageBackground | '#fffff' | 自定义左侧消息的背景色
   rightMessageBackground | '#a0e75a' | 自定义右侧消息的背景色
+  allPanelAnimateDuration | 100 | 所有面板动画时长
  
  * 输入组件属性
  
@@ -175,6 +176,10 @@ class Example extends React.Component {
  keyboardIcon | icon | 自定义最下方的键盘图标
  plusIcon | icon element | 自定义最下方的加号图标
  sendIcon | icon element | 自定义最下方的发送图标
+ sendUnableIcon | icon element | 自定义未能发送消息时的发送图标
+ useEmoji | true | 是否启用表情
+ usePlus | true | 是否启用更多
+ inputStyle | undefined | 输入框样式
  
  * 弹出层属性
  

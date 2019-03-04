@@ -1,5 +1,5 @@
 import moment from 'moment'
-import {EMOJIS_ZH, invertKeyValues} from "../source/emojis";
+import { EMOJIS_ZH, invertKeyValues } from '../source/emojis'
 
 const getCurrentTime = (time = 0) => {
   const nowTime = new Date() // 当前日前对象
@@ -76,64 +76,57 @@ const getCurrentTime = (time = 0) => {
   }
 }
 
-
-
-
-_matchContentString = (textContent, data, reg, type) => {
+const _matchContentString = (textContent, data, reg, type) => {
   if (textContent.length === 0) return
 
   // 匹配得到index并放入数组中
-  let currentTextLength = textContent.length;
+  let currentTextLength = textContent.length
 
-  let emojiIndex = textContent.search(reg);
+  let emojiIndex = textContent.search(reg)
 
-  let checkIndexArray = [];
+  let checkIndexArray = []
 
   // 若匹配不到，则直接返回一个全文本
   if (emojiIndex === -1) {
-
-    data.push(textContent.substring(0,currentTextLength));
-
+    data.push(textContent.substring(0, currentTextLength))
   } else {
-
     if (emojiIndex !== -1) {
-      checkIndexArray.push(emojiIndex);
+      checkIndexArray.push(emojiIndex)
     }
 
     // 取index最小者
-    let minIndex = Math.min(...checkIndexArray);
+    let minIndex = Math.min(...checkIndexArray)
 
     // 将0-index部分返回文本
-    data.push(textContent.substring(0, minIndex));
+    data.push(textContent.substring(0, minIndex))
 
     // 将index部分作分别处理
-    this._matchEmojiString(textContent.substring(minIndex), data, reg, type);
+    _matchEmojiString(textContent.substring(minIndex), data, reg, type)
   }
 }
 
-_matchEmojiString = (emojiStr, data, reg, type) => {
+const _matchEmojiString = (emojiStr, data, reg, type) => {
   let castStr = emojiStr.match(reg)
   let emojiLength = castStr[0].length
-  let emotoins_code =  EMOJIS_ZH
+  let emotoinsCode = EMOJIS_ZH
   if (type === 'zh') {
-    emotoins_code = invertKeyValues(EMOJIS_ZH)
+    emotoinsCode = invertKeyValues(EMOJIS_ZH)
   }
-  data.push(emotoins_code[castStr[0]])
-  this._matchContentString(emojiStr.substring(emojiLength), data, reg, type)
+  data.push(emotoinsCode[castStr[0]])
+  _matchContentString(emojiStr.substring(emojiLength), data, reg, type)
 }
 
 const changeEmojiText = (textContent, type = 'zh') => {
   let data = []
   let emojiReg = null
   if (type === 'zh') {
-    emojiReg = new RegExp('\\[[^\\]]+\\]','g')
-  }else {
+    emojiReg = new RegExp('\\[[^\\]]+\\]', 'g')
+  } else {
     emojiReg = new RegExp('\\/\\{[a-zA-Z_]{1,14}\\}', 'g')
   }
-  this._matchContentString(textContent, data, emojiReg, type)
+  _matchContentString(textContent, data, emojiReg, type)
   return data
 }
-
 
 export {
   getCurrentTime,
