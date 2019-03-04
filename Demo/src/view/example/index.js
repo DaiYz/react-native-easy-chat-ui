@@ -13,7 +13,11 @@ import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
 import { ChatScreen } from 'react-native-easy-chat-ui'
 export default class Example extends Component {
-
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerTitle: '聊天'
+    }
+  }
   state = {
     msg: {
       friend_12345678: {

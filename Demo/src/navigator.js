@@ -1,7 +1,7 @@
 import React from 'react'
 import { TouchableOpacity, Text, StyleSheet, Dimensions, View } from 'react-native'
 import { createStackNavigator, createBottomTabNavigator, createAppContainer, createSwitchNavigator } from 'react-navigation'
-// import Material from 'react-native-vector-icons/MaterialIcons'
+import Material from 'react-native-vector-icons/MaterialIcons'
 import Views from './view'
 const { width } = Dimensions.get('window')
 const _HEADER_BACK_BUTTON = (navigation) => {
@@ -11,7 +11,7 @@ const _HEADER_BACK_BUTTON = (navigation) => {
     style={{ top: 1, width: 54, paddingLeft: 15, justifyContent: 'center', alignItems: 'flex-start' }}
     onPress={() => navigation.goBack()}
   >
-    {/*<Material name={'keyboard-arrow-left'} size={30} color={'#333'} />*/}
+    <Material name={'keyboard-arrow-left'} size={30} color={'#333'} />
   </TouchableOpacity>)
 }
 const MODAL_DEFAULT_OPTIONS = {

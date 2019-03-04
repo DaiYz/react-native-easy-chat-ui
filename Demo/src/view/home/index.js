@@ -20,6 +20,11 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class Home extends Component<Props> {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      header: null
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
