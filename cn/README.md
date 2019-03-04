@@ -95,7 +95,11 @@ class Example extends React.Component {
 
 ## 详细示例 (如何录制语音)
 
-点击[`example/index.js`](../example/index.js)查看更多
+```
+cd Demo
+yarn
+react-native run-ios or react-native run-android
+```
 
 ## About Message object
 ```js

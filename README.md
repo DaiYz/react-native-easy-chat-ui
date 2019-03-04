@@ -95,7 +95,11 @@ class Example extends React.Component {
 
 ## Advanced example (How to record  voice)
 
-See [`example/index.js`](example/index.js) for more!
+```
+cd Demo
+yarn
+react-native run-ios or react-native run-android
+```
 
 ## About Message object
 ```js

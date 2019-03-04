@@ -11,8 +11,7 @@ import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
-// import { ChatScreen } from 'react-native-chat'
-import { ChatScreen } from '../../../../app/chat/index'
+import { ChatScreen } from 'react-native-easy-chat-ui'
 export default class Example extends Component {
 
   state = {
