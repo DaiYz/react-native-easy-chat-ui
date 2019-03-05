@@ -68,7 +68,7 @@ class ChatWindow extends PureComponent {
     loadHistory: PropTypes.func,
     leftMessageBackground: PropTypes.string,
     rightMessageBackground: PropTypes.string,
-
+    containerBackgroundColor: PropTypes.string,
     /* popProps */
     usePopView: PropTypes.bool,
     popoverStyle: ViewPropTypes.style,
@@ -318,7 +318,8 @@ class ChatWindow extends PureComponent {
     voicePlaying: false,
     voiceLeftLoadingColor: '#ccc',
     voiceRightLoadingColor: '#628b42',
-    inputHeightFix: 0
+    inputHeightFix: 0,
+    containerBackgroundColor: '#f5f5f5'
   }
 
   constructor (props) {
@@ -335,6 +336,7 @@ class ChatWindow extends PureComponent {
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
     this.HeaderHeight = isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
+    this.onEndReachedCalledDuringMomentum = true
     this.state = {
       messageContent: '',
       cursorIndex: 0,
@@ -776,8 +778,9 @@ class ChatWindow extends PureComponent {
     const { messageList } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     if (!inverted) return
-    if (this.props.historyLoading) return
+    if (this.props.historyLoading || this.onEndReachedCalledDuringMomentum) return
     this.props.loadHistory()
+    this.onEndReachedCalledDuringMomentum = true
   }
 
   _onEmojiSelected (code) {
@@ -897,7 +900,7 @@ class ChatWindow extends PureComponent {
         : (a.time - b.time))
       : []
     return (
-      <View style={{ backgroundColor: '#f5f5f5', flex: 1 }}>
+      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }}>
         <Animated.View style={Platform.OS === 'android' ? { flex: 1 } : {
           height: this.visibleHeight.interpolate({
             inputRange: [0, 1],
@@ -942,6 +945,7 @@ class ChatWindow extends PureComponent {
                 </View>
               }
               onLayout={() => { this._scrollToBottom() }}
+              onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false }}
               onContentSizeChange={() => { !inverted && this._scrollToBottom() }}
               renderRow={(rowData, sectionID, rowId) => {
                 return (
