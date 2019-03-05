@@ -26,7 +26,6 @@
   },
   "homepage": "https://github.com/DaiYz/react-native-chat#readme",
   "peerDependencies": {
-    "prop-types": "*",
     "react": "*",
     "react-native": "*"
   },
