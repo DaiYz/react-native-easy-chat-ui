@@ -5092,9 +5092,9 @@ react-native-audio@^4.3.0:
   version "4.3.0"
   resolved "http://registry.npm.taobao.org/react-native-audio/download/react-native-audio-4.3.0.tgz#fae22b81f6a4dda706fd4837d0c6a89c66cf2e7e"
 
-react-native-easy-chat-ui@^0.1.6:
-  version "0.1.6"
-  resolved "http://registry.npm.taobao.org/react-native-easy-chat-ui/download/react-native-easy-chat-ui-0.1.6.tgz#b02f8329cf055f341aaf77602c69cd39b625c306"
+react-native-easy-chat-ui@^0.2.1:
+  version "0.2.1"
+  resolved "http://registry.npm.taobao.org/react-native-easy-chat-ui/download/react-native-easy-chat-ui-0.2.1.tgz#d0c22a6da01c3d55dd4dcf6e291b5d0cf0ae6404"
   dependencies:
     moment "^2.22.2"
     prop-types "15.6.2"
