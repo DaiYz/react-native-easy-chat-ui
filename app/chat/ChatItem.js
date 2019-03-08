@@ -218,9 +218,11 @@ export default class ChatItem extends PureComponent {
           }}
         >
           <View>
-            {
-              message.renderTime ? this.props.renderMessageTime(message.time) : null
-            }
+            <TouchableOpacity activeOpacity={1}>
+              {
+                message.renderTime ? this.props.renderMessageTime(message.time) : null
+              }
+            </TouchableOpacity>
             <TouchableOpacity
               onPress={() => this.props.closeAll()}
               disabled={isOpen}

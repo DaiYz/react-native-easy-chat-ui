@@ -4,7 +4,7 @@
   "description": "chat UI for React Native",
   "main": "index.js",
   "directories": {
-    "example": "example"
+    "example": "Demo"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,15 +27,16 @@
   "homepage": "https://github.com/DaiYz/react-native-chat#readme",
   "peerDependencies": {
     "react": "*",
+    "prop-types": "*",
     "react-native": "*"
   },
   "dependencies": {
-    "moment": "^2.22.2",
-    "react": "16.2.0",
-    "react-native": "0.52.2",
-    "prop-types": "15.6.2"
+    "moment": "^2.22.2"
   },
   "devDependencies": {
+    "react": "16.2.0",
+    "react-native": "0.52.2",
+    "prop-types": "15.6.2",
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "4.0.1",
     "jest": "23.6.0",
