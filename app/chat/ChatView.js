@@ -471,9 +471,9 @@ class ChatWindow extends PureComponent {
     this.setState({ messageContent: '' })
     if (!inverted) {
       this.time && clearTimeout(this.time)
-      this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
+      // this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
     } else {
-      this.chatList.scrollTo({ y: 0, animated: false })
+      this.chatList.scrollToOffset({ y: 0, animated: false })
     }
   }
 
@@ -524,9 +524,12 @@ class ChatWindow extends PureComponent {
   }
 
   _scrollToBottom (listHeightAndWidth) {
-    const { contentHeight } = listHeightAndWidth
     const { messageList } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    if (listHeightAndWidth !== undefined) {
+      const { contentHeight } = listHeightAndWidth
+      this.isInverted = contentHeight > this.listHeight
+    }
     if (!inverted) {
       setTimeout(() => {
         this.chatList && this.chatList.scrollToEnd({
@@ -534,7 +537,6 @@ class ChatWindow extends PureComponent {
         })
       }, this._userHasBeenInputed ? 0 : 130)
     }
-    this.isInverted = contentHeight > this.listHeight
   }
 
   _onFocus = () => {
@@ -929,7 +931,10 @@ class ChatWindow extends PureComponent {
               onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false }}
               keyExtractor={(item) => `${item.id}`}
               onEndReached={() => this._loadHistory()}
-              onLayout={(e) => (this.listHeight = e.nativeEvent.layout.height)}
+              onLayout={(e) => {
+                this._scrollToBottom()
+                this.listHeight = e.nativeEvent.layout.height
+              }}
               onContentSizeChange={(contentWidth, contentHeight) => { this._scrollToBottom({ contentWidth, contentHeight }) }}
               renderItem={({ item, index }) =>
                 <ChatItem

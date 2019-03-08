@@ -245,6 +245,28 @@ export default class Example extends Component {
     }
   }
 
+  sendMessage = (type, content, isInverted) => {
+    const { msg } = this.state
+    const newMsg = Object.assign({}, msg)
+    newMsg['friend_12345678'].messages.push(
+      {
+        id: `${new Date().getTime()}`,
+        per: {
+          type,
+          content
+        },
+        targetId: '88886666',
+        chatInfo: {
+          avatar: require('../../components/chat/source/image/avatar.png'),
+          id: '12345678'
+        },
+        renderTime: true,
+        sendStatus: 1,
+        time: `${new Date().getTime()}`
+      })
+    this.setState({ msg: newMsg })
+  }
+
   render() {
     let statusHeight = StatusBar.currentHeight || 0
     let androidHeaderHeight = statusHeight + Header.HEIGHT
@@ -254,6 +276,7 @@ export default class Example extends Component {
         <ChatScreen
           ref={(e) => this.chat = e}
           messageList={this.state.msg}
+          sendMessage={this.sendMessage}
           isIphoneX={true}
           androidHeaderHeight={androidHeaderHeight}
           onMessagePress={this.onPress}
