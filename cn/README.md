@@ -253,3 +253,7 @@ android:windowSoftInputMode="adjustResize"
 
 ## 关于ios TextInput无法输入中文
 降级到0.52.2版本以下，或者修改原生文件(自己再封装的TextInput无法从根本上解决问题)
+
+## 需要视频或者语音通话可以访问react-native-agora库
+
+* 详情请戳 [react-native-agora](https://github.com/syanbo/react-native-agora)
