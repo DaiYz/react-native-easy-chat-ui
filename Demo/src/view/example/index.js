@@ -5,13 +5,34 @@ import {
   Text,
   View,
   StatusBar,
-  ScrollView, PermissionsAndroid
+  ScrollView, PermissionsAndroid, Dimensions
 } from 'react-native';
 import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
 import { ChatScreen } from 'react-native-easy-chat-ui'
+const X_WIDTH = 375
+const X_HEIGHT = 812
+const XSMAX_WIDTH = 414
+const XSMAX_HEIGHT = 896
+const PAD_WIDTH = 768
+const PAD_HEIGHT = 1024
+const IPADPRO11_WIDTH = 834
+const IPADPRO11_HEIGHT = 1194
+const IPADPRO129_HEIGHT = 1024
+const IPADPRO129_WIDTH = 1366
+
+const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window')
+const isIPhoneX = (() => {
+  return (
+    (Platform.OS === 'ios' &&
+      ((D_HEIGHT === X_HEIGHT && D_WIDTH === X_WIDTH) ||
+        (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT))) ||
+    ((D_HEIGHT === XSMAX_HEIGHT && D_WIDTH === XSMAX_WIDTH) ||
+      (D_HEIGHT === XSMAX_WIDTH && D_WIDTH === XSMAX_HEIGHT))
+  )
+})()
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -257,7 +278,7 @@ export default class Example extends Component {
         },
         targetId: '88886666',
         chatInfo: {
-          avatar: require('../../components/chat/source/image/avatar.png'),
+          avatar: require('../../source/avatar.png'),
           id: '12345678'
         },
         renderTime: true,
@@ -270,14 +291,13 @@ export default class Example extends Component {
   render() {
     let statusHeight = StatusBar.currentHeight || 0
     let androidHeaderHeight = statusHeight + Header.HEIGHT
-
     return (
       <View style={styles.container}>
         <ChatScreen
           ref={(e) => this.chat = e}
           messageList={this.state.msg}
           sendMessage={this.sendMessage}
-          isIphoneX={true}
+          isIphoneX={isIPhoneX}
           androidHeaderHeight={androidHeaderHeight}
           onMessagePress={this.onPress}
           audioPath={this.state.audioPath}

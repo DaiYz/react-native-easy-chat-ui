@@ -115,7 +115,7 @@ export default class InputBar extends PureComponent {
           : {
             paddingBottom: paddingHeight.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 240]
+              outputRange: [0, this.props.allPanelHeight]
             })
           }
       ]}

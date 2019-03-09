@@ -978,6 +978,7 @@ class ChatWindow extends PureComponent {
             />
           </TouchableOpacity>
           <InputBar
+            allPanelHeight={this.props.allPanelHeight}
             emojiIcon={this.props.emojiIcon}
             keyboardIcon={this.props.keyboardIcon}
             plusIcon={this.props.plusIcon}
