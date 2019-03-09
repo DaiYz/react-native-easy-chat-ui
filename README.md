@@ -22,6 +22,10 @@
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
 
+## Dependency
+- Use version `0.2.x` for RN `>= 0.44.0`
+- Use version `0.1.x` for RN `< 0.44.0`
+
 ## Example
 
 ```jsx

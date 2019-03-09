@@ -8,11 +8,10 @@ import {
   StyleSheet,
   Platform,
   Animated,
-  ActivityIndicator,
-  ListView,
   Easing,
   Clipboard,
   Dimensions,
+  FlatList,
   ViewPropTypes as RNViewPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types'
@@ -26,7 +25,6 @@ import InputBar from './InputBar'
 import PlusPanel from './plus'
 import DelPanel from './del'
 const { height, width } = Dimensions.get('window')
-const Ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 const ViewPropTypes = RNViewPropTypes || View.propTypes
 let that = null
 class ChatWindow extends PureComponent {
@@ -64,11 +62,13 @@ class ChatWindow extends PureComponent {
     panelContainerStyle: ViewPropTypes.style,
     allPanelHeight: PropTypes.number,
     messageErrorIcon: PropTypes.element,
-    historyLoading: PropTypes.bool,
     loadHistory: PropTypes.func,
     leftMessageBackground: PropTypes.string,
     rightMessageBackground: PropTypes.string,
+    renderLoadEarlier: PropTypes.func,
+    extraData: PropTypes.any,
     containerBackgroundColor: PropTypes.string,
+    showsVerticalScrollIndicator: PropTypes.bool,
     /* popProps */
     usePopView: PropTypes.bool,
     popoverStyle: ViewPropTypes.style,
@@ -138,6 +138,8 @@ class ChatWindow extends PureComponent {
   }
 
   static defaultProps = {
+    renderLoadEarlier: () => (null),
+    extraData: null,
     allPanelAnimateDuration: 100,
     messageList: {},
     panelContainerStyle: {},
@@ -196,7 +198,7 @@ class ChatWindow extends PureComponent {
         {
           title: '删除',
           onPress: () => {
-            that.props.delMessage({ index, message }, that.state.isInverted)
+            that.props.delMessage({ index, message }, that.isInverted)
           }
         },
         {
@@ -214,7 +216,7 @@ class ChatWindow extends PureComponent {
           {
             title: '删除',
             onPress: () => {
-              that.props.delMessage({ index, message }, that.state.isInverted)
+              that.props.delMessage({ index, message }, that.isInverted)
             }
           },
           {
@@ -240,7 +242,6 @@ class ChatWindow extends PureComponent {
       backgroundColor: '#333'
     },
     allPanelHeight: 200,
-    historyLoading: false,
     loadHistory: () => { console.log('loadMore') },
     onMessagePress: (type, index, content, message) => { console.log(type, index, content, message) },
     onMessageLongPress: (type, index, content, message) => { console.log('longPress', type, index, content, message) },
@@ -319,7 +320,8 @@ class ChatWindow extends PureComponent {
     voiceLeftLoadingColor: '#ccc',
     voiceRightLoadingColor: '#628b42',
     inputHeightFix: 0,
-    containerBackgroundColor: '#f5f5f5'
+    containerBackgroundColor: '#f5f5f5',
+    showsVerticalScrollIndicator: false
   }
 
   constructor (props) {
@@ -337,6 +339,8 @@ class ChatWindow extends PureComponent {
     this.emojiHeight = new Animated.Value(0)
     this.HeaderHeight = isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
     this.onEndReachedCalledDuringMomentum = true
+    this.listHeight = height - this.HeaderHeight - 64
+    this.isInverted = false
     this.state = {
       messageContent: '',
       cursorIndex: 0,
@@ -462,14 +466,14 @@ class ChatWindow extends PureComponent {
     if (type === 'text' && messageContent.trim().length !== 0) {
       messageContent = changeEmojiText(this.state.messageContent).join('')
     }
-    this.props.sendMessage(type, messageContent, this.state.isInverted)
+    this.props.sendMessage(type, messageContent, this.isInverted)
     this.InputBar.input && this.InputBar.input.clear()
     this.setState({ messageContent: '' })
     if (!inverted) {
       this.time && clearTimeout(this.time)
-      this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
+      // this.time = setTimeout(() => { this.chatList && this.chatList.scrollToEnd({ animated: true }) }, 200)
     } else {
-      this.chatList.scrollTo({ y: 0, animated: false })
+      this.chatList.scrollToOffset({ y: 0, animated: false })
     }
   }
 
@@ -519,17 +523,13 @@ class ChatWindow extends PureComponent {
     this.closeAll()
   }
 
-  _scrollToBottom (even) {
+  _scrollToBottom (listHeightAndWidth) {
     const { messageList } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
-    let scrollProperties = this.chatList.scrollProperties
-    if (!scrollProperties.contentLength) { return }
-    // if (scrollProperties.contentLength - (height - this.HeaderHeight - 64) > 0) {
-    //   console.log('[-----超出屏幕]')
-    //   if (this.inverted) {
-    //     this.chatList && this.chatList.scrollTo({y: 0, animated: false})
-    //   }
-    // }
+    if (listHeightAndWidth !== undefined) {
+      const { contentHeight } = listHeightAndWidth
+      this.isInverted = contentHeight > this.listHeight
+    }
     if (!inverted) {
       setTimeout(() => {
         this.chatList && this.chatList.scrollToEnd({
@@ -774,12 +774,11 @@ class ChatWindow extends PureComponent {
     }
   }
 
-  _loadHistory = () => {
+  _loadHistory = async () => {
     const { messageList } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
-    if (!inverted) return
-    if (this.props.historyLoading || this.onEndReachedCalledDuringMomentum) return
-    this.props.loadHistory()
+    if (!inverted || this.onEndReachedCalledDuringMomentum) return
+    await this.props.loadHistory()
     this.onEndReachedCalledDuringMomentum = true
   }
 
@@ -891,7 +890,7 @@ class ChatWindow extends PureComponent {
   }
 
   render () {
-    const { isIphoneX, messageList, allPanelHeight, historyLoading } = this.props
+    const { isIphoneX, messageList, allPanelHeight } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow } = this.state
     const currentList = messageList[this.targetKey] !== undefined
@@ -917,83 +916,69 @@ class ChatWindow extends PureComponent {
             activeOpacity={1}
             onPress={() => this.closeAll()}
             style={[{ flex: 1, backgroundColor: '#f7f7f7' }, this.props.chatWindowStyle]}>
-            <ListView
+            <FlatList
               ref={e => (this.chatList = e)}
+              inverted={inverted}
+              data={currentList}
+              ListFooterComponent={this.props.renderLoadEarlier}
+              extraData={this.props.extraData}
+              automaticallyAdjustContentInsets={false}
               onScroll={(e) => { this.props.onScroll(e) }}
-              style={{ transform: [{ scale: inverted ? -1 : 1 }] }}
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={this.props.showsVerticalScrollIndicator}
               onEndReachedThreshold={this.props.onEndReachedThreshold}
-              onEndReached={() => {
-                this._loadHistory()
-              }}
-              dataSource={Ds.cloneWithRows(currentList)}
               enableEmptySections
-              renderFooter={() =>
-                <View onLayout={
-                  (e) => {
-                    const listHeight = height - this.HeaderHeight - 53
-                    if (listHeight - e.nativeEvent.layout.y < 0) {
-                      !this.state.isInverted && this.setState({ isInverted: true })
-                    } else {
-                      this.state.isInverted && this.setState({ isInverted: false })
-                    }
-                    console.log(e.nativeEvent.layout.y)
-                  }
-                }
-                >
-                  { historyLoading ? <ActivityIndicator /> : null }
-                </View>
-              }
-              onLayout={() => { this._scrollToBottom() }}
+              scrollEventThrottle={100}
               onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false }}
-              onContentSizeChange={() => { !inverted && this._scrollToBottom() }}
-              renderRow={(rowData, sectionID, rowId) => {
-                return (
-                  <View style={{ transform: [{ scale: inverted ? -1 : 1 }] }}>
-                    <ChatItem
-                      ref={(e) => (this.messageItem = e)}
-                      user={this.props.userProfile}
-                      reSendMessage={this.props.reSendMessage}
-                      renderMessageCheck={this.props.renderMessageCheck}
-                      message={rowData}
-                      currentIndex={this.state.currentIndex}
-                      isOpen={this.state.selectMultiple}
-                      selectMultiple={this.selectMultiple}
-                      rowId={rowId}
-                      popShow={this.show}
-                      messageSelectIcon={this.props.messageSelectIcon}
-                      renderMessageTime={this.props.renderMessageTime}
-                      onMessageLongPress={this.show}
-                      onMessagePress={this.props.onMessagePress}
-                      onPressAvatar={this._PressAvatar}
-                      messageErrorIcon={this.props.messageErrorIcon}
-                      voiceLeftIcon={this.props.voiceLeftIcon}
-                      voiceRightIcon={this.props.voiceRightIcon}
-                      closeAll={this.closeAll}
-                      avatarStyle={this.props.avatarStyle}
-                      renderErrorMessage={this.props.renderErrorMessage}
-                      renderTextMessage={this.props.renderTextMessage}
-                      renderImageMessage={this.props.renderImageMessage}
-                      renderVoiceMessage={this.props.renderVoiceMessage}
-                      renderVideoMessage={this.props.renderVideoMessage}
-                      renderLocationMessage={this.props.renderLocationMessage}
-                      renderShareMessage={this.props.renderShareMessage}
-                      rightMessageBackground={this.props.rightMessageBackground}
-                      leftMessageBackground={this.props.leftMessageBackground}
-                      voiceLoading={this.props.voiceLoading}
-                      voicePlaying={this.props.voicePlaying}
-                      savePressIndex={this.savePressIndex}
-                      pressIndex={this.state.pressIndex}
-                      voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
-                      voiceRightLoadingColor={this.props.voiceRightLoadingColor}
-                    />
-                  </View>
-                )
+              keyExtractor={(item) => `${item.id}`}
+              onEndReached={() => this._loadHistory()}
+              onLayout={(e) => {
+                this._scrollToBottom()
+                this.listHeight = e.nativeEvent.layout.height
               }}
+              onContentSizeChange={(contentWidth, contentHeight) => { this._scrollToBottom({ contentWidth, contentHeight }) }}
+              renderItem={({ item, index }) =>
+                <ChatItem
+                  ref={(e) => (this.messageItem = e)}
+                  user={this.props.userProfile}
+                  reSendMessage={this.props.reSendMessage}
+                  renderMessageCheck={this.props.renderMessageCheck}
+                  message={item}
+                  currentIndex={this.state.currentIndex}
+                  isOpen={this.state.selectMultiple}
+                  selectMultiple={this.selectMultiple}
+                  rowId={index}
+                  popShow={this.show}
+                  messageSelectIcon={this.props.messageSelectIcon}
+                  renderMessageTime={this.props.renderMessageTime}
+                  onMessageLongPress={this.show}
+                  onMessagePress={this.props.onMessagePress}
+                  onPressAvatar={this._PressAvatar}
+                  messageErrorIcon={this.props.messageErrorIcon}
+                  voiceLeftIcon={this.props.voiceLeftIcon}
+                  voiceRightIcon={this.props.voiceRightIcon}
+                  closeAll={this.closeAll}
+                  avatarStyle={this.props.avatarStyle}
+                  renderErrorMessage={this.props.renderErrorMessage}
+                  renderTextMessage={this.props.renderTextMessage}
+                  renderImageMessage={this.props.renderImageMessage}
+                  renderVoiceMessage={this.props.renderVoiceMessage}
+                  renderVideoMessage={this.props.renderVideoMessage}
+                  renderLocationMessage={this.props.renderLocationMessage}
+                  renderShareMessage={this.props.renderShareMessage}
+                  rightMessageBackground={this.props.rightMessageBackground}
+                  leftMessageBackground={this.props.leftMessageBackground}
+                  voiceLoading={this.props.voiceLoading}
+                  voicePlaying={this.props.voicePlaying}
+                  savePressIndex={this.savePressIndex}
+                  pressIndex={this.state.pressIndex}
+                  voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
+                  voiceRightLoadingColor={this.props.voiceRightLoadingColor}
+                />
+              }
             />
           </TouchableOpacity>
           <InputBar
-            allPanelHeight={allPanelHeight}
+            allPanelHeight={this.props.allPanelHeight}
             emojiIcon={this.props.emojiIcon}
             keyboardIcon={this.props.keyboardIcon}
             plusIcon={this.props.plusIcon}
@@ -1045,7 +1030,7 @@ class ChatWindow extends PureComponent {
                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
                 messageDelIcon={this.props.messageDelIcon}
                 delMessage={this.props.delMessage}
-                isInverted={this.state.isInverted}
+                isInverted={this.isInverted}
                 leftHeight={this.leftHeight}
               />
               : null

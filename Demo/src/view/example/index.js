@@ -10,7 +10,6 @@ import {
 import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
-import Sound from 'react-native-sound'
 import { ChatScreen } from 'react-native-easy-chat-ui'
 const X_WIDTH = 375
 const X_HEIGHT = 812

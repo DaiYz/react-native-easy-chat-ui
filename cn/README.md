@@ -9,9 +9,12 @@
 [![npm](https://img.shields.io/npm/l/react-native-easy-chat-ui.svg)](https://github.com/DaiYz/react-native-easy-chat-ui/blob/master/LICENSE)
 
 ## 安装
-
+- RN `>= 0.44.0` 使用   最新版本
+- RN `< 0.44.0` 使用  `0.1.7`版本
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
+
+
 
 ## 截图
 <p>
@@ -250,3 +253,7 @@ android:windowSoftInputMode="adjustResize"
 
 ## 关于ios TextInput无法输入中文
 降级到0.52.2版本以下，或者修改原生文件(自己再封装的TextInput无法从根本上解决问题)
+
+## 需要视频或者语音通话可以访问react-native-agora库
+
+* 详情请戳 [react-native-agora](https://github.com/syanbo/react-native-agora)
