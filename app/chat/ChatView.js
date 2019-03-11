@@ -479,8 +479,18 @@ class ChatWindow extends PureComponent {
     }
   }
 
- async _changeMethod () {
-    this.setState({ showVoice: !this.state.showVoice })
+  _changeMethod () {
+    this.setState({ showVoice: !this.state.showVoice },
+      async() => {
+        if (Platform.OS === 'android' && this.state.showVoice && !this.androidHasAudioPermission) {
+          const hasPermission = await this.props.checkPermission()
+          this.androidHasAudioPermission = hasPermission
+          if (!hasPermission) {
+            this.props.requestAndroidPermission()
+          }
+        }
+      }
+    )
     this.setState({ saveChangeSize: this.state.inputChangeSize })
     this.time && clearTimeout(this.time)
     this.time = setTimeout(() => this.InputBar.input && this.InputBar.input.focus(), 300)
@@ -492,13 +502,7 @@ class ChatWindow extends PureComponent {
       this.setState({ xHeight: this.props.iphoneXBottomPadding })
       return this.closeEmoji(true)
     }
-    if (Platform.OS === 'android' && !this.state.showVoice && !this.androidHasAudioPermission) {
-      const hasPermission = await this.props.checkPermission()
-      this.androidHasAudioPermission = hasPermission
-      if (!hasPermission) {
-        this.props.requestAndroidPermission()
-      }
-    }
+
   }
 
   _changeText (e) {

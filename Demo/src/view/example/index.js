@@ -135,10 +135,6 @@ export default class Example extends Component {
     audioPath: ''
   }
 
-  async componentDidMount() {
-    console.warn(await AudioRecorder.requestAuthorization())
-  }
-
   audioProgress = () => {
     AudioRecorder.onProgress = (data) => {
       if (data.currentTime === 0) {
