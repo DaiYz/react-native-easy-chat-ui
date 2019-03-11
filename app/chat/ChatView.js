@@ -15,7 +15,7 @@ import {
   ViewPropTypes as RNViewPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types'
-import { getCurrentTime, changeEmojiText } from './utils'
+import { getCurrentTime, changeEmojiText, isIPhoneX } from './utils'
 import Voice from './VoiceView'
 import PopView from './components/pop-view'
 import ChatItem from './ChatItem'
@@ -45,7 +45,6 @@ class ChatWindow extends PureComponent {
     pressAvatar: PropTypes.func,
     renderErrorMessage: PropTypes.func,
     reSendMessage: PropTypes.func,
-    isIphoneX: PropTypes.bool.isRequired,
     androidHeaderHeight: PropTypes.number.isRequired,
     iphoneXHeaderPadding: PropTypes.number,
     iphoneXBottomPadding: PropTypes.number,
@@ -115,7 +114,8 @@ class ChatWindow extends PureComponent {
     audioHandle: PropTypes.bool,
     setAudioHandle: PropTypes.func,
     audioHasPermission: PropTypes.bool,
-    checkAndroidPermission: PropTypes.func,
+    checkPermission: PropTypes.func,
+    requestAndroidPermission: PropTypes.func,
     voiceErrorText: PropTypes.string,
     voiceCancelText: PropTypes.string,
     voiceNoteText: PropTypes.string,
@@ -157,7 +157,6 @@ class ChatWindow extends PureComponent {
     iphoneXHeaderPadding: 24, // 安全区域
     iphoneXBottomPadding: 34, // 安全区域
     onEndReachedThreshold: 0.1,
-    isIphoneX: true,
     usePopView: true,
     userProfile: {
       id: '88886666',
@@ -311,7 +310,8 @@ class ChatWindow extends PureComponent {
     audioHandle: true,
     setAudioHandle: () => {},
     audioHasPermission: false,
-    checkAndroidPermission: () => {},
+    checkPermission: () => {},
+    requestAndroidPermission: () => {},
     voiceErrorText: '说话时间太短',
     voiceCancelText: '松开手指取消发送',
     voiceNoteText: '手指上划，取消发送',
@@ -327,20 +327,22 @@ class ChatWindow extends PureComponent {
   constructor (props) {
     super(props)
     that = this
-    const { isIphoneX, chatId, androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
+    const { chatId, androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
     this.targetKey = `${chatType}_${chatId}`
     this.time = null
     this._userHasBeenInputed = false
     this.iosHeaderHeight = 64
+    this.isIphoneX = isIPhoneX()
     this.visibleHeight = new Animated.Value(0)
     this.panelHeight = new Animated.Value(0)
     this.leftHeight = new Animated.Value(0)
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
-    this.HeaderHeight = isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
+    this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
     this.onEndReachedCalledDuringMomentum = true
     this.listHeight = height - this.HeaderHeight - 64
     this.isInverted = false
+    this.androidHasAudioPermission = false
     this.state = {
       messageContent: '',
       cursorIndex: 0,
@@ -477,7 +479,7 @@ class ChatWindow extends PureComponent {
     }
   }
 
-  _changeMethod () {
+ async _changeMethod () {
     this.setState({ showVoice: !this.state.showVoice })
     this.setState({ saveChangeSize: this.state.inputChangeSize })
     this.time && clearTimeout(this.time)
@@ -489,6 +491,13 @@ class ChatWindow extends PureComponent {
     if (!this.state.showVoice && this.state.emojiShow) {
       this.setState({ xHeight: this.props.iphoneXBottomPadding })
       return this.closeEmoji(true)
+    }
+    if (Platform.OS === 'android' && !this.state.showVoice && !this.androidHasAudioPermission) {
+      const hasPermission = await this.props.checkPermission()
+      this.androidHasAudioPermission = hasPermission
+      if (!hasPermission) {
+        this.props.requestAndroidPermission()
+      }
     }
   }
 
@@ -890,7 +899,7 @@ class ChatWindow extends PureComponent {
   }
 
   render () {
-    const { isIphoneX, messageList, allPanelHeight } = this.props
+    const { messageList, allPanelHeight } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow } = this.state
     const currentList = messageList[this.targetKey] !== undefined
@@ -907,7 +916,7 @@ class ChatWindow extends PureComponent {
               height - this.HeaderHeight,
               keyboardShow
                 ? height - keyboardHeight - this.HeaderHeight
-                : height - this.HeaderHeight - allPanelHeight - (isIphoneX ? this.props.iphoneXBottomPadding : 0)
+                : height - this.HeaderHeight - allPanelHeight - (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
             ]
           })
         }
@@ -986,7 +995,7 @@ class ChatWindow extends PureComponent {
             sendIcon={this.props.sendIcon}
             sendUnableIcon={this.props.sendUnableIcon}
             ref={e => (this.InputBar = e)}
-            isIphoneX={isIphoneX}
+            isIphoneX={this.isIphoneX}
             placeholder={this.props.placeholder}
             useVoice={this.props.useVoice}
             onMethodChange={this._changeMethod.bind(this)}
@@ -1022,7 +1031,7 @@ class ChatWindow extends PureComponent {
             this.props.usePopView
               ? <DelPanel
                 messageSelected={this.state.messageSelected}
-                isIphoneX={isIphoneX}
+                isIphoneX={this.isIphoneX}
                 delPanelButtonStyle={this.props.delPanelButtonStyle}
                 delPanelStyle={this.props.delPanelStyle}
                 renderDelPanel={this.props.renderDelPanel}
@@ -1039,7 +1048,7 @@ class ChatWindow extends PureComponent {
             this.props.usePlus
               ? <PlusPanel
                 panelHeight={this.panelHeight}
-                isIphoneX={isIphoneX}
+                isIphoneX={this.isIphoneX}
                 HeaderHeight={this.HeaderHeight}
                 allPanelHeight={this.props.allPanelHeight}
                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
@@ -1054,7 +1063,7 @@ class ChatWindow extends PureComponent {
             this.props.useEmoji
               ? <EmojiPanel
                 emojiHeight={this.emojiHeight}
-                isIphoneX={this.props.isIphoneX}
+                isIphoneX={this.isIphoneX}
                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
                 HeaderHeight={this.HeaderHeight}
                 allPanelHeight={this.props.allPanelHeight}
@@ -1072,8 +1081,8 @@ class ChatWindow extends PureComponent {
                 changeVoiceStatus={this.changeVoiceStatus}
                 voiceStatus={this.state.isVoiceContinue}
                 audioPath={this.props.audioPath}
-                audioHasPermission={this.props.audioHasPermission}
-                checkAndroidPermission={this.props.checkAndroidPermission}
+                audioHasPermission={this.androidHasAudioPermission}
+                audioPermissionState={this.props.audioHasPermission}
                 voiceSpeakIcon={this.props.voiceSpeakIcon}
                 audioOnProgress={this.props.audioOnProgress}
                 audioOnFinish={this.props.audioOnFinish}

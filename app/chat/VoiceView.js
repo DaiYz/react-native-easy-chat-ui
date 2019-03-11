@@ -38,10 +38,11 @@ export default class VoiceView extends PureComponent {
   }
 
   componentDidMount () {
-    this.props.audioInitPath()
-    this.props.audioOnProgress()
-    this.props.audioOnFinish()
-    Platform.OS === 'android' && this.props.checkAndroidPermission()
+    if (Platform.OS !== 'android') {
+      this.props.audioInitPath()
+      this.props.audioOnProgress()
+      this.props.audioOnFinish()
+    }
   }
 
   componentWillReceiveProps (next) {
@@ -59,7 +60,6 @@ export default class VoiceView extends PureComponent {
   }
 
   show () {
-    const { hasPermission } = this.props
     this.setState({
       isShow: true
     })
@@ -75,7 +75,6 @@ export default class VoiceView extends PureComponent {
 
   async close () {
     await this._stop()
-    const { hasPermission } = this.state
     let delayTime = 0
     const { audioCurrentTime } = this.props
     if (audioCurrentTime < 1) {
@@ -94,7 +93,9 @@ export default class VoiceView extends PureComponent {
       return undefined
     }
     audioCurrentTime >= 1 && this.props.sendVoice && this.props.sendVoice('voice', content)
-    this.props.audioInitPath()
+    if (Platform.OS !== 'android') {
+      this.props.audioInitPath()
+    }
   }
 
   delayClose () {
@@ -154,6 +155,11 @@ export default class VoiceView extends PureComponent {
       return
     }
     this.setState({ recording: true, paused: false })
+    if (Platform.OS === 'android') {
+      await this.props.audioInitPath()
+      await this.props.audioOnProgress()
+      await this.props.audioOnFinish()
+    }
     try {
       await this.props.audioRecord()
     } catch (e) {

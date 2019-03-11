@@ -11,27 +11,7 @@ import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import { ChatScreen } from 'react-native-easy-chat-ui'
-const X_WIDTH = 375
-const X_HEIGHT = 812
-const XSMAX_WIDTH = 414
-const XSMAX_HEIGHT = 896
-const PAD_WIDTH = 768
-const PAD_HEIGHT = 1024
-const IPADPRO11_WIDTH = 834
-const IPADPRO11_HEIGHT = 1194
-const IPADPRO129_HEIGHT = 1024
-const IPADPRO129_WIDTH = 1366
 
-const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window')
-const isIPhoneX = (() => {
-  return (
-    (Platform.OS === 'ios' &&
-      ((D_HEIGHT === X_HEIGHT && D_WIDTH === X_WIDTH) ||
-        (D_HEIGHT === X_WIDTH && D_WIDTH === X_HEIGHT))) ||
-    ((D_HEIGHT === XSMAX_HEIGHT && D_WIDTH === XSMAX_WIDTH) ||
-      (D_HEIGHT === XSMAX_WIDTH && D_WIDTH === XSMAX_HEIGHT))
-  )
-})()
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -155,7 +135,8 @@ export default class Example extends Component {
     audioPath: ''
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    console.warn(await AudioRecorder.requestAuthorization())
   }
 
   audioProgress = () => {
@@ -246,7 +227,7 @@ export default class Example extends Component {
     this.setState({ finished: didSucceed })
   }
 
-  _checkAndroidPermission = async() => {
+  _requestAndroidPermission = async() => {
     try {
       const rationale = {
         'title': '麦克风权限',
@@ -296,12 +277,12 @@ export default class Example extends Component {
           ref={(e) => this.chat = e}
           messageList={this.state.msg}
           sendMessage={this.sendMessage}
-          isIphoneX={isIPhoneX}
           androidHeaderHeight={androidHeaderHeight}
           onMessagePress={this.onPress}
           audioPath={this.state.audioPath}
           audioHasPermission={this.state.hasPermission}
-          checkAndroidPermission={this._checkAndroidPermission}
+          checkPermission={AudioRecorder.requestAuthorization}
+          requestAndroidPermission={this._requestAndroidPermission}
           audioOnProgress={this.audioProgress}
           audioOnFinish={this.audioFinish}
           audioInitPath={this.initPath}

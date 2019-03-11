@@ -160,7 +160,6 @@ props | default | Info
  onMessagePress | (type, index, content) => {} |  Callback when press a message
  onMessageLongPress | (type, index, content) => {} | Callback when longPress a message and usePopView is false
  pressAvatar | (isSelf) => {} |  Callback when press avatar
- isIphoneX | true | Is iphoneX、iphoneXR、iphoneXS or iphoneXS Max?
  androidHeaderHeight | 66 | Android navigation bar height + statusBar height
  userProfile | {id: '88888888', avatar: 'default.png'} | Your own profile
  historyLoading | false | Display an `ActivityIndicator` when loading earlier messages
@@ -225,7 +224,8 @@ props | default | Info
    audioHandle | true | Whether to get a recording handle
    setAudioHandle | () => {} | Callback when get handle or not
    audioHasPermission | false | Whether has permission 
-   checkAndroidPermission | () => {} | Callback when check permission on android
+   requestAndroidPermission | () => {} | Callback when check permission on android
+   checkPermission | () => {} | Callback whether has permission 
    voiceLoading | false | Loading voice or not
    voicePlaying | false | Playing voice or not
    voiceLeftLoadingColor | '#cccccc' | Custom background color on left when load voice

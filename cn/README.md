@@ -159,7 +159,6 @@ react-native run-ios or react-native run-android
  onMessagePress | (type, index, content, message) => {} | 点击消息的回调
  onMessageLongPress | (type, index, content, message) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
  pressAvatar | (isSelf) => {} | 点击头像的回调
- isIphoneX | true | 是否是苹果的刘海屏手机
  androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
  userProfile | {id: '88888888', avatar: 'default.png'} | 你自己的个人资料
  historyLoading | false | 显示一个loading
@@ -229,7 +228,8 @@ react-native run-ios or react-native run-android
    audioHandle | true | 是否获取到录音的具柄
    setAudioHandle | () => {} | 修改是否获取录音具柄的状态
    audioHasPermission | false | 是否有录音权限
-   checkAndroidPermission | () => {} | android检查录音权限的回调
+   requestAndroidPermission | () => {} | android检查录音权限的回调
+   checkPermission | () => {} | 检查是否已获得录音权限
    voiceLoading | false | 是否正在加载语音
    voicePlaying | false | 是否正在播放语音
    voiceLeftLoadingColor | '#cccccc' | 自定义语音加载时左侧消息颜色
