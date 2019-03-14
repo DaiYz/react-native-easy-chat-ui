@@ -26,7 +26,6 @@ import PlusPanel from './plus'
 import DelPanel from './del'
 const { height, width } = Dimensions.get('window')
 const ViewPropTypes = RNViewPropTypes || View.propTypes
-let that = null
 class ChatWindow extends PureComponent {
   static propTypes = {
     /* defaultProps */
@@ -192,41 +191,6 @@ class ChatWindow extends PureComponent {
         <Text style={{ color: '#7a7a7a', marginTop: 10 }}>{data.title}</Text>
       </TouchableOpacity>,
     onScroll: () => {},
-    setPopItems: (type, index, text, message) => {
-      let items = [
-        {
-          title: '删除',
-          onPress: () => {
-            that.props.delMessage({ index, message }, that.isInverted)
-          }
-        },
-        {
-          title: '多选',
-          onPress: () => {
-            that.multipleSelect(index, message)
-          } }
-      ]
-      if (type === 'text') {
-        items = [
-          {
-            title: '复制',
-            onPress: () => Clipboard.setString(text)
-          },
-          {
-            title: '删除',
-            onPress: () => {
-              that.props.delMessage({ index, message }, that.isInverted)
-            }
-          },
-          {
-            title: '多选',
-            onPress: () => {
-              that.multipleSelect(index, message)
-            } }
-        ]
-      }
-      return items
-    },
     renderErrorMessage: (messageStatus) => {
       switch (messageStatus) {
         case -1:
@@ -326,7 +290,6 @@ class ChatWindow extends PureComponent {
 
   constructor (props) {
     super(props)
-    that = this
     const { chatId, androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
     this.targetKey = `${chatType}_${chatId}`
     this.time = null
@@ -481,7 +444,7 @@ class ChatWindow extends PureComponent {
 
   _changeMethod () {
     this.setState({ showVoice: !this.state.showVoice },
-      async() => {
+      async () => {
         if (Platform.OS === 'android' && this.state.showVoice && !this.androidHasAudioPermission) {
           const hasPermission = await this.props.checkPermission()
           this.androidHasAudioPermission = hasPermission
@@ -502,7 +465,6 @@ class ChatWindow extends PureComponent {
       this.setState({ xHeight: this.props.iphoneXBottomPadding })
       return this.closeEmoji(true)
     }
-
   }
 
   _changeText (e) {
@@ -751,8 +713,44 @@ class ChatWindow extends PureComponent {
       this.props.onMessageLongPress(type, index, text, message)
     } else {
       view.measure((x, y, width, height, pageX, pageY) => {
-        let items = this.props.setPopItems(type, index, text, message)
-        if (items === undefined) console.error('need to return items')
+        let items = null
+        if (this.props.setPopItems) {
+          items = this.props.setPopItems(type, index, text, message)
+        } else {
+          items = [
+            {
+              title: '删除',
+              onPress: () => {
+                this.props.delMessage({ index, message }, this.isInverted)
+              }
+            },
+            {
+              title: '多选',
+              onPress: () => {
+                this.multipleSelect(index, message)
+              } }
+          ]
+          if (type === 'text') {
+            items = [
+              {
+                title: '复制',
+                onPress: () => Clipboard.setString(text)
+              },
+              {
+                title: '删除',
+                onPress: () => {
+                  this.props.delMessage({ index, message }, this.isInverted)
+                }
+              },
+              {
+                title: '多选',
+                onPress: () => {
+                  this.multipleSelect(index, message)
+                } }
+            ]
+          }
+        }
+        if (items === null) console.error('need to return items')
         PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
       })
     }
