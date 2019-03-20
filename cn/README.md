@@ -10,7 +10,7 @@
 
 ## 安装
 - RN `>= 0.44.0` 使用   最新版本
-- RN `< 0.44.0` 使用  `0.1.7`版本
+- RN `< 0.44.0` 使用  `0.1.x`版本
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
 
