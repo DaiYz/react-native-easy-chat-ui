@@ -5,7 +5,7 @@ import {
   Text,
   View,
   StatusBar,
-  ScrollView, PermissionsAndroid, Dimensions
+  ScrollView, PermissionsAndroid, TouchableOpacity
 } from 'react-native';
 import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
@@ -23,7 +23,7 @@ export default class Example extends Component {
       friend_12345678: {
         messages: [
           {
-            id: `${new Date().getTime()}`,
+            id: `1`,
             per: {
               type: 'text',
               content: 'hello world'
@@ -38,7 +38,7 @@ export default class Example extends Component {
             time: '1542006036549'
           },
           {
-            id: `${new Date().getTime()}`,
+            id: `2`,
             per: {
               type: 'text',
               content: 'hi/{se}'
@@ -53,7 +53,7 @@ export default class Example extends Component {
             time: '1542106036549'
           },
           {
-            id: `${new Date().getTime()}`,
+            id: `3`,
             per: {
               type: 'image',
               content: {
@@ -72,7 +72,7 @@ export default class Example extends Component {
             time: '1542106037000'
           },
           {
-            id: `${new Date().getTime()}`,
+            id: `4`,
             per: {
               type: 'text',
               content: '你好/{weixiao}'
@@ -87,7 +87,7 @@ export default class Example extends Component {
             time: '1542177036549'
           },
           {
-            id: `${new Date().getTime()}`,
+            id: `5`,
             per: {
               type: 'voice',
               content: {
@@ -105,7 +105,7 @@ export default class Example extends Component {
             time: '1542260667161'
           },
           {
-            id: `${new Date().getTime()}`,
+            id: `6`,
             per: {
               type: 'voice',
               content: {
@@ -242,6 +242,28 @@ export default class Example extends Component {
     }
   }
 
+  receive = () => {
+    const { msg } = this.state
+    const newMsg = Object.assign({}, msg)
+    newMsg['friend_12345678'].messages.push(
+      {
+        id: `${new Date().getTime()}`,
+        per: {
+          type: 'text',
+          content: '收到一条消息' + new Date().getTime()
+        },
+        targetId: '12345678',
+        chatInfo: {
+          avatar: require('../../source/avatar.png'),
+          id: '88886666'
+        },
+        renderTime: true,
+        sendStatus: 1,
+        time: `${new Date().getTime()}`
+      })
+    this.setState({ msg: newMsg })
+  }
+
   sendMessage = (type, content, isInverted) => {
     const { msg } = this.state
     const newMsg = Object.assign({}, msg)
@@ -290,6 +312,18 @@ export default class Example extends Component {
           audioHandle={this.state.voiceHandle}
           setAudioHandle={this._setVoiceHandel}
         />
+        <TouchableOpacity
+          onPress={() => this.receive()}
+          style={{width: 60,
+            height: 60, borderRadius: 30,
+            position: 'absolute', top: 200, right: 0, backgroundColor: 'blue',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+          <Text style={{color: '#fff'}}>
+            模拟收消息
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
