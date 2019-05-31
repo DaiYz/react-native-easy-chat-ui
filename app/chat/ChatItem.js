@@ -238,7 +238,7 @@ export default class ChatItem extends PureComponent {
               <TouchableOpacity
                 activeOpacity={0.7}
                 disabled={isOpen}
-                onPress={() => this.props.onPressAvatar(isSelf)}
+                onPress={() => this.props.onPressAvatar(isSelf, message.targetId)}
               >
                 <Image
                   source={isSelf ? user.avatar : message.chatInfo.avatar}

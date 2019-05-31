@@ -246,7 +246,7 @@ class ChatWindow extends PureComponent {
       // })
     },
     androidHeaderHeight: 66,
-    pressAvatar: (isSelf) => { console.log(isSelf) },
+    pressAvatar: (isSelf, targetId) => { console.log(isSelf, targetId) },
     emojiIcon: <Image source={require('../source/image/emoji.png')} style={{ width: 30, height: 30 }} />,
     messageSelectIcon: <Image source={require('../source/image/check.png')} style={{ width: 14, height: 14 }} />,
     messageDelIcon: <Image source={require('../source/image/delete.png')} style={{ width: 22, height: 22 }} />,
@@ -492,9 +492,9 @@ class ChatWindow extends PureComponent {
     this.setState({ voiceEnd: false })
   }
 
-  _PressAvatar = (isSelf) => {
+  _PressAvatar = (isSelf, targetId) => {
     const { pressAvatar } = this.props
-    pressAvatar(isSelf)
+    pressAvatar(isSelf, targetId)
     this.closeAll()
   }
 
