@@ -186,6 +186,36 @@ export default class ChatItem extends PureComponent {
         } else {
           return this.props.renderShareMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
+      case 'videoCall':
+        if (this.props.renderVideoCallMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderVideoCallMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
+      case 'voiceCall':
+        if (this.props.renderVoiceCallMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderVoiceCallMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
+      case 'redEnvelope':
+        if (this.props.renderRedEnvelopeMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderRedEnvelopeMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
+      case 'file':
+        if (this.props.renderFileMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderFileMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
+      case 'system':
+        if (this.props.renderSystemMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderSystemMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
     }
   }
 

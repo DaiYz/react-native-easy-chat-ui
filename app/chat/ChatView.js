@@ -43,6 +43,7 @@ class ChatWindow extends PureComponent {
     renderMessageTime: PropTypes.func,
     pressAvatar: PropTypes.func,
     renderErrorMessage: PropTypes.func,
+    renderChatBg: PropTypes.func,
     reSendMessage: PropTypes.func,
     androidHeaderHeight: PropTypes.number.isRequired,
     iphoneXHeaderPadding: PropTypes.number,
@@ -130,6 +131,11 @@ class ChatWindow extends PureComponent {
     renderVideoMessage: PropTypes.func,
     renderLocationMessage: PropTypes.func,
     renderShareMessage: PropTypes.func,
+    renderVideoCallMessage: PropTypes.func,
+    renderVoiceCallMessage: PropTypes.func,
+    renderRedEnvelopeMessage: PropTypes.func,
+    renderFileMessage: PropTypes.func,
+    renderSystemMessage: PropTypes.func,
     /* delPanelProps */
     delPanelStyle: ViewPropTypes.style,
     delPanelButtonStyle: ViewPropTypes.style
@@ -900,18 +906,34 @@ class ChatWindow extends PureComponent {
     this.setState({ pressIndex: id })
   }
 
+  renderBg = (bg) => {
+    const {renderChatBg} = this.props
+    if (bg === null) return null
+    if (renderChatBg === undefined) {
+      return (
+        <Image source={bg} style={{position: 'absolute', width, top: 0, height}}
+               resizeMode={'cover'} />
+      )
+    } else {
+      return renderChatBg(bg)
+    }
+  }
+
   render () {
     const { messageList, allPanelHeight } = this.props
-    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const currentMessage = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey] : {}
+    const inverted = currentMessage.hasOwnProperty('inverted') ? currentMessage.inverted : false
+    const chatBg = currentMessage.hasOwnProperty('chatBg') ?  currentMessage.chatBg : null
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow } = this.state
-    const currentList = messageList[this.targetKey] !== undefined
+    const currentList = currentMessage.hasOwnProperty('messages')
       ? messageList[this.targetKey].messages.slice().sort((a, b) => inverted
         ? (b.time - a.time)
         : (a.time - b.time))
       : []
     return (
       <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }}>
-        <Animated.View style={Platform.OS === 'android' ? { flex: 1 } : {
+        { this.renderBg(chatBg) }
+        <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent'} : {
           height: this.visibleHeight.interpolate({
             inputRange: [0, 1],
             outputRange: [
@@ -920,13 +942,14 @@ class ChatWindow extends PureComponent {
                 ? height - keyboardHeight - this.HeaderHeight
                 : height - this.HeaderHeight - allPanelHeight - (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
             ]
-          })
+          }),
+          backgroundColor: 'transparent'
         }
         } >
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => this.closeAll()}
-            style={[{ flex: 1, backgroundColor: '#f7f7f7' }, this.props.chatWindowStyle]}>
+            style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}>
             <FlatList
               ref={e => (this.chatList = e)}
               inverted={inverted}
@@ -976,6 +999,11 @@ class ChatWindow extends PureComponent {
                   renderVideoMessage={this.props.renderVideoMessage}
                   renderLocationMessage={this.props.renderLocationMessage}
                   renderShareMessage={this.props.renderShareMessage}
+                  renderVideoCallMessage={this.props.renderVideoCallMessage}
+                  renderVoiceCallMessage={this.props.renderVoiceCallMessage}
+                  renderRedEnvelopeMessage={this.props.renderRedEnvelopeMessage}
+                  renderFileMessage={this.props.renderFileMessage}
+                  renderSystemMessage={this.props.renderSystemMessage}
                   rightMessageBackground={this.props.rightMessageBackground}
                   leftMessageBackground={this.props.leftMessageBackground}
                   voiceLoading={this.props.voiceLoading}

@@ -66,7 +66,8 @@ class Example extends React.Component {
             time: new Date().getTime()
           },
         ],
-        inverted: false  // require
+        inverted: false,  // require
+        chatBg: require('../../source/bg.jpg') // chatBg not default
       }
     },
     voiceHandle: true,
@@ -127,19 +128,23 @@ react-native run-ios or react-native run-android
       }
     ],
     
-    inverted: false  // require
+    inverted: false , // require
+    chatBg: require('../../source/bg.jpg') // chatBg not default
+
   }
 }
 ```
 * friend_12345678: `${chatType}_${chatId}`
 * id: message id
 * per: per message obj
+* about message type: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
 * targetId: The id of the person who sent the message  
 * chatInfo: The profile of the person you're chatting with
 * renderTime: Whether to render time above message
 * sendStatus: 0 ---> sending,  1 ---> sendSuccess,  -1 ---> You are deleted or on the blacklist,   -2 ---> error
 * time: moment，messageList sorted by time
 * inverted: When messageList exceeds the screen height, set it to true otherwise false (You can change this value when componentWillUnmount or delete message)
+* chatBg: background image
 
 ## Props
 
@@ -159,12 +164,13 @@ props | default | Info
  chatType | 'friend' | Your relationship with the person you're chatting with
  onMessagePress | (type, index, content) => {} |  Callback when press a message
  onMessageLongPress | (type, index, content) => {} | Callback when longPress a message and usePopView is false
- pressAvatar | (isSelf) => {} |  Callback when press avatar
+ pressAvatar | (isSelf, targetId) => {} |  Callback when press avatar
  androidHeaderHeight | 66 | Android navigation bar height + statusBar height
  userProfile | {id: '88888888', avatar: 'default.png'} | Your own profile
  historyLoading | false | Display an `ActivityIndicator` when loading earlier messages
  loadHistory | () => {} | Callback when loading earlier messages
  renderMessageTime | (time) => {} | Custom time inside above message
+ renderChatBg | (bg) => {} | Custom chat background image
  renderErrorMessage | (messageStatus) => {} | Custom a message when the friend relationship is abnormal
  panelSource | [{icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,title: '照片',onPress: () => { console.log('takePhoto') }}, {icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,title: '拍照',onPress: () => { console.log('takePhoto') }}] | Custom panel source
  renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | Custom a tab icon
@@ -242,6 +248,11 @@ renderVoiceView | undefined | Custom voice container, (data) => {}
 renderVideoMessage | undefined | Custom message video, (data) => {}
 renderLocationMessage | undefined | Custom message location, (data) => {}
 renderShareMessage| undefined | Custom message share, (data) => {}
+renderVideoCallMessage| undefined | Custom message video call, (data) => {}
+renderVoiceCallMessage| undefined | Custom message voice call, (data) => {}
+renderRedEnvelopeMessage| undefined | Custom message red-envelope, (data) => {}
+renderFileMessage| undefined | Custom message file, (data) => {}
+renderSystemMessage| undefined | Custom message system, (data) => {}
 
 ## Notes for Android
 * Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:

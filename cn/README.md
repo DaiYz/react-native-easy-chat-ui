@@ -65,7 +65,9 @@ class Example extends React.Component {
             time: new Date().getTime()
           },
         ],
-        inverted: false  // require
+        inverted: false,  // require
+        chatBg: require('../../source/bg.jpg') // chatBg not default
+
       }
     },
     voiceHandle: true,
@@ -126,19 +128,23 @@ react-native run-ios or react-native run-android
       }
     ],
     
-    inverted: false  // require
+    inverted: false,  // require
+    chatBg: require('../../source/bg.jpg') // chatBg not default
+
   }
 }
 ```
 * friend_12345678: `${chatType}_${chatId}`
 * id: 消息 id
 * per: 单独消息内容对象(消息类型和具体内容)
+* 消息类型: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
 * targetId: 消息谁发的就是谁的用户ID  
 * chatInfo: 与你聊天人的资料(id, 头像)
 * renderTime: 是否在每一条消息上显示消息时间
 * sendStatus: 0 ---> 发送中,  1 ---> 发送成功,  -1 ---> 你被拉黑或者被删除,   -2 ---> 发送失败 (只有发送方为自己的时候才有此条)
 * time: 当前时间，消息将由此值来排序
 * inverted: 当消息长度超出屏幕高度时为true否则为false(请在在componentWillUnmount生命周期中或者删除消息的时候修改此值)
+* chatBg: 聊天背景
 
 ## 属性
 
@@ -158,12 +164,13 @@ react-native run-ios or react-native run-android
  chatType | 'friend' | 与聊天人的关系
  onMessagePress | (type, index, content, message) => {} | 点击消息的回调
  onMessageLongPress | (type, index, content, message) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
- pressAvatar | (isSelf) => {} | 点击头像的回调
+ pressAvatar | (isSelf, targetId) => {} | 点击头像的回调
  androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
  userProfile | {id: '88888888', avatar: 'default.png'} | 你自己的个人资料
  historyLoading | false | 显示一个loading
  loadHistory | () => {} | 下拉获取历史记录的回调
  renderMessageTime | (time) => {} | 自定义渲染消息上方的时间
+ renderChatBg | (bg) => {} | 自定义当前聊天背景
  renderErrorMessage | (messageStatus) => {} | 自定义渲染当被拉黑或者被删除的时候显示的提示性消息
  panelSource | [{icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,title: '照片',onPress: () => { console.log('takePhoto') }}, {icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,title: '拍照',onPress: () => { console.log('takePhoto') }}] | 自定义最右侧面板数据源
  renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | 自定义渲染每个数据源的内容
@@ -245,6 +252,11 @@ renderVoiceView | undefined | 自定义渲染语音外部容器, (data) => {}
 renderVideoMessage | undefined | 自定义视频消息, (data) => {}
 renderLocationMessage | undefined | 自定义定位消息, (data) => {}
 renderShareMessage| undefined | 自定义分享消息, (data) => {}
+renderVideoCallMessage| undefined | 自定义视频聊天消息, (data) => {}
+renderVoiceCallMessage| undefined | 自定义语音聊天信息, (data) => {}
+renderRedEnvelopeMessage| undefined | 自定义红包信息 (data) => {}
+renderFileMessage| undefined | 自定义文件信息, (data) => {}
+renderSystemMessage| undefined | 自定义系统消息, (data) => {}
 ## 关于android 键盘设置
 `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:
 ```xml

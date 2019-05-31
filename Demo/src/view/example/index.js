@@ -13,6 +13,7 @@ import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
 import { ChatScreen } from 'react-native-easy-chat-ui'
 
+
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
@@ -126,6 +127,7 @@ export default class Example extends Component {
               time: '1542264667161'
             },
           ],
+          chatBg: require('../../source/bg.jpg'),  // {uri: 'http: //XXXXXX.jpg'}
           inverted: false  // require
         }
       },
