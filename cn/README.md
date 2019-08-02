@@ -263,8 +263,8 @@ renderSystemMessage| undefined | 自定义系统消息, (data) => {}
 android:windowSoftInputMode="adjustResize"
 ```
 
-## 关于ios TextInput无法输入中文
-降级到0.52.2版本以下，或者修改原生文件(自己再封装的TextInput无法从根本上解决问题)
+## 关于ios TextInput无法输入中文（RN 0.53～0.55版本）
+降级到0.52.2版本以下或者升级到最新版，或者修改原生文件(自己再封装的TextInput无法从根本上解决问题)
 
 ## 需要视频或者语音通话可以访问react-native-agora库
 
