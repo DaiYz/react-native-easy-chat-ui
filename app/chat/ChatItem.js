@@ -212,7 +212,13 @@ export default class ChatItem extends PureComponent {
         }
       case 'system':
         if (this.props.renderSystemMessage === undefined) {
-          return null
+          return (
+            <View style={styles.system_container}>
+              <View style={styles.system_button}>
+                <Text style={styles.system_text}>{msg.content}</Text>
+              </View>
+            </View>
+          )
         } else {
           return this.props.renderSystemMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
@@ -238,21 +244,29 @@ export default class ChatItem extends PureComponent {
   render () {
     const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId } = this.props
     const isSelf = user.id === message.targetId
+    const msg = message.per
+    const {type} = msg
+    const avatar = isSelf ? user.avatar : message.chatInfo.avatar
+    const avatarSource = typeof(avatar) === 'number' ? avatar : {uri: avatar}
     const Element = isOpen ? TouchableWithoutFeedback : View
     return (
       <View>
         <Element
           onPress={() => {
             this.setState({ isSelect: !this.state.isSelect })
-            selectMultiple(!this.state.isSelect, parseInt(rowId), message)
+            selectMultiple(!this.state.isSelect, parseInt(rowId), message)x
           }}
         >
           <View>
-            <TouchableOpacity activeOpacity={1}>
-              {
-                message.renderTime ? this.props.renderMessageTime(message.time) : null
-              }
-            </TouchableOpacity>
+            {
+              type === 'system'
+                ? null
+                : <TouchableOpacity activeOpacity={1}>
+                  {
+                    message.renderTime ? this.props.renderMessageTime(message.time) : null
+                  }
+                </TouchableOpacity>
+            }
             <TouchableOpacity
               onPress={() => this.props.closeAll()}
               disabled={isOpen}
@@ -260,28 +274,32 @@ export default class ChatItem extends PureComponent {
               style={[styles.chat, isSelf ? styles.right : styles.left]} ref={(e) => (this.content = e)}
             >
               {
-                !isSelf && isOpen &&
-                  <View>
-                    {this.renderCheck()}
-                  </View>
+                !isSelf && isOpen &&  type !== 'system' &&
+                <View>
+                  {this.renderCheck()}
+                </View>
               }
-              <TouchableOpacity
-                activeOpacity={0.7}
-                disabled={isOpen}
-                onPress={() => this.props.onPressAvatar(isSelf, message.targetId)}
-              >
-                <Image
-                  source={isSelf ? user.avatar : message.chatInfo.avatar}
-                  style={[styles.avatar, avatarStyle]} />
-              </TouchableOpacity>
+              {
+                type === 'system'
+                  ? null
+                  :  <TouchableOpacity
+                    activeOpacity={0.7}
+                    disabled={isOpen}
+                    onPress={() => this.props.onPressAvatar(isSelf, message.targetId)}
+                  >
+                    <Image
+                      source={avatarSource}
+                      style={[styles.avatar, avatarStyle]} />
+                  </TouchableOpacity>
+              }
               {this._renderContent(isSelf)}
               {
-                isSelf && isOpen &&
-                  <View
-                    style={{ flex: 1 }}
-                  >
-                    {this.renderCheck()}
-                  </View>
+                isSelf && isOpen && type !== 'system' &&
+                <View
+                  style={{ flex: 1 }}
+                >
+                  {this.renderCheck()}
+                </View>
               }
             </TouchableOpacity>
 
@@ -381,5 +399,18 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#9c9c9c',
     marginTop: 14
+  },
+  system_container: {
+    flex: 1,
+    alignItems: 'center'
+  },
+  system_button: {
+    backgroundColor: 'rgba(240, 240, 240, 0.5)',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 4
+  },
+  system_text: {
+    fontSize: 12
   }
 })
