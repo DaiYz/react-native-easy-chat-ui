@@ -88,7 +88,7 @@ export interface ChatScreenPropsType {
   /**
    * 重发消息的回调
    */
-  reSendMessage?: (type: MsgType, content: string) => void
+  reSendMessage?: (message: MessagePorpsType) => void
   /**
    * 删除消息的回调
    */
