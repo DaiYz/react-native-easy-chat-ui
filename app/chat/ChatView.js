@@ -910,8 +910,9 @@ class ChatWindow extends PureComponent {
     const {renderChatBg} = this.props
     if (bg === null) return null
     if (renderChatBg === undefined) {
+      const source = typeof(bg) === 'number' ? bg : {uri: bg}
       return (
-        <Image source={bg} style={{position: 'absolute', width, top: 0, height}}
+        <Image source={source} style={{position: 'absolute', width, top: 0, height}}
                resizeMode={'cover'} />
       )
     } else {
