@@ -104,7 +104,7 @@ export interface ChatScreenPropsType {
   /**
    * 与聊天人的关系
    */
-  chatType?: 'friend'
+  chatType?: 'friend' | 'group'
   /**
    * 点击消息的回调
    */
