@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   system_button: {
-    backgroundColor: 'rgba(240, 240, 240, 0.5)',
+    backgroundColor: 'rgba(240, 240, 240, 0.7)',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 4
