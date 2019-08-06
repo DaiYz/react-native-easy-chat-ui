@@ -151,8 +151,8 @@ class ChatWindow extends PureComponent {
     sendMessage: (type, content, isInverted) => {
       console.log(type, content, isInverted, 'send')
     },
-    reSendMessage: (content, isInverted) => {
-      console.log(content, isInverted, 'reSend')
+    reSendMessage: (message) => {
+      console.log(message, 'reSend')
     },
     leftMessageBackground: '#fff',
     rightMessageBackground: '#a0e75a',
