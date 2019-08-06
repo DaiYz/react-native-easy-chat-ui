@@ -308,7 +308,6 @@ class ChatWindow extends PureComponent {
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
     this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
-    this.onEndReachedCalledDuringMomentum = true
     this.listHeight = height - this.HeaderHeight - 64
     this.isInverted = false
     this.androidHasAudioPermission = false
@@ -794,9 +793,8 @@ class ChatWindow extends PureComponent {
   _loadHistory = async () => {
     const { messageList } = this.props
     const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
-    if (!inverted || this.onEndReachedCalledDuringMomentum) return
+    if (!inverted) return
     await this.props.loadHistory()
-    this.onEndReachedCalledDuringMomentum = true
   }
 
   _onEmojiSelected (code) {
@@ -963,7 +961,6 @@ class ChatWindow extends PureComponent {
               onEndReachedThreshold={this.props.onEndReachedThreshold}
               enableEmptySections
               scrollEventThrottle={100}
-              onMomentumScrollBegin={() => { this.onEndReachedCalledDuringMomentum = false }}
               keyExtractor={(item) => `${item.id}`}
               onEndReached={() => this._loadHistory()}
               onLayout={(e) => {
