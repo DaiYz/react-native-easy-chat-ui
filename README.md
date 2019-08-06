@@ -157,7 +157,7 @@ props | default | Info
  onEndReachedThreshold | 0.1 | ListView Props
  chatWindowStyle | undefined | Container style
  sendMessage | (type, content, isInverted) => {} | Callback when sending a message
- reSendMessage | (type, content) => {} | Callback when you want send again
+ reSendMessage | (message) => {} | Callback when you want send again
  delMessage | (indexs, isInverted) => {} | Callback when delete message
  avatarStyle | undefined | Style of avatar
  chatId | '123455678' | The id of the person you're chatting with
