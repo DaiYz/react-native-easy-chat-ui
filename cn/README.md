@@ -157,7 +157,7 @@ react-native run-ios or react-native run-android
  onEndReachedThreshold | 0.1 | 同ListView属性
  chatWindowStyle | undefined | 外部容器样式
  sendMessage | (type, content, isInverted) => {} | 发送消息时的回调
- reSendMessage | (type, content) => {} | 重发消息的回调
+ reSendMessage | (message) => {} | 重发消息的回调
  delMessage | (indexs, isInverted) => {} | 删除消息的回调
  avatarStyle | undefined | 头像样式
  chatId | '123455678' | 聊天对象的ID
