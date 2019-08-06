@@ -58,17 +58,7 @@ export interface ChatScreenPropsType {
   /**
    * 消息列表
    */
-  messageList: {
-    any: {
-      messages: MessagePorpsType[]
-      /**
-       * 当消息长度超出屏幕高度时为true否则为false，用于历史消息功能
-       * (请在在componentWillUnmount生命周期中或者删除消息的时候修改此值)
-       */
-      inverted: boolean
-      chatBg?: string | number
-    }
-  }
+  messageList: object
   /**
    * 同FlatList属性
    */
