@@ -254,7 +254,7 @@ export default class ChatItem extends PureComponent {
         <Element
           onPress={() => {
             this.setState({ isSelect: !this.state.isSelect })
-            selectMultiple(!this.state.isSelect, parseInt(rowId), message)x
+            selectMultiple(!this.state.isSelect, parseInt(rowId), message)
           }}
         >
           <View>

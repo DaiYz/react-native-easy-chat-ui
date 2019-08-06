@@ -89,7 +89,6 @@ class Example extends React.Component {
       <ChatScreen
         ref={(e) => this.chat = e}
         messageList={this.state.msg}
-        isIphoneX={true}
         androidHeaderHeight={androidHeaderHeight}
         sendMessage={this.sendMessage}
       />
