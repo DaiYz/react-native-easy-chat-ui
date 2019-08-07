@@ -177,6 +177,8 @@ props | default | Info
  messageErrorIcon | icon element | Custom a icon when message failed to be sent
  leftMessageBackground | '#fffff' | Custom background color on left
  rightMessageBackground | '#a0e75a' | Custom background color on right
+ leftMessageTextStyle | undefined | Custom text message style on left
+ rightMessageTextStyle | undefined | Custom text message style on right
  
  * inputBarProps
  
