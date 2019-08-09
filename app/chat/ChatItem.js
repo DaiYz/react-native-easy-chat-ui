@@ -54,16 +54,16 @@ export default class ChatItem extends PureComponent {
     this.setState({ loading: status })
   }
 
-  _matchContentString (textContent, views) {
+  _matchContentString = (textContent, views, isSelf) => {
     // 匹配得到index并放入数组中
+    const {leftMessageTextStyle, rightMessageTextStyle} = this.props
     if (textContent.length === 0) return
     let emojiIndex = textContent.search(PATTERNS.emoji)
-
     let checkIndexArray = []
 
     // 若匹配不到，则直接返回一个全文本
     if (emojiIndex === -1) {
-      views.push(<Text key={'emptyTextView' + (Math.random() * 100)}>{textContent}</Text>)
+      views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle} key={'emptyTextView' + (Math.random() * 100)}>{textContent}</Text>)
     } else {
       if (emojiIndex !== -1) {
         checkIndexArray.push(emojiIndex)
@@ -71,14 +71,14 @@ export default class ChatItem extends PureComponent {
       // 取index最小者
       let minIndex = Math.min(...checkIndexArray)
       // 将0-index部分返回文本
-      views.push(<Text key={'firstTextView' + (Math.random() * 100)}>{textContent.substring(0, minIndex)}</Text>)
+      views.push(<Text style={isSelf ? rightMessageTextStyle : leftMessageTextStyle} key={'firstTextView' + (Math.random() * 100)}>{textContent.substring(0, minIndex)}</Text>)
 
       // 将index部分作分别处理
       this._matchEmojiString(textContent.substring(minIndex), views)
     }
   }
 
-  _matchEmojiString (emojiStr, views) {
+  _matchEmojiString = (emojiStr, views, isSelf) => {
     let castStr = emojiStr.match(PATTERNS.emoji)
     let emojiLength = castStr[0].length
 
@@ -87,12 +87,12 @@ export default class ChatItem extends PureComponent {
     if (emojiImg) {
       views.push(<Image key={emojiStr} style={styles.subEmojiStyle} resizeMethod={'auto'} source={emojiImg} />)
     }
-    this._matchContentString(emojiStr.substring(emojiLength), views)
+    this._matchContentString(emojiStr.substring(emojiLength), views, isSelf)
   }
 
-  _getActualText (textContent) {
+  _getActualText = (textContent, isSelf) => {
     let views = []
-    this._matchContentString(textContent, views)
+    this._matchContentString(textContent, views, isSelf)
     return views
   }
 
@@ -112,7 +112,7 @@ export default class ChatItem extends PureComponent {
               isSelf={isSelf}
               messageErrorIcon={messageErrorIcon}
               message={message}
-              views={this._getActualText(message.per.content)}
+              views={this._getActualText(message.per.content, isSelf)}
               onMessageLongPress={this.props.onMessageLongPress}
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}

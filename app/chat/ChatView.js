@@ -64,6 +64,8 @@ class ChatWindow extends PureComponent {
     loadHistory: PropTypes.func,
     leftMessageBackground: PropTypes.string,
     rightMessageBackground: PropTypes.string,
+    leftMessageTextStyle: PropTypes.object,
+    rightMessageTextStyle: PropTypes.object,
     renderLoadEarlier: PropTypes.func,
     extraData: PropTypes.any,
     containerBackgroundColor: PropTypes.string,
@@ -1010,6 +1012,8 @@ class ChatWindow extends PureComponent {
                   pressIndex={this.state.pressIndex}
                   voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
                   voiceRightLoadingColor={this.props.voiceRightLoadingColor}
+                  leftMessageTextStyle={this.props.leftMessageTextStyle}
+                  rightMessageTextStyle={this.props.rightMessageTextStyle}
                 />
               }
             />

@@ -178,7 +178,8 @@ react-native run-ios or react-native run-android
  leftMessageBackground | '#fffff' | 自定义左侧消息的背景色
   rightMessageBackground | '#a0e75a' | 自定义右侧消息的背景色
   allPanelAnimateDuration | 100 | 所有面板动画时长
- 
+  leftMessageTextStyle | undefined | 自定义左侧文本消息文字样式
+  rightMessageTextStyle | undefined | 自定义右侧文本消息文字样式
  * 输入组件属性
  
  属性名字 | 默认值 | 描述
