@@ -2,7 +2,7 @@ import ChatView from './app/chat/ChatView'
 import { ViewStyle } from 'react-native'
 import { PureComponent } from 'react'
 
-enum MsgType {
+export enum MsgType {
   text = 'text',
   image = 'image',
   voice = 'voice',
