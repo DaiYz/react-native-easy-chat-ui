@@ -16,6 +16,17 @@ export enum MsgType {
   system = 'system',
 }
 
+export interface VoiceContentPropsType {
+  uri: string
+  length: number
+}
+
+export interface ImageContentPropsType {
+  uri: string
+  width: number
+  height: number
+}
+
 export interface MessagePorpsType {
   id: string
   /**
@@ -29,7 +40,7 @@ export interface MessagePorpsType {
     /**
      * 消息内容
      */
-    content: string
+    content: string | VoiceContentPropsType | ImageContentPropsType
   }
   /**
    * 消息谁发的就是谁的用户ID
