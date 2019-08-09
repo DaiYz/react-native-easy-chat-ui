@@ -83,7 +83,7 @@ class Example extends React.Component {
   sendMessage = (type, content, isInverted) => {
       console.log(type, content, isInverted, 'msg')
     }
-  
+
   render() {
     return (
       <ChatScreen
@@ -126,7 +126,7 @@ react-native run-ios or react-native run-android
         time: new Date().getTime()
       }
     ],
-    
+
     inverted: false , // require
     chatBg: require('../../source/bg.jpg') // chatBg not default
 
@@ -137,7 +137,7 @@ react-native run-ios or react-native run-android
 * id: message id
 * per: per message obj
 * about message type: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
-* targetId: The id of the person who sent the message  
+* targetId: The id of the person who sent the message
 * chatInfo: The profile of the person you're chatting with
 * renderTime: Whether to render time above message
 * sendStatus: 0 ---> sending,  1 ---> sendSuccess,  -1 ---> You are deleted or on the blacklist,   -2 ---> error
@@ -179,9 +179,9 @@ props | default | Info
  rightMessageBackground | '#a0e75a' | Custom background color on right
  leftMessageTextStyle | undefined | Custom text message style on left
  rightMessageTextStyle | undefined | Custom text message style on right
- 
+
  * inputBarProps
- 
+
  props | default | Info
  ----- |  ------- | -----
  emojiIcon | icon element | Custom emoticons
@@ -189,9 +189,9 @@ props | default | Info
  keyboardIcon | icon | Custom keyboard icon
  plusIcon | icon element | Custom plus icon
  sendIcon | icon element | Custom send icon
- 
+
  * popViewProps
- 
+
   props | default | Info
   ----- |  ------ | -----
   usePopView | true | Display a popView when longPress a message
@@ -202,9 +202,9 @@ props | default | Info
   messageDelIcon | icon element | Custom delete icon
   messageSelectIcon | icon element | Custom selected icon
   renderMessageCheck | undefined | Custom selected icon, (isSelect)=> {}
-  
- * voiceProps 
- 
+
+ * voiceProps
+
   props | default | Info
    ----- |  ------- | -----
    useVoice | true | send voice message
@@ -229,15 +229,15 @@ props | default | Info
    audioResumeRecord | () => {} | Callback when resume record
    audioCurrentTime | 0 | audio length
    audioHandle | true | Whether to get a recording handle
-   setAudioHandle | () => {} | Callback when get handle or not
-   audioHasPermission | false | Whether has permission 
+   setAudioHandle | (status) => {} | Callback when get handle or not
+   audioHasPermission | false | Whether has permission
    requestAndroidPermission | () => {} | Callback when check permission on android
-   checkPermission | () => {} | Callback whether has permission 
+   checkPermission | () => {} | Callback whether has permission
    voiceLoading | false | Loading voice or not
    voicePlaying | false | Playing voice or not
    voiceLeftLoadingColor | '#cccccc' | Custom background color on left when load voice
    voiceRightLoadingColor | '#628b42' | Custom background color on right when load voice
-   
+
 * bubbleProps
 
 props | default | Info
@@ -263,9 +263,3 @@ android:windowSoftInputMode="adjustResize"
 
 ## License
 * [MIT](LICENSE)
-
-
-
-    
-   
-

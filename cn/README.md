@@ -83,7 +83,7 @@ class Example extends React.Component {
   sendMessage = (type, content, isInverted) => {
       console.log(type, content, isInverted, 'msg')
     }
-  
+
   render() {
     return (
       <ChatScreen
@@ -126,7 +126,7 @@ react-native run-ios or react-native run-android
         time: new Date().getTime()
       }
     ],
-    
+
     inverted: false,  // require
     chatBg: require('../../source/bg.jpg') // chatBg not default
 
@@ -137,7 +137,7 @@ react-native run-ios or react-native run-android
 * id: 消息 id
 * per: 单独消息内容对象(消息类型和具体内容)
 * 消息类型: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
-* targetId: 消息谁发的就是谁的用户ID  
+* targetId: 消息谁发的就是谁的用户ID
 * chatInfo: 与你聊天人的资料(id, 头像)
 * renderTime: 是否在每一条消息上显示消息时间
 * sendStatus: 0 ---> 发送中,  1 ---> 发送成功,  -1 ---> 你被拉黑或者被删除,   -2 ---> 发送失败 (只有发送方为自己的时候才有此条)
@@ -181,7 +181,7 @@ react-native run-ios or react-native run-android
   leftMessageTextStyle | undefined | 自定义左侧文本消息文字样式
   rightMessageTextStyle | undefined | 自定义右侧文本消息文字样式
  * 输入组件属性
- 
+
  属性名字 | 默认值 | 描述
  ----- |  ------- | -----
  emojiIcon | icon element | 自定义最下方的表情图标
@@ -193,9 +193,9 @@ react-native run-ios or react-native run-android
  useEmoji | true | 是否启用表情
  usePlus | true | 是否启用更多
  inputStyle | undefined | 输入框样式
- 
+
  * 弹出层属性
- 
+
   属性名字 | 默认值 | 描述
   ----- |  ------- | -----
   usePopView | true | 长按消息是否显示一个弹出层
@@ -206,9 +206,9 @@ react-native run-ios or react-native run-android
  renderDelPanel | undefined | 自定义底部删除面板, (isSelect)=> {}
  messageSelectIcon | icon element | 自定义消息选中时的图标
  renderMessageCheck | undefined | 自定义渲染消息选中和未选中的样式, (isSelect)=> {}
-  
- * 语音属性 
- 
+
+ * 语音属性
+
   属性名字 | 默认值 | 描述
    ----- |  ------- | -----
    useVoice | true | 是否使用语音
@@ -233,7 +233,7 @@ react-native run-ios or react-native run-android
    audioResumeRecord | () => {} | 重制录音的回调
    audioCurrentTime | 0 | 语音的长度
    audioHandle | true | 是否获取到录音的具柄
-   setAudioHandle | () => {} | 修改是否获取录音具柄的状态
+   setAudioHandle | (status) => {} | 修改是否获取录音具柄的状态
    audioHasPermission | false | 是否有录音权限
    requestAndroidPermission | () => {} | android检查录音权限的回调
    checkPermission | () => {} | 检查是否已获得录音权限
