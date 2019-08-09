@@ -2,7 +2,7 @@ import ChatView from './app/chat/ChatView'
 import { ViewStyle } from 'react-native'
 import { PureComponent } from 'react'
 
-enum MsgType {
+export enum MsgType {
   text = 'text',
   image = 'image',
   voice = 'voice',
@@ -325,7 +325,7 @@ export interface ChatScreenPropsType {
   /**
    * 修改是否获取录音句柄的状态
    */
-  setAudioHandle?: () => void
+  setAudioHandle?: (status: boolean) => void
   /**
    * 是否有录音权限
    */
