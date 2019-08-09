@@ -236,8 +236,9 @@ export default class Example extends Component {
   _requestAndroidPermission = async() => {
     try {
       const rationale = {
-        'title': '麦克风权限',
-        'message': '需要权限录制语音.'
+        title: '麦克风权限',
+        message: '需要权限录制语音.',
+        buttonPositive: '确定',
       }
       const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.RECORD_AUDIO, rationale)
       this.setState({ hasPermission: granted === PermissionsAndroid.RESULTS.GRANTED })
