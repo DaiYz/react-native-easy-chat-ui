@@ -87,7 +87,7 @@ export default class Example extends Component {
           id: `5`,
           type: 'voice',
           content: {
-            uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+            uri: 'http://music.163.com/song/media/outer/url?id=317151.mp3',
             length: 10
           },
           targetId: '12345678',
@@ -104,7 +104,7 @@ export default class Example extends Component {
           id: `6`,
           type: 'voice',
           content: {
-            uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+            uri: 'http://music.163.com/song/media/outer/url?id=317151.mp3',
             length: 30
           },
           targetId: '88886666',
