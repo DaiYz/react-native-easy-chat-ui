@@ -98,9 +98,9 @@ export default class ChatItem extends PureComponent {
 
   _renderContent= (isSelf) => {
     const { message, isOpen, messageErrorIcon, reSendMessage, rowId } = this.props
+    const {content = {}, type = ''} = message
     const { loading } = this.state
-    const msg = message.per
-    switch (msg.type) {
+    switch (type) {
       case 'text':
         if (this.props.renderTextMessage === undefined) {
           return (
@@ -112,14 +112,14 @@ export default class ChatItem extends PureComponent {
               isSelf={isSelf}
               messageErrorIcon={messageErrorIcon}
               message={message}
-              views={this._getActualText(message.per.content, isSelf)}
+              views={this._getActualText(content, isSelf)}
               onMessageLongPress={this.props.onMessageLongPress}
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
             />
           )
         } else {
-          return this.props.renderTextMessage({ isOpen, isSelf, message, views: this._getActualText(message.per.content), index: parseInt(rowId) })
+          return this.props.renderTextMessage({ isOpen, isSelf, message, views: this._getActualText(message.content), index: parseInt(rowId) })
         }
       case 'image':
         if (this.props.renderImageMessage === undefined) {
@@ -242,13 +242,14 @@ export default class ChatItem extends PureComponent {
   }
 
   render () {
-    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId } = this.props
+    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle } = this.props
     const isSelf = user.id === message.targetId
-    const msg = message.per
-    const {type} = msg
+    const {type} = message
     const avatar = isSelf ? user.avatar : message.chatInfo.avatar
+    const nickName = isSelf ? '' : message.chatInfo.nickName
     const avatarSource = typeof(avatar) === 'number' ? avatar : {uri: avatar}
     const Element = isOpen ? TouchableWithoutFeedback : View
+    const showName = chatType === 'group' && showUserName && type !== 'system'
     return (
       <View>
         <Element
@@ -292,7 +293,13 @@ export default class ChatItem extends PureComponent {
                       style={[styles.avatar, avatarStyle]} />
                   </TouchableOpacity>
               }
-              {this._renderContent(isSelf)}
+              <View style={{justifyContent: showName && type === 'voice' ? 'flex-start' : 'center'}}>
+                {
+                  showName && !isSelf? <Text style={[styles.userName, userNameStyle]}>{nickName}</Text>
+                    : null
+                }
+                {this._renderContent(isSelf)}
+              </View>
               {
                 isSelf && isOpen && type !== 'system' &&
                 <View
@@ -362,25 +369,10 @@ const styles = StyleSheet.create({
     minHeight: 30
   },
   avatar: {
-    marginHorizontal: 8,
+    marginLeft: 8,
     borderRadius: 24,
     width: 48,
     height: 48
-  },
-  triangle: {
-    width: 0,
-    height: 0,
-    zIndex: 999,
-    borderWidth: 8,
-    borderTopColor: 'transparent',
-    borderBottomColor: 'transparent',
-    marginTop: 16
-  },
-  left_triangle: {
-    borderLeftWidth: 0
-  },
-  right_triangle: {
-    borderRightWidth: 0
   },
   check: {
     width: 20,
@@ -412,5 +404,11 @@ const styles = StyleSheet.create({
   },
   system_text: {
     fontSize: 12
+  },
+  userName: {
+    fontSize: 12,
+    color: '#aaa',
+    marginBottom: 2,
+    marginLeft: 14
   }
 })

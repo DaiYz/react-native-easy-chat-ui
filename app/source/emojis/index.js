@@ -168,7 +168,7 @@ export const EMOJIS_DATA = {
   '/{pijiu}': pijiu,/* 啤酒 */
   '/{kafei}': kafei,/* 咖啡 */
   '/{zhutou}': zhutou,/* 猪头 */
-  '/{meigui}}': meigui,/* 玫瑰 */
+  '/{meigui}': meigui,/* 玫瑰 */
   '/{diaoxie}': diaoxie,/* 凋谢 */
   '/{zuichun}': zuichun,/* 嘴唇 */
   '/{aixin}': aixin,/* 爱心 */

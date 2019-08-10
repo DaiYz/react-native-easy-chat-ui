@@ -59,8 +59,8 @@ export default class VoiceMessage extends PureComponent {
             progress === 0
               ? require('../source/image/voiceRightOne.png')
               : progress === 1
-                ? require('../source/image/voiceRightTwo.png')
-                : require('../source/image/voiceRight.png')
+              ? require('../source/image/voiceRightTwo.png')
+              : require('../source/image/voiceRight.png')
           }
           resizeMode={'cover'}
           style={{
@@ -122,21 +122,21 @@ export default class VoiceMessage extends PureComponent {
             }
             onPress={() => {
               this.props.savePressIndex(this.props.rowId)
-              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.per.content.uri, message)
+              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.content.uri, message)
             }
             }
             onLongPress={() => {
-              this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.per.content.uri, message)
+              this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.content.uri, message)
             }}
           >
-            <View style={[{ width: 40 + (message.per.content.length > 1 ? message.per.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
+            <View style={[{ width: 40 + (message.content.length > 1 ? message.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
             ]}>
               {this._renderIcon()}
             </View>
           </TouchableOpacity>
           <View style={{ justifyContent: 'flex-end' }}>
             <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
-              {`${message.per.content.length}"`}
+              {`${message.content.length}"`}
             </Text>
           </View>
         </View>
@@ -174,21 +174,26 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
-    marginTop: 16
   },
   left_triangle: {
-    borderLeftWidth: 0
+    borderLeftWidth: 0,
+    borderRightWidth: 16
   },
   right_triangle: {
-    borderRightWidth: 0
+    borderRightWidth: 0,
+    borderLeftWidth: 16,
+    borderColor: '#a0e75a'
   },
   right: {
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
+    alignItems: 'center'
   },
   left: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   voiceArea: {
+    paddingVertical: 8,
     borderRadius: 12,
     maxWidth: width - 160,
     justifyContent: 'center',

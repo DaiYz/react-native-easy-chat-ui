@@ -29,15 +29,16 @@ const ViewPropTypes = RNViewPropTypes || View.propTypes
 class ChatWindow extends PureComponent {
   static propTypes = {
     /* defaultProps */
-    messageList: PropTypes.object.isRequired,
+    messageList: PropTypes.array.isRequired,
+    inverted: PropTypes.bool,
+    chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onScroll: PropTypes.func,
     onEndReachedThreshold: PropTypes.number,
     chatWindowStyle: ViewPropTypes.style,
     sendMessage: PropTypes.func,
     avatarStyle: ViewPropTypes.style,
     allPanelAnimateDuration: PropTypes.number,
-    chatId: PropTypes.string,
-    chatType: PropTypes.string,
+    chatType: PropTypes.oneOf(['friend', 'group']),
     onMessagePress: PropTypes.func,
     onMessageLongPress: PropTypes.func,
     renderMessageTime: PropTypes.func,
@@ -48,9 +49,11 @@ class ChatWindow extends PureComponent {
     androidHeaderHeight: PropTypes.number.isRequired,
     iphoneXHeaderPadding: PropTypes.number,
     iphoneXBottomPadding: PropTypes.number,
+    showUserName: PropTypes.bool,
     userProfile: PropTypes.shape({
       id: PropTypes.string.isRequired,
-      avatar: PropTypes.isRequired
+      avatar: PropTypes.isRequired,
+      nickName: PropTypes.string
     }),
     panelSource: PropTypes.arrayOf(PropTypes.shape({
       icon: PropTypes.element,
@@ -70,6 +73,7 @@ class ChatWindow extends PureComponent {
     extraData: PropTypes.any,
     containerBackgroundColor: PropTypes.string,
     showsVerticalScrollIndicator: PropTypes.bool,
+    userNameStyle: PropTypes.object,
     /* popProps */
     usePopView: PropTypes.bool,
     popoverStyle: ViewPropTypes.style,
@@ -147,8 +151,12 @@ class ChatWindow extends PureComponent {
   static defaultProps = {
     renderLoadEarlier: () => (null),
     extraData: null,
+    chatType: 'friend',
+    chatBackgroundImage: null,
+    inverted: false,
     allPanelAnimateDuration: 100,
-    messageList: {},
+    messageList: [],
+    showUserName: false,
     panelContainerStyle: {},
     sendMessage: (type, content, isInverted) => {
       console.log(type, content, isInverted, 'send')
@@ -167,10 +175,9 @@ class ChatWindow extends PureComponent {
     usePopView: true,
     userProfile: {
       id: '88886666',
-      avatar: require('../source/image/defaultAvatar.png')
+      avatar: require('../source/image/defaultAvatar.png'),
+      nickName: 'Test'
     },
-    chatId: '12345678',
-    chatType: 'friend',
     panelSource: [
       {
         icon: <Image source={require('../source/image/photo.png')} style={{ width: 30, height: 30 }} />,
@@ -298,8 +305,7 @@ class ChatWindow extends PureComponent {
 
   constructor (props) {
     super(props)
-    const { chatId, androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
-    this.targetKey = `${chatType}_${chatId}`
+    const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
     this.time = null
     this._userHasBeenInputed = false
     this.iosHeaderHeight = 64
@@ -432,8 +438,7 @@ class ChatWindow extends PureComponent {
   }
 
   _sendMessage = (type, messageContent) => {
-    const { messageList } = this.props
-    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const { inverted } = this.props
     this._userHasBeenInputed = true
     if (type === 'text' && messageContent.trim().length !== 0) {
       messageContent = changeEmojiText(this.state.messageContent).join('')
@@ -479,8 +484,7 @@ class ChatWindow extends PureComponent {
   }
 
   _onContentSizeChange (e) {
-    const { messageList } = this.props
-    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const { inverted } = this.props
     const changeHeight = e.nativeEvent.contentSize.height
     if (changeHeight === 34) return
     this.setState({ inputChangeSize: changeHeight <= 70 ? changeHeight : 70 })
@@ -506,8 +510,7 @@ class ChatWindow extends PureComponent {
   }
 
   _scrollToBottom (listHeightAndWidth) {
-    const { messageList } = this.props
-    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const { inverted } = this.props
     if (listHeightAndWidth !== undefined) {
       const { contentHeight } = listHeightAndWidth
       this.isInverted = contentHeight > this.listHeight
@@ -793,8 +796,7 @@ class ChatWindow extends PureComponent {
   }
 
   _loadHistory = async () => {
-    const { messageList } = this.props
-    const inverted = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey].inverted : false
+    const { inverted } = this.props
     if (!inverted) return
     await this.props.loadHistory()
   }
@@ -921,19 +923,14 @@ class ChatWindow extends PureComponent {
   }
 
   render () {
-    const { messageList, allPanelHeight } = this.props
-    const currentMessage = messageList.hasOwnProperty(this.targetKey) ? messageList[this.targetKey] : {}
-    const inverted = currentMessage.hasOwnProperty('inverted') ? currentMessage.inverted : false
-    const chatBg = currentMessage.hasOwnProperty('chatBg') ?  currentMessage.chatBg : null
+    const { messageList, allPanelHeight, inverted, chatBackgroundImage, chatType } = this.props
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow } = this.state
-    const currentList = currentMessage.hasOwnProperty('messages')
-      ? messageList[this.targetKey].messages.slice().sort((a, b) => inverted
-        ? (b.time - a.time)
-        : (a.time - b.time))
-      : []
+    const currentList = messageList.slice().sort((a, b) => inverted
+      ? (b.time - a.time)
+      : (a.time - b.time))
     return (
       <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }}>
-        { this.renderBg(chatBg) }
+        { this.renderBg(chatBackgroundImage) }
         <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent'} : {
           height: this.visibleHeight.interpolate({
             inputRange: [0, 1],
@@ -974,6 +971,7 @@ class ChatWindow extends PureComponent {
                 <ChatItem
                   ref={(e) => (this.messageItem = e)}
                   user={this.props.userProfile}
+                  chatType={chatType}
                   reSendMessage={this.props.reSendMessage}
                   renderMessageCheck={this.props.renderMessageCheck}
                   message={item}
@@ -992,6 +990,7 @@ class ChatWindow extends PureComponent {
                   voiceRightIcon={this.props.voiceRightIcon}
                   closeAll={this.closeAll}
                   avatarStyle={this.props.avatarStyle}
+                  userNameStyle={this.props.userNameStyle}
                   renderErrorMessage={this.props.renderErrorMessage}
                   renderTextMessage={this.props.renderTextMessage}
                   renderImageMessage={this.props.renderImageMessage}
