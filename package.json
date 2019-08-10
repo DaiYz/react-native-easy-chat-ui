@@ -32,9 +32,6 @@
     "prop-types": "*",
     "react-native": "*"
   },
-  "dependencies": {
-    "moment": "^2.22.2"
-  },
   "devDependencies": {
     "react": "16.2.0",
     "react-native": "0.52.2",
@@ -42,6 +39,7 @@
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "4.0.1",
     "jest": "23.6.0",
+    "moment": "^2.22.2",
     "react-test-renderer": "16.2.0"
   },
   "jest": {
