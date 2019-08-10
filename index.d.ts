@@ -16,32 +16,20 @@ export enum MsgType {
   system = 'system',
 }
 
-export interface VoiceContentPropsType {
-  uri: string
-  length: number
-}
-
-export interface ImageContentPropsType {
-  uri: string
-  width: number
-  height: number
-}
-
+/**
+ * 单独消息内容对象
+ */
 export interface MessagePorpsType {
   id: string
   /**
-   * 单独消息内容对象
+   * 消息类型
    */
-  per: {
-    /**
-     * 消息类型
-     */
-    type: MsgType
-    /**
-     * 消息内容
-     */
-    content: string | VoiceContentPropsType | ImageContentPropsType
-  }
+  type: MsgType
+  /**
+   * 消息内容
+   */
+  content: string | object
+
   /**
    * 消息谁发的就是谁的用户ID
    */
@@ -51,7 +39,8 @@ export interface MessagePorpsType {
    */
   chatInfo: {
     avatar: string | number
-    id: string
+    id: string,
+    nickName: string
   }
   /**
    * 是否在每一条消息上显示消息时间
@@ -63,13 +52,20 @@ export interface MessagePorpsType {
    */
   time: string
 }
-
+// 消息属性
 export interface ChatScreenPropsType {
-  // 消息属性
   /**
    * 消息列表
    */
-  messageList: object
+  messageList: object[]
+  /**
+   * 是否列表倒置
+   */
+  inverted: boolean
+  /**
+   * 聊天背景
+   */
+  chatBackgroundImage: string | number
   /**
    * 同FlatList属性
    */
@@ -109,11 +105,11 @@ export interface ChatScreenPropsType {
   /**
    * 点击消息的回调
    */
-  onMessagePress?: (type: MsgType, index: number, content: string, message: MessagePorpsType) => void
+  onMessagePress?: (type: MsgType, index: number, content: string | object, message: MessagePorpsType) => void
   /**
    * 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
    */
-  onMessageLongPress?: (type: MsgType, index: number, content: string, message: MessagePorpsType) => void
+  onMessageLongPress?: (type: MsgType, index: number, content: string | object, message: MessagePorpsType) => void
   /**
    * 点击头像的回调
    */
@@ -135,17 +131,21 @@ export interface ChatScreenPropsType {
    */
   loadHistory?: () => void
   /**
+   * 是否显示用户昵称
+   */
+  showUserName: boolean
+  /**
    * 自定义渲染消息上方的时间
    */
-  renderMessageTime?: (time: string) => void
+  renderMessageTime?: (time: string) => JSX.Element
   /**
    * 自定义当前聊天背景
    */
-  renderChatBg?: (bg: number | string) => void
+  renderChatBg?: (bg: number | string) => JSX.Element
   /**
    * 	自定义渲染当被拉黑或者被删除的时候显示的提示性消息
    */
-  renderErrorMessage?: (messageStatus: 0 | 1 | -1 | -2) => void
+  renderErrorMessage?: (messageStatus: 0 | 1 | -1 | -2) => JSX.Element
   /**
    * 自定义最右侧面板数据源
    */
@@ -235,7 +235,7 @@ export interface ChatScreenPropsType {
   /**
    * 自定义底部删除面板
    */
-  renderDelPanel?: (isSelect: boolean) => void
+  renderDelPanel?: (isSelect: boolean) => JSX.Element
   /**
    * 自定义消息选中时的图标
    */
@@ -243,7 +243,7 @@ export interface ChatScreenPropsType {
   /**
    * 自定义渲染消息选中和未选中的样式
    */
-  renderMessageCheck?: (isSelect: boolean) => void
+  renderMessageCheck?: (isSelect: boolean) => JSX.Element
   // 语音属性
   /**
    * 是否使用语音
@@ -369,51 +369,51 @@ export interface ChatScreenPropsType {
   /**
    * 	自定义渲染文本消息
    */
-  renderTextMessage?: (data: any) => void
+  renderTextMessage?: (data: any) => JSX.Element
   /**
    * 自定义渲染图片消息
    */
-  renderImageMessage?: (data: any) => void
+  renderImageMessage?: (data: any) => JSX.Element
   /**
    * 自定义渲染语音消息
    */
-  renderVoiceMessage?: (data: any) => void
+  renderVoiceMessage?: (data: any) => JSX.Element
   /**
    * 自定义渲染语音外部容器
    */
-  renderVoiceView?: (data: any) => void
+  renderVoiceView?: (data: any) => JSX.Element
   /**
    * 自定义渲染视频消息
    */
-  renderVideoMessage?: (data: any) => void
+  renderVideoMessage?: (data: any) => JSX.Element
   /**
    * 自定义定位消息
    */
-  renderLocationMessage?: (data: any) => void
+  renderLocationMessage?: (data: any) => JSX.Element
   /**
    * 自定义分享消息
    */
-  renderShareMessage?: (data: any) => void
+  renderShareMessage?: (data: any) => JSX.Element
   /**
    * 自定义视频聊天信息
    */
-  renderVideoCallMessage?: (data: any) => void
+  renderVideoCallMessage?: (data: any) => JSX.Element
   /**
    * 自定义语音聊天信息
    */
-  renderVoiceCallMessage?: (data: any) => void
+  renderVoiceCallMessage?: (data: any) => JSX.Element
   /**
    * 自定义红包信息
    */
-  renderRedEnvelopeMessage?: (data: any) => void
+  renderRedEnvelopeMessage?: (data: any) => JSX.Element
   /**
    * 自定义文件信息
    */
-  renderFileMessage?: (data: any) => void
+  renderFileMessage?: (data: any) => JSX.Element
   /**
    * 自定义系统消息
    */
-  renderSystemMessage?: (data: any) => void
+  renderSystemMessage?: (data: any) => JSX.Element
 }
 
 export class ChatScreen extends PureComponent<ChatScreenPropsType, any> {
