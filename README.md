@@ -47,36 +47,111 @@ import { ChatScreen } from 'react-native-easy-chat-ui'
 
 class Example extends React.Component {
   state = {
-    msg: {
-      friend_12345678: {
-        messages: [
-          {
-            id: `${new Date().getTime()}`,
-            per: {
+     messages: [
+            {
+              id: `1`,
               type: 'text',
-              content: 'hello world'
-            } ,
-            targetId: '12345678',
-            chatInfo: {
-              avatar: require('./app/source/image/avatar.png'),
-              id: '12345678'
+              content: 'hello world',
+              targetId: '12345678',
+              chatInfo: {
+                avatar: require('../../source/defaultAvatar.png'),
+                id: '12345678',
+                nickName: 'Test'
+              },
+              renderTime: true,
+              sendStatus: 0,
+              time: '1542006036549'
             },
-            renderTime: true,
-            sendStatus: 0,
-            time: new Date().getTime()
-          },
-        ],
-        inverted: false,  // require
-        chatBg: require('../../source/bg.jpg') // chatBg not default
-      }
-    },
-    voiceHandle: true,
-    currentTime: 0,
-    recording: false,
-    paused: false,
-    stoppedRecording: false,
-    finished: false,
-    audioPath: ''
+            {
+              id: `2`,
+              type: 'text',
+              content: 'hi/{se}',
+              targetId: '12345678',
+              chatInfo: {
+                avatar: require('../../source/defaultAvatar.png'),
+                id: '12345678',
+                nickName: 'Test'
+              },
+              renderTime: true,
+              sendStatus: 0,
+              time: '1542106036549'
+            },
+            {
+              id: `3`,
+              type: 'image',
+              content: {
+                uri: 'https://upload-images.jianshu.io/upload_images/11942126-044bd33212dcbfb8.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/300/h/240',
+                width: 100,
+                height: 80,
+              } ,
+              targetId: '12345678',
+              chatInfo: {
+                avatar: require('../../source/defaultAvatar.png'),
+                id: '12345678',
+                nickName: 'Test'
+              },
+              renderTime: false,
+              sendStatus: 0,
+              time: '1542106037000'
+            },
+            {
+              id: `4`,
+              type: 'text',
+              content: '你好/{weixiao}',
+              targetId: '88886666',
+              chatInfo: {
+                avatar: require('../../source/avatar.png'),
+                id: '12345678'
+              },
+              renderTime: true,
+              sendStatus: -2,
+              time: '1542177036549'
+            },
+            {
+              id: `5`,
+              type: 'voice',
+              content: {
+                uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+                length: 10
+              },
+              targetId: '12345678',
+              chatInfo: {
+                avatar: require('../../source/defaultAvatar.png'),
+                id: '12345678',
+                nickName: 'Test'
+              },
+              renderTime: true,
+              sendStatus: 1,
+              time: '1542260667161'
+            },
+            {
+              id: `6`,
+              type: 'voice',
+              content: {
+                uri: 'http://m10.music.126.net/20190810141311/78bf2f6e1080052bc0259afa91cf030d/ymusic/d60e/d53a/a031/1578f4093912b3c1f41a0bfd6c10115d.mp3',
+                length: 30
+              },
+              targetId: '88886666',
+              chatInfo: {
+                avatar: require('../../source/avatar.png'),
+                id: '12345678'
+              },
+              renderTime: true,
+              sendStatus: 0,
+              time: '1542264667161'
+            },
+          ],
+          // chatBg: require('../../source/bg.jpg'),
+          inverted: false,  // require
+          voiceHandle: true,
+          currentTime: 0,
+          recording: false,
+          paused: false,
+          stoppedRecording: false,
+          finished: false,
+          audioPath: '',
+          voicePlaying: false,
+          voiceLoading: false
   }
 
 
@@ -88,7 +163,7 @@ class Example extends React.Component {
     return (
       <ChatScreen
         ref={(e) => this.chat = e}
-        messageList={this.state.msg}
+        messageList={this.state.messages}
         androidHeaderHeight={androidHeaderHeight}
         sendMessage={this.sendMessage}
       />
@@ -105,45 +180,35 @@ yarn
 react-native run-ios or react-native run-android
 ```
 
-## About Message object
+## About Message
 ```js
 {
-  friend_12345678: {
     messages: [
       {
         id: `${new Date().getTime()}`,
-        per: {
-          type: 'text',
-          content: 'hello world'
-        } ,
+        type: 'text',
+        content: 'hello world',
         targetId: '12345678',
         chatInfo: {
           avatar: require('./app/source/image/avatar.png'),
-          id: '12345678'
+          id: '12345678',
+          nickName: 'Test'   // not require
         },
         renderTime: true,
         sendStatus: 0,
         time: new Date().getTime()
       }
-    ],
-
-    inverted: false , // require
-    chatBg: require('../../source/bg.jpg') // chatBg not default
-
-  }
+    ]
 }
 ```
-* friend_12345678: `${chatType}_${chatId}`
 * id: message id
-* per: per message obj
 * about message type: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
 * targetId: The id of the person who sent the message
+* content: see example
 * chatInfo: The profile of the person you're chatting with
 * renderTime: Whether to render time above message
 * sendStatus: 0 ---> sending,  1 ---> sendSuccess,  -1 ---> You are deleted or on the blacklist,   -2 ---> error
 * time: moment，messageList sorted by time
-* inverted: When messageList exceeds the screen height, set it to true otherwise false (You can change this value when componentWillUnmount or delete message)
-* chatBg: background image
 
 ## Props
 
@@ -151,7 +216,9 @@ react-native run-ios or react-native run-android
 
 props | default | Info
 ----- |  ------- | -----
- messageList | {} | Messages to display
+ messageList | [] | Messages to display
+ inverted | false |  When messageList exceeds the screen height, set it to true otherwise false (You can change this value when componentWillUnmount or delete message)
+ chatBackgroundImage | null | Custom BackgroundImage 
  onScroll | () => {} | ListView Props
  onEndReachedThreshold | 0.1 | ListView Props
  chatWindowStyle | undefined | Container style
@@ -166,6 +233,7 @@ props | default | Info
  pressAvatar | (isSelf, targetId) => {} |  Callback when press avatar
  androidHeaderHeight | 66 | Android navigation bar height + statusBar height
  userProfile | {id: '88888888', avatar: 'default.png'} | Your own profile
+ showUserName | false | Whether show userName
  historyLoading | false | Display an `ActivityIndicator` when loading earlier messages
  loadHistory | () => {} | Callback when loading earlier messages
  renderMessageTime | (time) => {} | Custom time inside above message
@@ -254,6 +322,132 @@ renderVoiceCallMessage| undefined | Custom message voice call, (data) => {}
 renderRedEnvelopeMessage| undefined | Custom message red-envelope, (data) => {}
 renderFileMessage| undefined | Custom message file, (data) => {}
 renderSystemMessage| undefined | Custom message system, (data) => {}
+
+
+## All Props
+```js
+  propTypes = {
+    /* defaultProps */
+    messageList: PropTypes.array.isRequired,
+    inverted: PropTypes.bool,
+    chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    onScroll: PropTypes.func,
+    onEndReachedThreshold: PropTypes.number,
+    chatWindowStyle: ViewPropTypes.style,
+    sendMessage: PropTypes.func,
+    avatarStyle: ViewPropTypes.style,
+    allPanelAnimateDuration: PropTypes.number,
+    chatType: PropTypes.oneOf(['friend', 'group']),
+    onMessagePress: PropTypes.func,
+    onMessageLongPress: PropTypes.func,
+    renderMessageTime: PropTypes.func,
+    pressAvatar: PropTypes.func,
+    renderErrorMessage: PropTypes.func,
+    renderChatBg: PropTypes.func,
+    reSendMessage: PropTypes.func,
+    androidHeaderHeight: PropTypes.number.isRequired,
+    iphoneXHeaderPadding: PropTypes.number,
+    iphoneXBottomPadding: PropTypes.number,
+    showUserName: PropTypes.bool,
+    userProfile: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      avatar: PropTypes.isRequired,
+      nickName: PropTypes.string
+    }),
+    panelSource: PropTypes.arrayOf(PropTypes.shape({
+      icon: PropTypes.element,
+      title: PropTypes.string,
+      onPress: PropTypes.func
+    })),
+    renderPanelRow: PropTypes.func,
+    panelContainerStyle: ViewPropTypes.style,
+    allPanelHeight: PropTypes.number,
+    messageErrorIcon: PropTypes.element,
+    loadHistory: PropTypes.func,
+    leftMessageBackground: PropTypes.string,
+    rightMessageBackground: PropTypes.string,
+    leftMessageTextStyle: PropTypes.object,
+    rightMessageTextStyle: PropTypes.object,
+    renderLoadEarlier: PropTypes.func,
+    extraData: PropTypes.any,
+    containerBackgroundColor: PropTypes.string,
+    showsVerticalScrollIndicator: PropTypes.bool,
+    userNameStyle: PropTypes.object,
+    /* popProps */
+    usePopView: PropTypes.bool,
+    popoverStyle: ViewPropTypes.style,
+    renderDelPanel: PropTypes.func,
+    changeHeaderLeft: PropTypes.func,
+    setPopItems: PropTypes.func,
+    messageDelIcon: PropTypes.element,
+    messageSelectIcon: PropTypes.element,
+    delMessage: PropTypes.func,
+    renderMessageCheck: PropTypes.func,
+
+    /* inputBarProps */
+    emojiIcon: PropTypes.element,
+    placeholder: PropTypes.string,
+    keyboardIcon: PropTypes.element,
+    plusIcon: PropTypes.element,
+    sendIcon: PropTypes.element,
+    sendUnableIcon: PropTypes.element,
+    inputStyle: ViewPropTypes.style,
+    inputOutContainerStyle: ViewPropTypes.style,
+    inputContainerStyle: ViewPropTypes.style,
+    inputHeightFix: PropTypes.number,
+    useEmoji: PropTypes.bool,
+    usePlus: PropTypes.bool,
+    /* voiceProps */
+    useVoice: PropTypes.bool,
+    pressInText: PropTypes.string,
+    pressOutText: PropTypes.string,
+    voiceIcon: PropTypes.element,
+    voiceLeftIcon: PropTypes.element,
+    voiceRightIcon: PropTypes.element,
+    voiceErrorIcon: PropTypes.element,
+    voiceCancelIcon: PropTypes.element,
+    voiceSpeakIcon: PropTypes.element,
+    audioPath: PropTypes.string,
+    audioOnProgress: PropTypes.func,
+    audioOnFinish: PropTypes.func,
+    audioInitPath: PropTypes.func,
+    audioRecord: PropTypes.func,
+    audioStopRecord: PropTypes.func,
+    audioPauseRecord: PropTypes.func,
+    audioResumeRecord: PropTypes.func,
+    audioCurrentTime: PropTypes.number,
+    audioHandle: PropTypes.bool,
+    setAudioHandle: PropTypes.func,
+    audioHasPermission: PropTypes.bool,
+    checkPermission: PropTypes.func,
+    requestAndroidPermission: PropTypes.func,
+    voiceErrorText: PropTypes.string,
+    voiceCancelText: PropTypes.string,
+    voiceNoteText: PropTypes.string,
+    voiceLoading: PropTypes.bool,
+    voicePlaying: PropTypes.bool,
+    voiceLeftLoadingColor: PropTypes.string,
+    voiceRightLoadingColor: PropTypes.string,
+    /* bubbleProps */
+    renderTextMessage: PropTypes.func,
+    renderImageMessage: PropTypes.func,
+    renderVoiceMessage: PropTypes.func,
+    renderVoiceView: PropTypes.func,
+    renderVideoMessage: PropTypes.func,
+    renderLocationMessage: PropTypes.func,
+    renderShareMessage: PropTypes.func,
+    renderVideoCallMessage: PropTypes.func,
+    renderVoiceCallMessage: PropTypes.func,
+    renderRedEnvelopeMessage: PropTypes.func,
+    renderFileMessage: PropTypes.func,
+    renderSystemMessage: PropTypes.func,
+    /* delPanelProps */
+    delPanelStyle: ViewPropTypes.style,
+    delPanelButtonStyle: ViewPropTypes.style
+  }
+
+
+````
 
 ## Notes for Android
 * Make sure you have `android:windowSoftInputMode="adjustResize"` in your `AndroidManifest.xml`:

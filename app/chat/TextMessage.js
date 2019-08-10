@@ -36,14 +36,14 @@ export default class TextMessage extends PureComponent {
           activeOpacity={1}
           disabled={isOpen}
           onLongPress={() => {
-            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''), message)
+            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'text', parseInt(this.props.rowId), changeEmojiText(this.props.message.content, 'en').join(''), message)
           }}
           onPress={() => {
-            this.props.onMessagePress('text', parseInt(this.props.rowId), changeEmojiText(this.props.message.per.content, 'en').join(''), message)
+            this.props.onMessagePress('text', parseInt(this.props.rowId), changeEmojiText(this.props.message.content, 'en').join(''), message)
           }}
         >
           <View style={[styles.container, { backgroundColor: isSelf ? rightMessageBackground
-            : leftMessageBackground }]}>
+              : leftMessageBackground }]}>
             {views}
           </View>
         </TouchableOpacity>
@@ -83,7 +83,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     maxWidth: width - 160,
     minHeight: 20,
-    marginLeft: -1
   },
 
   subEmojiStyle: {
@@ -97,20 +96,22 @@ const styles = StyleSheet.create({
     borderWidth: 8,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
-    marginTop: 16,
-    borderColor: '#fff'
+    borderColor: '#fff',
+    marginTop: 16
   },
   left_triangle: {
-    borderLeftWidth: 0
+    borderLeftWidth: 0,
+    borderRightWidth: 16
   },
   right_triangle: {
     borderRightWidth: 0,
+    borderLeftWidth: 16,
     borderColor: '#a0e75a'
   },
   right: {
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
   },
   left: {
-    flexDirection: 'row'
+    flexDirection: 'row',
   }
 })

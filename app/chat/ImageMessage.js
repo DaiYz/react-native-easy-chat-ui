@@ -14,13 +14,13 @@ export default class ImageMessage extends PureComponent {
           activeOpacity={1}
           collapsable={false}
           disabled={isOpen}
-          onPress={() => this.props.onMessagePress('image', parseInt(this.props.rowId), message.per.content.uri, message)}
+          onPress={() => this.props.onMessagePress('image', parseInt(this.props.rowId), message.content.uri, message)}
           style={{ backgroundColor: 'transparent', padding: 5, borderRadius: 5 }}
           onLongPress={() => {
-            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'image', parseInt(this.props.rowId), message.per.content.uri, message)
+            this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'image', parseInt(this.props.rowId), message.content.uri, message)
           }} >
           <View style={{ maxHeight: 300, overflow: 'hidden', borderRadius: 5 }}>
-            <Image source={{ uri: message.per.content.uri }} style={[{ width: 100, height: message.per.content.height / (message.per.content.width / 100), borderRadius: 5 }]} />
+            <Image source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
           </View>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
@@ -51,9 +51,11 @@ export default class ImageMessage extends PureComponent {
 
 const styles = StyleSheet.create({
   right: {
-    flexDirection: 'row-reverse'
+    flexDirection: 'row-reverse',
+    marginRight: 10
   },
   left: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    marginLeft: 10
   }
 })
