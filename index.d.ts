@@ -16,11 +16,11 @@ export enum MsgType {
   system = 'system',
 }
 
+/**
+ * 单独消息内容对象
+ */
 export interface MessagePorpsType {
   id: string
-  /**
-   * 单独消息内容对象
-   */
   /**
    * 消息类型
    */
@@ -52,9 +52,8 @@ export interface MessagePorpsType {
    */
   time: string
 }
-
+// 消息属性
 export interface ChatScreenPropsType {
-  // 消息属性
   /**
    * 消息列表
    */
