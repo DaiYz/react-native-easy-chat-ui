@@ -2,6 +2,17 @@ import ChatView from './app/chat/ChatView'
 import { ViewStyle } from 'react-native'
 import { PureComponent } from 'react'
 
+export interface VoiceContentPropsType {
+  uri: string
+  length: number
+}
+
+export interface ImageContentPropsType {
+  uri: string
+  width: number
+  height: number
+}
+
 export enum MsgType {
   text = 'text',
   image = 'image',
@@ -28,7 +39,7 @@ export interface MessagePorpsType {
   /**
    * 消息内容
    */
-  content: string | object
+  content: string | VoiceContentPropsType | ImageContentPropsType
 
   /**
    * 消息谁发的就是谁的用户ID
@@ -52,12 +63,13 @@ export interface MessagePorpsType {
    */
   time: string
 }
+
 // 消息属性
 export interface ChatScreenPropsType {
   /**
    * 消息列表
    */
-  messageList: object[]
+  messageList: MessagePorpsType[]
   /**
    * 是否列表倒置
    */
