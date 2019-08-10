@@ -1,6 +1,6 @@
 {
   "name": "react-native-easy-chat-ui",
-  "version": "0.3.1",
+  "version": "0.3.0",
   "description": "chat UI for React Native",
   "main": "index.js",
   "directories": {
@@ -28,10 +28,12 @@
   },
   "homepage": "https://github.com/DaiYz/react-native-chat#readme",
   "peerDependencies": {
-    "moment": "^2.22.2",
     "react": "*",
     "prop-types": "*",
     "react-native": "*"
+  },
+  "dependencies": {
+    "moment": "^2.22.2"
   },
   "devDependencies": {
     "react": "16.2.0",
