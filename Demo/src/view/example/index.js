@@ -12,8 +12,7 @@ import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
-// import { ChatScreen } from 'react-native-easy-chat-ui'
-import { ChatScreen } from "../../../src/app/chat";
+import { ChatScreen } from 'react-native-easy-chat-ui'
 
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -311,7 +310,8 @@ export default class Example extends Component {
         targetId: '12345678',
         chatInfo: {
           avatar: require('../../source/avatar.png'),
-          id: '88886666'
+          id: '88886666',
+          nickName: 'Test'
         },
         renderTime: true,
         sendStatus: 1,
@@ -331,7 +331,8 @@ export default class Example extends Component {
         targetId: '88886666',
         chatInfo: {
           avatar: require('../../source/avatar.png'),
-          id: '12345678'
+          id: '12345678',
+          nickName: 'Test'
         },
         renderTime: true,
         sendStatus: 1,
