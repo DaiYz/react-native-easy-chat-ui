@@ -215,7 +215,7 @@ export default class ChatItem extends PureComponent {
           return (
             <View style={styles.system_container}>
               <View style={styles.system_button}>
-                <Text style={styles.system_text}>{msg.content}</Text>
+                <Text style={styles.system_text}>{message.content}</Text>
               </View>
             </View>
           )

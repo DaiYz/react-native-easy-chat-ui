@@ -181,10 +181,8 @@ react-native run-ios or react-native run-android
   messages: [
     {
       id: `${new Date().getTime()}`,
-      per: {
-        type: 'text',
-        content: 'hello world'
-      } ,
+      type: 'text',
+      content: 'hello world'
       targetId: '12345678',
       chatInfo: {
         avatar: require('./app/source/image/avatar.png'),
@@ -198,7 +196,8 @@ react-native run-ios or react-native run-android
 }
 ```
 * id: 消息 id
-* 消息类型: 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
+* type: 消息类型 'text', 'image', 'voice', 'video', 'location', 'share', 'videoCall', 'voiceCall', 'redEnvelope', 'file', 'system'
+* conent: 消息内容
 * targetId: 消息谁发的就是谁的用户ID
 * chatInfo: 与你聊天人的资料(id, 头像, 昵称)
 * renderTime: 是否在每一条消息上显示消息时间
