@@ -22,6 +22,7 @@ export default class Example extends Component {
   }
   constructor(props) {
     super(props);
+    this.timer = null
     this.state = {
       messages: [
         {
@@ -127,10 +128,12 @@ export default class Example extends Component {
       finished: false,
       audioPath: '',
       voicePlaying: false,
-      voiceLoading: false
+      voiceLoading: false,
+      voiceVolume: 0
     }
     this.sound = null
     this.activeVoiceId = -1
+
   }
 
   audioProgress = () => {
@@ -142,11 +145,23 @@ export default class Example extends Component {
       }
       this._setVoiceHandel(false)
       this.setState({volume: Math.floor(data.currentMetering) })
+      this.random()
     }
   }
 
   audioFinish = () => {
     AudioRecorder.onFinished = (data) => this._finishRecording(data.status === 'OK', data.audioFileURL)
+  }
+
+  random = () => {
+    if (this.timer) return
+    console.log('start')
+    this.timer = setInterval(()=> {
+      const num =  Math.floor(Math.random() * 10)
+      this.setState({
+        voiceVolume: num
+      })
+    }, 500)
   }
 
 
@@ -187,6 +202,7 @@ export default class Example extends Component {
   _stop = async() => {
     try {
       await AudioRecorder.stopRecording()
+      this.timer && clearInterval(this.timer)
       if (Platform.OS === 'android') {
         this._finishRecording(true)
       }
@@ -344,7 +360,7 @@ export default class Example extends Component {
   render() {
     let statusHeight = StatusBar.currentHeight || 0
     let androidHeaderHeight = statusHeight + Header.HEIGHT
-    const {voiceLoading, voicePlaying, messages, chatBg, inverted} = this.state
+    const {voiceLoading, voicePlaying, messages, chatBg, inverted, voiceVolume} = this.state
     return (
       <View style={styles.container}>
         <ChatScreen
@@ -371,6 +387,7 @@ export default class Example extends Component {
           setAudioHandle={this._setVoiceHandel}
           voiceLoading={voiceLoading}
           voicePlaying={voicePlaying}
+          voiceVolume={voiceVolume}
         />
         <TouchableOpacity
           onPress={() => this.receive()}

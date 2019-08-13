@@ -283,7 +283,7 @@ react-native run-ios or react-native run-android
    voiceCancelIcon | icon element | 自定义取消录音的图标
    voiceCancelText | '松开手指取消发送' | 自定义取消录音的提示文字
    voiceNoteText | '手指上划，取消发送' | 自定义按下语音按钮显示的文字
-   voiceSpeakIcon | icon element | 自定义按下语音按钮显示的图标
+   voiceSpeakIcon | [] | 自定义按下语音按钮显示的图标(多个)
    audioPath | '' | 语音的存储路径
    audioOnProgress | () => {} | 录制语音中的回调
    audioOnFinish | () => {} | 录制语音结束的回调
@@ -301,6 +301,7 @@ react-native run-ios or react-native run-android
    voiceLoading | false | 是否正在加载语音
    voicePlaying | false | 是否正在播放语音
    voiceLeftLoadingColor | '#cccccc' | 自定义语音加载时左侧消息颜色
+   voiceVolume | 0 | 音量,取值[0 ~ 10]
    voiceRightLoadingColor | '#628b42' | 自定义语音加载时右侧消息颜色
 * 聊天气泡属性
 
@@ -402,7 +403,7 @@ renderSystemMessage| undefined | 自定义系统消息, (data) => {}
     voiceRightIcon: PropTypes.element,
     voiceErrorIcon: PropTypes.element,
     voiceCancelIcon: PropTypes.element,
-    voiceSpeakIcon: PropTypes.element,
+    voiceSpeakIcon: PropTypes.array,
     audioPath: PropTypes.string,
     audioOnProgress: PropTypes.func,
     audioOnFinish: PropTypes.func,
@@ -423,6 +424,7 @@ renderSystemMessage| undefined | 自定义系统消息, (data) => {}
     voiceLoading: PropTypes.bool,
     voicePlaying: PropTypes.bool,
     voiceLeftLoadingColor: PropTypes.string,
+    voiceVolume: PropTypes.number,
     voiceRightLoadingColor: PropTypes.string,
     /* bubbleProps */
     renderTextMessage: PropTypes.func,

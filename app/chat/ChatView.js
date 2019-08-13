@@ -107,7 +107,7 @@ class ChatWindow extends PureComponent {
     voiceRightIcon: PropTypes.element,
     voiceErrorIcon: PropTypes.element,
     voiceCancelIcon: PropTypes.element,
-    voiceSpeakIcon: PropTypes.element,
+    voiceSpeakIcon: PropTypes.array,
     audioPath: PropTypes.string,
     audioOnProgress: PropTypes.func,
     audioOnFinish: PropTypes.func,
@@ -128,6 +128,7 @@ class ChatWindow extends PureComponent {
     voiceLoading: PropTypes.bool,
     voicePlaying: PropTypes.bool,
     voiceLeftLoadingColor: PropTypes.string,
+    voiceVolume: PropTypes.number,
     voiceRightLoadingColor: PropTypes.string,
     /* bubbleProps */
     renderTextMessage: PropTypes.func,
@@ -273,7 +274,18 @@ class ChatWindow extends PureComponent {
     messageErrorIcon: <Image source={require('../source/image/waring.png')} style={{ width: 20, height: 20 }} />,
     voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{ width: 60, height: 60 }} />,
     voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{ width: 60, height: 60 }} />,
-    voiceSpeakIcon: <Image source={require('../source/image/speak.png')} style={{ width: 60, height: 60, marginVertical: 25 }} />,
+    voiceSpeakIcon: [
+      require('../source/image/speak0.png'),
+      require('../source/image/speak1.png'),
+      require('../source/image/speak2.png'),
+      require('../source/image/speak3.png'),
+      require('../source/image/speak4.png'),
+      require('../source/image/speak5.png'),
+      require('../source/image/speak6.png'),
+      require('../source/image/speak7.png'),
+      require('../source/image/speak8.png'),
+    ],
+    voiceVolume: 10,
     delMessage: (content, isInverted) => {
       console.log(content, isInverted)
     },
@@ -1131,6 +1143,7 @@ class ChatWindow extends PureComponent {
                 voiceCancelText={this.props.voiceCancelText}
                 voiceNoteText={this.props.voiceNoteText}
                 renderVoiceView={this.props.renderVoiceView}
+                voiceVolume={this.props.voiceVolume}
               />
               : null
           }

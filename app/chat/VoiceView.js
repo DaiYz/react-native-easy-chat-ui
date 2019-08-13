@@ -6,7 +6,7 @@ import {
   Dimensions,
   Text,
   ViewPropTypes as RNViewPropTypes,
-  PermissionsAndroid,
+  Image,
   ActivityIndicator,
   Platform
 } from 'react-native'
@@ -169,7 +169,7 @@ export default class VoiceView extends PureComponent {
 
   _renderContent () {
     const { error } = this.state
-    const { errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView } = this.props
+    const { errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView, voiceSpeakIcon, voiceVolume } = this.props
     if (renderVoiceView === undefined) {
       return (
         error ? (
@@ -191,7 +191,10 @@ export default class VoiceView extends PureComponent {
                 </View>
               ) : (
                 <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-                  {this.props.voiceSpeakIcon}
+                  <VoiceIcon
+                    voiceSpeakIcon={voiceSpeakIcon}
+                    voiceVolume={voiceVolume}
+                  />
                   <Text style={{ color: '#fff', textAlign: 'center' }}>{voiceNoteText}</Text>
                 </View>
               )
@@ -215,6 +218,34 @@ export default class VoiceView extends PureComponent {
     ) : null
     return view
   }
+}
+
+
+const VoiceIcon = (props) => {
+  const {voiceSpeakIcon, voiceVolume} = props
+  let source = null
+  if (voiceVolume >=0 && voiceVolume < 1){
+    source = voiceSpeakIcon[0]
+  } else if (voiceVolume >=1 && voiceVolume < 2) {
+    source = voiceSpeakIcon[1]
+  } else if (voiceVolume >=2 && voiceVolume < 3) {
+    source = voiceSpeakIcon[2]
+  } else if (voiceVolume >=3 && voiceVolume < 4) {
+    source = voiceSpeakIcon[3]
+  } else if (voiceVolume >=4 && voiceVolume < 5) {
+    source = voiceSpeakIcon[4]
+  } else if (voiceVolume >=5 && voiceVolume < 6) {
+    source = voiceSpeakIcon[5]
+  } else if (voiceVolume >=6 && voiceVolume < 7) {
+    source = voiceSpeakIcon[6]
+  } else if (voiceVolume >=7 && voiceVolume < 8) {
+    source = voiceSpeakIcon[7]
+  } else {
+    source = voiceSpeakIcon[8]
+  }
+  return (
+    <Image source={source} style={{ width: 60, height: 60, marginVertical: 25 }} />
+  )
 }
 
 const styles = StyleSheet.create({

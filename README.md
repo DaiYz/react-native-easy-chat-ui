@@ -286,7 +286,7 @@ props | default | Info
    voiceCancelIcon | icon element | Custom icon when cancel record
    voiceCancelText | '松开手指取消发送' | Custom text when cancel record
    voiceNoteText | '手指上划，取消发送' | Custom text when pressIn record button
-   voiceSpeakIcon | icon element | Custom icon when pressIn record button
+   voiceSpeakIcon | [] | Custom icon when pressIn record button
    audioPath | '' | File path to store voice
    audioOnProgress | () => {} | Callback when recording
    audioOnFinish | () => {} | Callback when finish record
@@ -304,6 +304,7 @@ props | default | Info
    voiceLoading | false | Loading voice or not
    voicePlaying | false | Playing voice or not
    voiceLeftLoadingColor | '#cccccc' | Custom background color on left when load voice
+   voiceVolume | 0 | Volume (0~10)
    voiceRightLoadingColor | '#628b42' | Custom background color on right when load voice
 
 * bubbleProps
@@ -406,7 +407,7 @@ renderSystemMessage| undefined | Custom message system, (data) => {}
     voiceRightIcon: PropTypes.element,
     voiceErrorIcon: PropTypes.element,
     voiceCancelIcon: PropTypes.element,
-    voiceSpeakIcon: PropTypes.element,
+    voiceSpeakIcon: PropTypes.array,
     audioPath: PropTypes.string,
     audioOnProgress: PropTypes.func,
     audioOnFinish: PropTypes.func,
@@ -427,6 +428,7 @@ renderSystemMessage| undefined | Custom message system, (data) => {}
     voiceLoading: PropTypes.bool,
     voicePlaying: PropTypes.bool,
     voiceLeftLoadingColor: PropTypes.string,
+    voiceVolume: PropTypes.number,
     voiceRightLoadingColor: PropTypes.string,
     /* bubbleProps */
     renderTextMessage: PropTypes.func,
