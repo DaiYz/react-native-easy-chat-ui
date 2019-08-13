@@ -35,7 +35,7 @@ export interface MessagePorpsType {
   /**
    * 消息类型
    */
-  type: MsgType
+  type: MsgType | string
   /**
    * 消息内容
    */
@@ -51,19 +51,18 @@ export interface MessagePorpsType {
   chatInfo: {
     avatar: string | number
     id: string,
-    nickName: string
+    nickName?: string
   }
   /**
    * 是否在每一条消息上显示消息时间
    */
   renderTime: boolean
-  sendStatus: 0 | 1 | -1 | -2
+  sendStatus: 0 | 1 | -1 | -2 | number
   /**
    * 当前时间，消息将由此值来排序，Date.getTime()
    */
   time: string
 }
-
 // 消息属性
 export interface ChatScreenPropsType {
   /**
@@ -77,7 +76,7 @@ export interface ChatScreenPropsType {
   /**
    * 聊天背景
    */
-  chatBackgroundImage: string | number
+  chatBackgroundImage?: string | number
   /**
    * 同FlatList属性
    */
@@ -145,7 +144,7 @@ export interface ChatScreenPropsType {
   /**
    * 是否显示用户昵称
    */
-  showUserName: boolean
+  showUserName?: boolean
   /**
    * 自定义渲染消息上方的时间
    */
