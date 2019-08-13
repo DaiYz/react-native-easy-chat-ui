@@ -293,7 +293,10 @@ export default class ChatItem extends PureComponent {
                       style={[styles.avatar, avatarStyle]} />
                   </TouchableOpacity>
               }
-              <View style={{justifyContent: showName && type === 'voice' ? 'flex-start' : 'center'}}>
+              <View style={[
+                  { justifyContent: showName && type === 'voice' ? 'flex-start' : 'center' },
+                  type === 'system' && { flex: 1 },
+                ]}>
                 {
                   showName && !isSelf? <Text style={[styles.userName, userNameStyle]}>{nickName}</Text>
                     : null
