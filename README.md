@@ -234,7 +234,6 @@ props | default | Info
  androidHeaderHeight | 66 | Android navigation bar height + statusBar height
  userProfile | {id: '88888888', avatar: 'default.png'} | Your own profile
  showUserName | false | Whether show userName
- historyLoading | false | Display an `ActivityIndicator` when loading earlier messages
  loadHistory | () => {} | Callback when loading earlier messages
  renderMessageTime | (time) => {} | Custom time inside above message
  renderChatBg | (bg) => {} | Custom chat background image

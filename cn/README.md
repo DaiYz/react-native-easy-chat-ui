@@ -227,7 +227,6 @@ react-native run-ios or react-native run-android
  pressAvatar | (isSelf, targetId) => {} | 点击头像的回调
  androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
  userProfile | {id: '88888888', avatar: 'default.png'} | 你自己的个人资料
- historyLoading | false | 显示一个loading
  loadHistory | () => {} | 下拉获取历史记录的回调
  renderMessageTime | (time) => {} | 自定义渲染消息上方的时间
  renderChatBg | (bg) => {} | 自定义当前聊天背景
