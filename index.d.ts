@@ -136,7 +136,7 @@ export interface ChatScreenPropsType {
   /**
    * 显示一个loading
    */
-  historyLoading?: boolean
+  renderLoadEarlier?: () => JSX.Element
   /**
    * 下拉获取历史记录的回调
    */
