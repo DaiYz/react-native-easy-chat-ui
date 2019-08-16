@@ -101,6 +101,7 @@ export interface ChatScreenPropsType {
    * 删除消息的回调
    */
   delMessage?: (indexs, isInverted: boolean) => void
+  renderAvatar?: (message: MessagePorpsType) => JSX.Element
   /**
    * 头像样式
    */

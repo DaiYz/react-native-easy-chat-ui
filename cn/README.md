@@ -219,7 +219,8 @@ react-native run-ios or react-native run-android
  sendMessage | (type, content, isInverted) => {} | 发送消息时的回调
  reSendMessage | (message) => {} | 重发消息的回调
  delMessage | (indexs, isInverted) => {} | 删除消息的回调
- avatarStyle | undefined | 头像样式
+ renderAvatar | undefined | 自定义头像组件
+ avatarStyle | undefined | 头像样式, renderAvatar 为 undefined 时有效
  chatId | '123455678' | 聊天对象的ID
  chatType | 'friend' | 与聊天人的关系
  onMessagePress | (type, index, content, message) => {} | 点击消息的回调

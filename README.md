@@ -218,13 +218,14 @@ props | default | Info
 ----- |  ------- | -----
  messageList | [] | Messages to display
  inverted | false |  When messageList exceeds the screen height, set it to true otherwise false (You can change this value when componentWillUnmount or delete message)
- chatBackgroundImage | null | Custom BackgroundImage 
+ chatBackgroundImage | null | Custom BackgroundImage
  onScroll | () => {} | ListView Props
  onEndReachedThreshold | 0.1 | ListView Props
  chatWindowStyle | undefined | Container style
  sendMessage | (type, content, isInverted) => {} | Callback when sending a message
  reSendMessage | (message) => {} | Callback when you want send again
  delMessage | (indexs, isInverted) => {} | Callback when delete message
+ renderAvatar | (message) => {} | Custom avatar view
  avatarStyle | undefined | Style of avatar
  chatId | '123455678' | The id of the person you're chatting with
  chatType | 'friend' | Your relationship with the person you're chatting with

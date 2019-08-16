@@ -36,6 +36,7 @@ class ChatWindow extends PureComponent {
     onEndReachedThreshold: PropTypes.number,
     chatWindowStyle: ViewPropTypes.style,
     sendMessage: PropTypes.func,
+    renderAvatar: PropTypes.func,
     avatarStyle: ViewPropTypes.style,
     allPanelAnimateDuration: PropTypes.number,
     chatType: PropTypes.oneOf(['friend', 'group']),
@@ -1001,6 +1002,7 @@ class ChatWindow extends PureComponent {
                   voiceLeftIcon={this.props.voiceLeftIcon}
                   voiceRightIcon={this.props.voiceRightIcon}
                   closeAll={this.closeAll}
+                  renderAvatar={this.props.renderAvatar}
                   avatarStyle={this.props.avatarStyle}
                   showUserName={this.props.showUserName}
                   userNameStyle={this.props.userNameStyle}
