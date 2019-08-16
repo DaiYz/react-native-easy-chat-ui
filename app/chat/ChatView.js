@@ -1002,6 +1002,7 @@ class ChatWindow extends PureComponent {
                   voiceRightIcon={this.props.voiceRightIcon}
                   closeAll={this.closeAll}
                   avatarStyle={this.props.avatarStyle}
+                  showUserName={this.props.showUserName}
                   userNameStyle={this.props.userNameStyle}
                   renderErrorMessage={this.props.renderErrorMessage}
                   renderTextMessage={this.props.renderTextMessage}
