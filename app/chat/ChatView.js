@@ -774,7 +774,9 @@ class ChatWindow extends PureComponent {
           }
         }
         if (items === null) console.error('need to return items')
-        PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
+        if (items.length > 0 ) {
+          PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
+        }
       })
     }
   }
