@@ -36,6 +36,7 @@ class ChatWindow extends PureComponent {
     onEndReachedThreshold: PropTypes.number,
     chatWindowStyle: ViewPropTypes.style,
     sendMessage: PropTypes.func,
+    renderAvatar: PropTypes.func,
     avatarStyle: ViewPropTypes.style,
     allPanelAnimateDuration: PropTypes.number,
     chatType: PropTypes.oneOf(['friend', 'group']),
@@ -773,7 +774,9 @@ class ChatWindow extends PureComponent {
           }
         }
         if (items === null) console.error('need to return items')
-        PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
+        if (items.length > 0 ) {
+          PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
+        }
       })
     }
   }
@@ -1001,7 +1004,9 @@ class ChatWindow extends PureComponent {
                   voiceLeftIcon={this.props.voiceLeftIcon}
                   voiceRightIcon={this.props.voiceRightIcon}
                   closeAll={this.closeAll}
+                  renderAvatar={this.props.renderAvatar}
                   avatarStyle={this.props.avatarStyle}
+                  showUserName={this.props.showUserName}
                   userNameStyle={this.props.userNameStyle}
                   renderErrorMessage={this.props.renderErrorMessage}
                   renderTextMessage={this.props.renderTextMessage}

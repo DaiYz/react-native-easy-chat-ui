@@ -101,6 +101,7 @@ export interface ChatScreenPropsType {
    * 删除消息的回调
    */
   delMessage?: (indexs, isInverted: boolean) => void
+  renderAvatar?: (message: MessagePorpsType) => JSX.Element
   /**
    * 头像样式
    */
@@ -136,7 +137,7 @@ export interface ChatScreenPropsType {
   /**
    * 显示一个loading
    */
-  historyLoading?: boolean
+  renderLoadEarlier?: () => JSX.Element
   /**
    * 下拉获取历史记录的回调
    */
