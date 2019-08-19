@@ -19,7 +19,7 @@ export default class PlusPanel extends PureComponent {
         style={[{
           height: panelHeight.interpolate({
             inputRange: [0, 1],
-            outputRange: [height, this.totalHeight]
+            outputRange: [0, this.totalHeight]
           }),
           opacity: panelHeight.interpolate({
             inputRange: [0, 1],

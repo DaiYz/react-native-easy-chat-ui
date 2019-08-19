@@ -110,14 +110,6 @@ export default class InputBar extends PureComponent {
       <Animated.View style={[
         styles.commentBar,
         inputOutContainerStyle,
-        Platform.OS === 'ios'
-          ? { paddingBottom: isIphoneX ? xHeight : 0 }
-          : {
-            paddingBottom: paddingHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, 0]
-            })
-          }
       ]}
       >
         <View style={[{
