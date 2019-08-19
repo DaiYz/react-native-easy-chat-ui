@@ -38,19 +38,7 @@ export default class EmojiPanel extends PureComponent {
     const ContainerComponent = Platform.select({ ios: ScrollView, android: ViewPagerAndroid })
     this.total = 0
     return (
-      <Animated.View style={[styles.container, Platform.os === 'ios' ? {
-        position: 'absolute',
-        height: this.totalHeight,
-        backgroundColor: '#f5f5f5',
-        top: this.props.emojiHeight.interpolate({
-          inputRange: [0, 1],
-          outputRange: [height, height - HeaderHeight - this.totalHeight]
-        }),
-        opacity: this.props.emojiHeight.interpolate({
-          inputRange: [0, 1],
-          outputRange: [0, 1]
-        })
-      }:{
+      <Animated.View style={[styles.container, {
         height: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
           outputRange: [0, this.totalHeight]
