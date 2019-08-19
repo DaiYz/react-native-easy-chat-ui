@@ -17,7 +17,19 @@ export default class PlusPanel extends PureComponent {
     return (
       <Animated.View
         style={[
-          {
+          Platform.os === 'ios' ? {
+          top: panelHeight.interpolate({
+            inputRange: [0, 1],
+            outputRange: [height, height - HeaderHeight - this.totalHeight]
+          }),
+          opacity: panelHeight.interpolate({
+            inputRange: [0, 1],
+            outputRange: [0, 1]
+          }),
+          position: 'absolute',
+          height: this.totalHeight,
+          width
+        } : {
             height: panelHeight.interpolate({
               inputRange: [0, 1],
               outputRange: [0, this.totalHeight],
