@@ -107,11 +107,7 @@ export default class InputBar extends PureComponent {
       }
     })()
     return (
-      <Animated.View style={[
-        styles.commentBar,
-        inputOutContainerStyle,
-      ]}
-      >
+      <Animated.View style={[styles.commentBar, inputOutContainerStyle]}>
         <View style={[{
           flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10
         }, inputContainerStyle]}>

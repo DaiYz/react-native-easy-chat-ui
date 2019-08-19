@@ -16,17 +16,18 @@ export default class PlusPanel extends PureComponent {
     const { HeaderHeight, panelHeight, panelContainerStyle } = this.props
     return (
       <Animated.View
-        style={[{
-          height: panelHeight.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, this.totalHeight]
-          }),
-          opacity: panelHeight.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
-          }),
-          width
-        }
+        style={[
+          {
+            height: panelHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, this.totalHeight],
+            }),
+            opacity: panelHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [0, 1],
+            }),
+            width,
+          },
         ]}
         renderToHardwareTextureAndroid
       >
