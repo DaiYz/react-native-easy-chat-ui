@@ -1,8 +1,8 @@
 import ChatScreen from './app/chat/ChatView'
 import PopView from './app/chat/components/pop-view'
-import Emojis from './app/source/emojis'
+import { EMOJIS_DATA } from './app/source/emojis/index'
 export {
   ChatScreen,
   PopView,
-  Emojis
+  EMOJIS_DATA
 }
