@@ -1,4 +1,5 @@
 import ChatView from './app/chat/ChatView'
+import Emojis from './app/source/emojis'
 import { ViewStyle } from 'react-native'
 import { PureComponent } from 'react'
 
@@ -435,3 +436,5 @@ export class ChatScreen extends PureComponent<ChatScreenPropsType, any> {
   componentWillMount(): void
   render(): JSX.Element
 }
+
+export const Emojis
