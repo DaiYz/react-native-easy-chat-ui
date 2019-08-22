@@ -112,12 +112,7 @@ export default class InputBar extends PureComponent {
         inputOutContainerStyle,
         Platform.OS === 'ios'
           ? { paddingBottom: isIphoneX ? xHeight : 0 }
-          : {
-            paddingBottom: paddingHeight.interpolate({
-              inputRange: [0, 1],
-              outputRange: [0, this.props.allPanelHeight]
-            })
-          }
+          : {}
       ]}
       >
         <View style={[{
