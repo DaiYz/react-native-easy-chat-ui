@@ -39,12 +39,11 @@ export default class EmojiPanel extends PureComponent {
     this.total = 0
     return (
       <Animated.View style={[styles.container, {
-        height: this.totalHeight,
-        backgroundColor: '#f5f5f5',
-        top: this.props.emojiHeight.interpolate({
+        height: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
-          outputRange: [height, height - HeaderHeight - this.totalHeight]
+          outputRange: [0, this.totalHeight]
         }),
+        backgroundColor: '#f5f5f5',
         opacity: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
           outputRange: [0, 1]
@@ -105,7 +104,6 @@ export default class EmojiPanel extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    position: 'absolute',
     backgroundColor: '#f9f9f9',
     borderTopWidth: StyleSheet.hairlineWidth,
     borderColor: '#ccc',
