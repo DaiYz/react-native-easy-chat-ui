@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   Image, StyleSheet,
   Text,
-  ActivityIndicator, Dimensions
+  ActivityIndicator, Dimensions, Platform
 } from 'react-native'
 const { width } = Dimensions.get('window')
 
@@ -171,18 +171,20 @@ const styles = StyleSheet.create({
     width: 0,
     height: 0,
     zIndex: 999,
-    borderWidth: 8,
+    borderWidth: 6,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
   },
   left_triangle: {
     borderLeftWidth: 0,
-    borderRightWidth: 16
+    borderRightWidth: Platform.OS === 'android' ? 6 : 10,
+    marginLeft: 5
   },
   right_triangle: {
     borderRightWidth: 0,
-    borderLeftWidth: 16,
-    borderColor: '#a0e75a'
+    borderLeftWidth: Platform.OS === 'android' ? 6 : 10,
+    borderColor: '#a0e75a',
+    marginRight: 5
   },
   right: {
     flexDirection: 'row-reverse',

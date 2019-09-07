@@ -331,6 +331,7 @@ class ChatWindow extends PureComponent {
     this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
     this.listHeight = height - this.HeaderHeight - 64
     this.isInverted = false
+    this.rootHeight = 0
     this.androidHasAudioPermission = false
     this.state = {
       messageContent: '',
@@ -944,7 +945,7 @@ class ChatWindow extends PureComponent {
       ? (b.time - a.time)
       : (a.time - b.time))
     return (
-      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }}>
+      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
         { this.renderBg(chatBackgroundImage) }
         <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent'} : {
           height: this.visibleHeight.interpolate({
@@ -1035,6 +1036,7 @@ class ChatWindow extends PureComponent {
             />
           </TouchableOpacity>
           <InputBar
+            rootHeight={this.rootHeight}
             allPanelHeight={this.props.allPanelHeight}
             emojiIcon={this.props.emojiIcon}
             keyboardIcon={this.props.keyboardIcon}
