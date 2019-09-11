@@ -10,12 +10,13 @@ import {
   Text, Dimensions
 } from 'react-native'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 export default class InputBar extends PureComponent {
   constructor (props) {
     super(props)
     this.createPanResponder()
+    this.inputHeight = 0
   }
 
   createPanResponder () {
@@ -40,9 +41,10 @@ export default class InputBar extends PureComponent {
     }
   }
   onPanResponderMove (e, gestureState) {
-    const { showVoice, voiceStatus, changeVoiceStatus } = this.props
+    const { showVoice, voiceStatus, changeVoiceStatus, rootHeight } = this.props
     if (showVoice) {
-      if (Math.abs(e.nativeEvent.locationY) > 60) {
+      const compare = Platform.OS === 'ios' ? height - this.inputHeight : rootHeight
+      if(e.nativeEvent.pageY < compare){
         if (!voiceStatus) return undefined
         changeVoiceStatus(false)
       } else {
@@ -114,6 +116,7 @@ export default class InputBar extends PureComponent {
           ? { paddingBottom: isIphoneX ? xHeight : 0 }
           : {}
       ]}
+                     onLayout={(e) => this.inputHeight = e.nativeEvent.layout.height}
       >
         <View style={[{
           flexDirection: 'row', alignItems: 'center', marginVertical: 8, paddingHorizontal: 10

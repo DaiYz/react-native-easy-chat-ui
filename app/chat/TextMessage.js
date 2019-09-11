@@ -3,6 +3,7 @@ import {
   View,
   TouchableOpacity,
   ActivityIndicator,
+  Platform,
   StyleSheet, Dimensions
 } from 'react-native'
 import { changeEmojiText } from './utils'
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
     width: 0,
     height: 0,
     zIndex: 999,
-    borderWidth: 8,
+    borderWidth: 6,
     borderTopColor: 'transparent',
     borderBottomColor: 'transparent',
     borderColor: '#fff',
@@ -101,12 +102,14 @@ const styles = StyleSheet.create({
   },
   left_triangle: {
     borderLeftWidth: 0,
-    borderRightWidth: 16
+    borderRightWidth: Platform.OS === 'android' ? 6 : 10,
+    marginLeft: 5
   },
   right_triangle: {
     borderRightWidth: 0,
-    borderLeftWidth: 16,
-    borderColor: '#a0e75a'
+    borderLeftWidth: Platform.OS === 'android' ? 6 : 10,
+    borderColor: '#a0e75a',
+    marginRight: 5
   },
   right: {
     flexDirection: 'row-reverse',
