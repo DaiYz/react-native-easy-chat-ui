@@ -28,6 +28,10 @@ export default class VideoMessage extends PureComponent {
               source={{ uri: message.content.poster }}
               style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]}
             />
+            <Image
+              source={require('../source/image/play.png')}
+              style={styles.playIcon}
+            />
           </View>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
@@ -61,4 +65,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginLeft: 10,
   },
+  playIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginLeft: -25,
+    marginTop: -25,
+  }
 })
