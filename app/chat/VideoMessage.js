@@ -3,7 +3,6 @@ import { View, TouchableOpacity, Image, StyleSheet, ActivityIndicator } from 're
 export default class VideoMessage extends PureComponent {
   render() {
     const { message, messageErrorIcon, isSelf, isOpen, reSendMessage } = this.props
-    console.log('message:', message)
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <TouchableOpacity
