@@ -117,6 +117,7 @@ export default class ChatItem extends PureComponent {
               onMessageLongPress={this.props.onMessageLongPress}
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
+              lastReadAt={this.props.lastReadAt}
             />
           )
         } else {

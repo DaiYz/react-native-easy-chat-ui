@@ -78,6 +78,10 @@ export interface ChatScreenPropsType {
    */
   messageList: MessagePorpsType[]
   /**
+   * 会话最后被阅读的时间
+   */
+  lastReadAt: Date
+  /**
    * 是否列表倒置
    */
   inverted: boolean

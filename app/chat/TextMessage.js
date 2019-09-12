@@ -47,6 +47,9 @@ export default class TextMessage extends PureComponent {
               : leftMessageBackground }]}>
             {views}
           </View>
+          <Text style={{ textAlign: 'right', fontSize: 13 }}>
+            {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+          </Text>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
           {!isSelf
