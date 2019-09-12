@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
-  StyleSheet, Dimensions
+  StyleSheet,
+  Dimensions,
+  Text
 } from 'react-native'
 import { changeEmojiText } from './utils'
 const { width } = Dimensions.get('window')
