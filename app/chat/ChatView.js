@@ -988,7 +988,7 @@ class ChatWindow extends PureComponent {
                   ref={(e) => (this.messageItem = e)}
                   user={this.props.userProfile}
                   chatType={chatType}
-                  lastReadAt={this.props.lastReadAt.getTime()}
+                  lastReadAt={this.props.lastReadAt}
                   reSendMessage={this.props.reSendMessage}
                   renderMessageCheck={this.props.renderMessageCheck}
                   message={item}
