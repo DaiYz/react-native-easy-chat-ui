@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import TextMessage from './TextMessage'
 import ImageMessage from './ImageMessage'
+import VideoMessage from './VideoMessage'
 import VoiceMessage from './VoiceMessage'
 import { EMOJIS_DATA } from '../source/emojis'
 const { width } = Dimensions.get('window')
@@ -116,6 +117,7 @@ export default class ChatItem extends PureComponent {
               onMessageLongPress={this.props.onMessageLongPress}
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
+              lastReadAt={this.props.lastReadAt}
             />
           )
         } else {
@@ -135,6 +137,7 @@ export default class ChatItem extends PureComponent {
               onMessageLongPress={this.props.onMessageLongPress}
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
+              lastReadAt={this.props.lastReadAt}
             />
           )
         } else {
@@ -163,6 +166,7 @@ export default class ChatItem extends PureComponent {
               pressIndex={this.props.pressIndex}
               voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
               voiceRightLoadingColor={this.props.voiceRightLoadingColor}
+              lastReadAt={this.props.lastReadAt}
             />
           )
         } else {
@@ -170,7 +174,21 @@ export default class ChatItem extends PureComponent {
         }
       case 'video' :
         if (this.props.renderVideoMessage === undefined) {
-          return null
+          return (
+            <VideoMessage
+              rightMessageBackground={this.props.rightMessageBackground}
+              leftMessageBackground={this.props.leftMessageBackground}
+              reSendMessage={reSendMessage}
+              isOpen={isOpen}
+              isSelf={isSelf}
+              messageErrorIcon={messageErrorIcon}
+              message={message}
+              onMessageLongPress={this.props.onMessageLongPress}
+              onMessagePress={this.props.onMessagePress}
+              rowId={this.props.rowId}
+              lastReadAt={this.props.lastReadAt}
+            />
+          )
         } else {
           return this.props.renderVideoMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }

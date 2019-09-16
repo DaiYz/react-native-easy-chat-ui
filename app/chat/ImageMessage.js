@@ -2,7 +2,10 @@ import React, { PureComponent } from 'react'
 import {
   View,
   TouchableOpacity,
-  Image, StyleSheet, ActivityIndicator
+  Image,
+  StyleSheet,
+  ActivityIndicator,
+  Text
 } from 'react-native'
 export default class ImageMessage extends PureComponent {
   render () {
@@ -21,6 +24,9 @@ export default class ImageMessage extends PureComponent {
           }} >
           <View style={{ maxHeight: 300, overflow: 'hidden', borderRadius: 5 }}>
             <Image source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
+            <Text style={{ textAlign: 'right', fontSize: 13 }}>
+              {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+            </Text>
           </View>
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>

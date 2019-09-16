@@ -102,38 +102,43 @@ export default class VoiceMessage extends PureComponent {
           collapsable={false}
           ref={(e) => (this[`item_${this.props.rowId}`] = e)}
         >
-          <TouchableOpacity
-            activeOpacity={0.8}
-            disabled={isOpen}
-            style={
-              [styles.voiceArea,
-                loading
-                  ? {
-                    backgroundColor: isSelf
-                      ? voiceRightLoadingColor
-                      : voiceLeftLoadingColor
-                  }
-                  : {
-                    backgroundColor: isSelf
-                      ? rightMessageBackground
-                      : leftMessageBackground
-                  }
-              ]
-            }
-            onPress={() => {
-              this.props.savePressIndex(this.props.rowId)
-              this.props.onMessagePress('voice', parseInt(this.props.rowId), message.content.uri, message)
-            }
-            }
-            onLongPress={() => {
-              this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.content.uri, message)
-            }}
-          >
-            <View style={[{ width: 40 + (message.content.length > 1 ? message.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
-            ]}>
-              {this._renderIcon()}
-            </View>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              disabled={isOpen}
+              style={
+                [styles.voiceArea,
+                  loading
+                    ? {
+                      backgroundColor: isSelf
+                        ? voiceRightLoadingColor
+                        : voiceLeftLoadingColor
+                    }
+                    : {
+                      backgroundColor: isSelf
+                        ? rightMessageBackground
+                        : leftMessageBackground
+                    }
+                ]
+              }
+              onPress={() => {
+                this.props.savePressIndex(this.props.rowId)
+                this.props.onMessagePress('voice', parseInt(this.props.rowId), message.content.uri, message)
+              }
+              }
+              onLongPress={() => {
+                this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.content.uri, message)
+              }}
+            >
+              <View style={[{ width: 40 + (message.content.length > 1 ? message.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
+              ]}>
+                {this._renderIcon()}
+              </View>
+            </TouchableOpacity>
+            <Text style={{ textAlign: 'right', fontSize: 13 }}>
+              {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+            </Text>
+          </View>
           <View style={{ justifyContent: 'flex-end' }}>
             <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
               {`${message.content.length}"`}

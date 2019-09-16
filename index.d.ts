@@ -14,6 +14,13 @@ export interface ImageContentPropsType {
   height: number
 }
 
+export interface VideoContentPropsType {
+  uri: string
+  poster: string
+  width: number
+  height: number
+}
+
 export enum MsgType {
   text = 'text',
   image = 'image',
@@ -40,7 +47,7 @@ export interface MessagePorpsType {
   /**
    * 消息内容
    */
-  content: string | VoiceContentPropsType | ImageContentPropsType
+  content: string | VoiceContentPropsType | ImageContentPropsType | VideoContentPropsType
 
   /**
    * 消息谁发的就是谁的用户ID
@@ -70,6 +77,10 @@ export interface ChatScreenPropsType {
    * 消息列表
    */
   messageList: MessagePorpsType[]
+  /**
+   * 会话最后被阅读的时间
+   */
+  lastReadAt: Date
   /**
    * 是否列表倒置
    */

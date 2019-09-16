@@ -31,6 +31,7 @@ class ChatWindow extends PureComponent {
     /* defaultProps */
     messageList: PropTypes.array.isRequired,
     inverted: PropTypes.bool,
+    lastReadAt: PropTypes.object,
     chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onScroll: PropTypes.func,
     onEndReachedThreshold: PropTypes.number,
@@ -930,8 +931,7 @@ class ChatWindow extends PureComponent {
     if (renderChatBg === undefined) {
       const source = typeof(bg) === 'number' ? bg : {uri: bg}
       return (
-        <Image source={source} style={{position: 'absolute', width, top: 0, height}}
-               resizeMode={'cover'} />
+        <Image source={source} style={{position: 'absolute', width, top: 0, height}} resizeMode={'cover'} />
       )
     } else {
       return renderChatBg(bg)
@@ -988,6 +988,7 @@ class ChatWindow extends PureComponent {
                   ref={(e) => (this.messageItem = e)}
                   user={this.props.userProfile}
                   chatType={chatType}
+                  lastReadAt={this.props.lastReadAt}
                   reSendMessage={this.props.reSendMessage}
                   renderMessageCheck={this.props.renderMessageCheck}
                   message={item}
