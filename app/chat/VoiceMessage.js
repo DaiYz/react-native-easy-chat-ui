@@ -83,7 +83,7 @@ export default class VoiceMessage extends PureComponent {
   }
 
   render () {
-    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor, chatType } = this.props
     const { loading } = this.state
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
@@ -135,9 +135,11 @@ export default class VoiceMessage extends PureComponent {
                 {this._renderIcon()}
               </View>
             </TouchableOpacity>
-            <Text style={{ textAlign: 'right', fontSize: 13 }}>
-              {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
-            </Text>
+            {chatType !== 'group' && isSelf && (
+              <Text style={{ textAlign: 'right', fontSize: 13 }}>
+                {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+              </Text>
+            )}
           </View>
           <View style={{ justifyContent: 'flex-end' }}>
             <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
