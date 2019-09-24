@@ -18,7 +18,7 @@ const PATTERNS = {
 }
 export default class TextMessage extends PureComponent {
   render () {
-    const { isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground, reSendMessage } = this.props
+    const { isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground, reSendMessage, chatType } = this.props
     return (
       <View
         style={[isSelf ? styles.right : styles.left]}
@@ -49,9 +49,11 @@ export default class TextMessage extends PureComponent {
               : leftMessageBackground }]}>
             {views}
           </View>
-          <Text style={{ textAlign: 'right', fontSize: 13 }}>
-            {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
-          </Text>
+          {chatType !== 'group' && isSelf && (
+            <Text style={{ textAlign: 'right', fontSize: 13 }}>
+              {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+            </Text>
+          )}
         </TouchableOpacity>
         <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
           {!isSelf
