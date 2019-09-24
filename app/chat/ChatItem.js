@@ -118,6 +118,8 @@ export default class ChatItem extends PureComponent {
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
               lastReadAt={this.props.lastReadAt}
+              showIsRead={this.props.showIsRead}
+              isReadStyle={this.props.isReadStyle}
               chatType={this.props.chatType}
             />
           )
@@ -139,6 +141,8 @@ export default class ChatItem extends PureComponent {
               onMessagePress={this.props.onMessagePress}
               rowId={this.props.rowId}
               lastReadAt={this.props.lastReadAt}
+              showIsRead={this.props.showIsRead}
+              isReadStyle={this.props.isReadStyle}
               chatType={this.props.chatType}
             />
           )
@@ -170,6 +174,8 @@ export default class ChatItem extends PureComponent {
               voiceRightLoadingColor={this.props.voiceRightLoadingColor}
               lastReadAt={this.props.lastReadAt}
               chatType={this.props.chatType}
+              showIsRead={this.props.showIsRead}
+              isReadStyle={this.props.isReadStyle}
             />
           )
         } else {
@@ -191,6 +197,8 @@ export default class ChatItem extends PureComponent {
               rowId={this.props.rowId}
               lastReadAt={this.props.lastReadAt}
               chatType={this.props.chatType}
+              showIsRead={this.props.showIsRead}
+              isReadStyle={this.props.isReadStyle}
             />
           )
         } else {

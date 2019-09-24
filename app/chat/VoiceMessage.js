@@ -83,91 +83,98 @@ export default class VoiceMessage extends PureComponent {
   }
 
   render () {
-    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor, chatType } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, leftMessageBackground, rightMessageBackground, voiceRightLoadingColor, voiceLeftLoadingColor, chatType, isReadStyle, showIsRead} = this.props
     const { loading } = this.state
     return (
-      <View style={[isSelf ? styles.right : styles.left]}>
-        <View
-          style={
-            [
-              styles.triangle,
-              isSelf
-                ? styles.right_triangle
-                : styles.left_triangle,
-              loading ? { borderColor: isSelf ? voiceRightLoadingColor : voiceLeftLoadingColor } : { borderColor: isSelf ? rightMessageBackground : leftMessageBackground }
-            ]}
-        />
-        <View
-          style={{ flexDirection: isSelf ? 'row-reverse' : 'row' }}
-          collapsable={false}
-          ref={(e) => (this[`item_${this.props.rowId}`] = e)}
-        >
-          <View>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              disabled={isOpen}
-              style={
-                [styles.voiceArea,
-                  loading
-                    ? {
-                      backgroundColor: isSelf
-                        ? voiceRightLoadingColor
-                        : voiceLeftLoadingColor
-                    }
-                    : {
-                      backgroundColor: isSelf
-                        ? rightMessageBackground
-                        : leftMessageBackground
-                    }
-                ]
-              }
-              onPress={() => {
-                this.props.savePressIndex(this.props.rowId)
-                this.props.onMessagePress('voice', parseInt(this.props.rowId), message.content.uri, message)
-              }
-              }
-              onLongPress={() => {
-                this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.content.uri, message)
-              }}
-            >
-              <View style={[{ width: 40 + (message.content.length > 1 ? message.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
-              ]}>
-                {this._renderIcon()}
-              </View>
-            </TouchableOpacity>
-            {chatType !== 'group' && isSelf && (
-              <Text style={{ textAlign: 'right', fontSize: 13 }}>
-                {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
-              </Text>
-            )}
-          </View>
-          <View style={{ justifyContent: 'flex-end' }}>
-            <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
-              {`${message.content.length}"`}
-            </Text>
-          </View>
-        </View>
-        <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
-          {!isSelf
-            ? null
-            : message.sendStatus === undefined
-              ? null
-              : message.sendStatus === 0
-                ? <ActivityIndicator />
-                : message.sendStatus < 0
-                  ? <TouchableOpacity
-                    disabled={false}
-                    activeOpacity={0.7}
-                    onPress={() => {
-                      if (message.sendStatus === -2) {
-                        reSendMessage(message)
+      <View>
+        <View style={[isSelf ? styles.right : styles.left]}>
+          <View
+            style={
+              [
+                styles.triangle,
+                isSelf
+                  ? styles.right_triangle
+                  : styles.left_triangle,
+                loading ? { borderColor: isSelf ? voiceRightLoadingColor : voiceLeftLoadingColor } : { borderColor: isSelf ? rightMessageBackground : leftMessageBackground }
+              ]}
+          />
+          <View
+            style={{ flexDirection: isSelf ? 'row-reverse' : 'row' }}
+            collapsable={false}
+            ref={(e) => (this[`item_${this.props.rowId}`] = e)}
+          >
+            <View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                disabled={isOpen}
+                style={
+                  [styles.voiceArea,
+                    loading
+                      ? {
+                        backgroundColor: isSelf
+                          ? voiceRightLoadingColor
+                          : voiceLeftLoadingColor
                       }
-                    }}>
-                    {messageErrorIcon}
-                  </TouchableOpacity>
-                  : null
-          }
+                      : {
+                        backgroundColor: isSelf
+                          ? rightMessageBackground
+                          : leftMessageBackground
+                      }
+                  ]
+                }
+                onPress={() => {
+                  this.props.savePressIndex(this.props.rowId)
+                  this.props.onMessagePress('voice', parseInt(this.props.rowId), message.content.uri, message)
+                }
+                }
+                onLongPress={() => {
+                  this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'voice', parseInt(this.props.rowId), message.content.uri, message)
+                }}
+              >
+                <View style={[{ width: 40 + (message.content.length > 1 ? message.content.length * 2 : 0) }, { maxWidth: width - 160 }, { flexDirection: isSelf ? 'row-reverse' : 'row' }
+                ]}>
+                  {this._renderIcon()}
+                </View>
+              </TouchableOpacity>
+              {/*{chatType !== 'group' && isSelf && (*/}
+              {/*  <Text style={{ textAlign: 'right', fontSize: 13 }}>*/}
+              {/*    {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}*/}
+              {/*  </Text>*/}
+              {/*)}*/}
+            </View>
+            <View style={{ justifyContent: 'flex-end' }}>
+              <Text style={[{ color: '#aaa', marginBottom: 4 }, isSelf ? { marginRight: 4 } : { marginLeft: 4 }]}>
+                {`${message.content.length}"`}
+              </Text>
+            </View>
+          </View>
+          <View style={{ alignItems: 'center', justifyContent: 'center', marginRight: 10 }}>
+            {!isSelf
+              ? null
+              : message.sendStatus === undefined
+                ? null
+                : message.sendStatus === 0
+                  ? <ActivityIndicator />
+                  : message.sendStatus < 0
+                    ? <TouchableOpacity
+                      disabled={false}
+                      activeOpacity={0.7}
+                      onPress={() => {
+                        if (message.sendStatus === -2) {
+                          reSendMessage(message)
+                        }
+                      }}>
+                      {messageErrorIcon}
+                    </TouchableOpacity>
+                    : null
+            }
+          </View>
         </View>
+        {chatType !== 'group' && isSelf && showIsRead && (
+          <Text style={[{ textAlign: 'right', fontSize: 13, marginRight: 12 }, isReadStyle]}>
+            {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
+          </Text>
+        )}
       </View>
     )
   }
@@ -195,7 +202,7 @@ const styles = StyleSheet.create({
   },
   right: {
     flexDirection: 'row-reverse',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   left: {
     flexDirection: 'row',

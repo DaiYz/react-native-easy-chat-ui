@@ -52,6 +52,8 @@ class ChatWindow extends PureComponent {
     iphoneXHeaderPadding: PropTypes.number,
     iphoneXBottomPadding: PropTypes.number,
     showUserName: PropTypes.bool,
+    showIsRead: PropTypes.bool,
+    isReadStyle: PropTypes.object,
     userProfile: PropTypes.shape({
       id: PropTypes.string.isRequired,
       avatar: PropTypes.isRequired,
@@ -314,7 +316,8 @@ class ChatWindow extends PureComponent {
     voiceRightLoadingColor: '#628b42',
     inputHeightFix: 0,
     containerBackgroundColor: '#f5f5f5',
-    showsVerticalScrollIndicator: false
+    showsVerticalScrollIndicator: false,
+    showIsRead: false
   }
 
   constructor (props) {
@@ -989,6 +992,8 @@ class ChatWindow extends PureComponent {
                   user={this.props.userProfile}
                   chatType={chatType}
                   lastReadAt={this.props.lastReadAt}
+                  showIsRead={this.props.showIsRead}
+                  isReadStyle={this.props.isReadStyle}
                   reSendMessage={this.props.reSendMessage}
                   renderMessageCheck={this.props.renderMessageCheck}
                   message={item}

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { View, TouchableOpacity, Image, StyleSheet, ActivityIndicator, Text } from 'react-native'
 export default class VideoMessage extends PureComponent {
   render() {
-    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle } = this.props
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <TouchableOpacity
@@ -31,8 +31,8 @@ export default class VideoMessage extends PureComponent {
               source={require('../source/image/play.png')}
               style={styles.playIcon}
             />
-            {chatType !== 'group' && isSelf && (
-              <Text style={{ textAlign: 'right', fontSize: 13 }}>
+            {chatType !== 'group' && isSelf && showIsRead &&(
+              <Text style={[{ textAlign: 'right', fontSize: 13 },isReadStyle]}>
                 {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
               </Text>
             )}
