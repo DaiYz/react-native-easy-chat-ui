@@ -149,8 +149,8 @@ class ChatWindow extends PureComponent {
     renderSystemMessage: PropTypes.func,
     /* delPanelProps */
     delPanelStyle: ViewPropTypes.style,
-    delPanelButtonStyle: ViewPropTypes.style
-
+    delPanelButtonStyle: ViewPropTypes.style,
+    flatListProps: PropTypes.object
   }
 
   static defaultProps = {
@@ -968,6 +968,7 @@ class ChatWindow extends PureComponent {
             onPress={() => this.closeAll()}
             style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}>
             <FlatList
+              {...this.props.flatListProps}
               ref={e => (this.chatList = e)}
               inverted={inverted}
               data={currentList}

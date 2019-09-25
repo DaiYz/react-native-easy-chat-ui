@@ -31,7 +31,7 @@ export default class DelPanel extends PureComponent {
         ]}
         renderToHardwareTextureAndroid
       >
-        <View style={[{ paddingBottom: this.props.iphoneXBottomPadding, backgroundColor: '#fff' }, this.props.delPanelStyle]}>
+        <View style={[{ paddingBottom: this.props.isIphoneX ? this.props.iphoneXBottomPadding : 0, backgroundColor: '#fff' }, this.props.delPanelStyle]}>
           {
             this.props.renderDelPanel === undefined
               ? <TouchableOpacity
