@@ -12,13 +12,19 @@ import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
+import Material from 'react-native-vector-icons/MaterialIcons'
 import { ChatScreen } from 'react-native-easy-chat-ui'
 
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
-    return {
+    console.log(navigation)
+    let option = {
       headerTitle: '聊天'
     }
+    if(navigation.state.params && navigation.state.params.hasOwnProperty('headerLeft')){
+      option.headerLeft = navigation.state.params.headerLeft
+    }
+    return option
   }
   constructor(props) {
     super(props);
@@ -357,6 +363,36 @@ export default class Example extends Component {
     this.setState({ messages: newMsg })
   }
 
+
+  changeHeaderLeft = () => {
+    /* example */
+    this.props.navigation.setParams({
+      headerLeft: (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{ top: 1, width: 54, paddingLeft: 12, justifyContent: 'center', alignItems: 'flex-start' }}
+          onPress={() => {
+            this.props.navigation.setParams({
+              headerLeft: (
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  style={{ top: 1, width: 54, paddingLeft: 8, justifyContent: 'center', alignItems: 'flex-start' }}
+                  onPress={() => this.props.navigation.goBack()}
+                >
+                  <Material name={'keyboard-arrow-left'} size={30} color={'#000'} />
+                </TouchableOpacity>
+              )
+            })
+            this.chat._closeMultipleSelect && this.chat._closeMultipleSelect()
+          }
+          }
+        >
+          <Text style={{fontSize: 15, fontWeight: '600'}}>取消</Text>
+        </TouchableOpacity>
+      )
+    })
+  }
+
   render() {
     let statusHeight = StatusBar.currentHeight || 0
     let androidHeaderHeight = statusHeight + Header.HEIGHT
@@ -371,6 +407,7 @@ export default class Example extends Component {
           sendMessage={this.sendMessage}
           androidHeaderHeight={androidHeaderHeight}
           onMessagePress={this.onPress}
+          changeHeaderLeft={this.changeHeaderLeft}
           audioPath={this.state.audioPath}
           audioHasPermission={this.state.hasPermission}
           checkPermission={AudioRecorder.requestAuthorization}

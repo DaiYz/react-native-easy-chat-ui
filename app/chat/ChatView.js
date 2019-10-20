@@ -719,7 +719,10 @@ class ChatWindow extends PureComponent {
   }
 
   _closeMultipleSelect = () => {
-    this.setState({ selectMultiple: false })
+    this.setState({
+      selectMultiple: false,
+      currentIndex: -1
+    })
     Animated.timing(this.leftHeight, {
       duration: 200,
       toValue: 0,
