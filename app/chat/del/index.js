@@ -6,7 +6,7 @@ export default class DelPanel extends PureComponent {
   constructor (props) {
     super(props)
     const { isIphoneX, iphoneXBottomPadding, delPanelStyle } = props
-    this.height = delPanelStyle?.height ? delPanelStyle.height : 54
+    this.height = delPanelStyle ? height ? delPanelStyle.height : 54 : 0
     this.totalHeight = this.height + (isIphoneX ? iphoneXBottomPadding : 0)
   }
 
