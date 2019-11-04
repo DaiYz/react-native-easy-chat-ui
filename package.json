@@ -30,7 +30,8 @@
   "peerDependencies": {
     "react": "*",
     "prop-types": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "@react-native-community/viewpager": "^2.0.1"
   },
   "dependencies": {
     "moment": "^2.22.2"
