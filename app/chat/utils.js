@@ -125,7 +125,11 @@ const _matchEmojiString = (emojiStr, data, reg, type) => {
   if (type === 'zh') {
     emotoinsCode = invertKeyValues(EMOJIS_ZH)
   }
-  data.push(emotoinsCode[castStr[0]])
+  if(emotoinsCode[castStr[0]]){
+    data.push(emotoinsCode[castStr[0]])
+  }else {
+    return data.push(emojiStr)
+  }
   _matchContentString(emojiStr.substring(emojiLength), data, reg, type)
 }
 
