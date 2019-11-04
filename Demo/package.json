@@ -7,13 +7,14 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/viewpager": "^2.0.1",
     "moment": "^2.24.0",
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-audio": "^4.3.0",
-    "react-native-easy-chat-ui": "^0.3.14",
+    "react-native-easy-chat-ui": "^0.4.0",
     "react-native-fs": "^2.13.3",
-    "react-native-gesture-handler": "^1.0.12",
+    "react-native-gesture-handler": "1.0.12",
     "react-native-sound": "^0.10.12",
     "react-native-vector-icons": "^6.3.0",
     "react-navigation": "^3.3.2"
