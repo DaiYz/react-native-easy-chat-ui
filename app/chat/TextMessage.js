@@ -18,7 +18,7 @@ const PATTERNS = {
 }
 export default class TextMessage extends PureComponent {
   render () {
-    const { isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground, reSendMessage, chatType, isReadStyle, showIsRead } = this.props
+    const { isSelf, message, messageErrorIcon, views, isOpen, rightMessageBackground, leftMessageBackground, reSendMessage, chatType, isReadStyle, showIsRead, ImageComponent } = this.props
     return (
       <View
         style={[isSelf ? styles.right : styles.left]}
@@ -71,7 +71,7 @@ export default class TextMessage extends PureComponent {
                         reSendMessage(message)
                       }
                     }}>
-                    {messageErrorIcon}
+                    {messageErrorIcon ? messageErrorIcon : <ImageComponent source={require('../source/image/waring.png')} style={{ width: 20, height: 20 }} />}
                   </TouchableOpacity>
                   : null
           }

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import {
   View,
   TouchableOpacity,
-  Image, StyleSheet,
+  StyleSheet,
   Text,
   ActivityIndicator, Dimensions, Platform
 } from 'react-native'
@@ -48,13 +48,13 @@ export default class VoiceMessage extends PureComponent {
   }
 
   _renderIcon = () => {
-    const { isSelf, voiceLeftIcon, voiceRightIcon } = this.props
+    const { isSelf, voiceLeftIcon, voiceRightIcon, ImageComponent } = this.props
     const { progress } = this.state
     if (isSelf) {
       if (voiceRightIcon) {
         return voiceRightIcon
       } else {
-        return <Image
+        return <ImageComponent
           source={
             progress === 0
               ? require('../source/image/voiceRightOne.png')
@@ -71,7 +71,7 @@ export default class VoiceMessage extends PureComponent {
       if (voiceLeftIcon) {
         return voiceLeftIcon
       } else {
-        return <Image source={progress === 0 ? require('../source/image/voiceLeftOne.png') : progress === 1 ? require('../source/image/voiceLeftTwo.png') : require('../source/image/voiceLeft.png')} resizeMode={'cover'} style={{
+        return <ImageComponent source={progress === 0 ? require('../source/image/voiceLeftOne.png') : progress === 1 ? require('../source/image/voiceLeftTwo.png') : require('../source/image/voiceLeft.png')} resizeMode={'cover'} style={{
           width: 26, height: 26
         }} />
       }

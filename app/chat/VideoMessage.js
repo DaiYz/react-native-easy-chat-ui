@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react'
-import { View, TouchableOpacity, Image, StyleSheet, ActivityIndicator, Text } from 'react-native'
+import { View, TouchableOpacity, StyleSheet, ActivityIndicator, Text } from 'react-native'
 export default class VideoMessage extends PureComponent {
   render() {
-    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle, ImageComponent } = this.props
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <TouchableOpacity
@@ -23,11 +23,11 @@ export default class VideoMessage extends PureComponent {
           }}
         >
           <View style={{ maxHeight: 300, overflow: 'hidden', borderRadius: 5 }}>
-            <Image
+            <ImageComponent
               source={{ uri: message.content.poster }}
               style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]}
             />
-            <Image
+            <ImageComponent
               source={require('../source/image/play.png')}
               style={styles.playIcon}
             />

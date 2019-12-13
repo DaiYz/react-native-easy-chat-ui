@@ -4,7 +4,6 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Image,
   StyleSheet, Dimensions
 } from 'react-native'
 import TextMessage from './TextMessage'
@@ -80,13 +79,14 @@ export default class ChatItem extends PureComponent {
   }
 
   _matchEmojiString = (emojiStr, views, isSelf) => {
+    const {ImageComponent} = this.props
     let castStr = emojiStr.match(PATTERNS.emoji)
     let emojiLength = castStr[0].length
 
     let emojiImg = EMOJIS_DATA[castStr[0]]
 
     if (emojiImg) {
-      views.push(<Image key={emojiStr} style={styles.subEmojiStyle} resizeMethod={'auto'} source={emojiImg} />)
+      views.push(<ImageComponent key={emojiStr} style={styles.subEmojiStyle} resizeMethod={'auto'} source={emojiImg} />)
     }
     this._matchContentString(emojiStr.substring(emojiLength), views, isSelf)
   }
@@ -98,7 +98,7 @@ export default class ChatItem extends PureComponent {
   }
 
   _renderContent= (isSelf) => {
-    const { message, isOpen, messageErrorIcon, reSendMessage, rowId } = this.props
+    const { message, isOpen, messageErrorIcon, reSendMessage, rowId, ImageComponent } = this.props
     const {content = {}, type = ''} = message
     const { loading } = this.state
     switch (type) {
@@ -106,6 +106,7 @@ export default class ChatItem extends PureComponent {
         if (this.props.renderTextMessage === undefined) {
           return (
             <TextMessage
+              ImageComponent={ImageComponent}
               rightMessageBackground={this.props.rightMessageBackground}
               leftMessageBackground={this.props.leftMessageBackground}
               reSendMessage={reSendMessage}
@@ -130,6 +131,7 @@ export default class ChatItem extends PureComponent {
         if (this.props.renderImageMessage === undefined) {
           return (
             <ImageMessage
+              ImageComponent={ImageComponent}
               rightMessageBackground={this.props.rightMessageBackground}
               leftMessageBackground={this.props.leftMessageBackground}
               reSendMessage={reSendMessage}
@@ -153,6 +155,7 @@ export default class ChatItem extends PureComponent {
         if (this.props.renderVoiceMessage === undefined) {
           return (
             <VoiceMessage
+              ImageComponent={ImageComponent}
               reSendMessage={reSendMessage}
               loading={loading}
               rightMessageBackground={this.props.rightMessageBackground}
@@ -185,6 +188,7 @@ export default class ChatItem extends PureComponent {
         if (this.props.renderVideoMessage === undefined) {
           return (
             <VideoMessage
+              ImageComponent={ImageComponent}
               rightMessageBackground={this.props.rightMessageBackground}
               leftMessageBackground={this.props.leftMessageBackground}
               reSendMessage={reSendMessage}
@@ -256,11 +260,14 @@ export default class ChatItem extends PureComponent {
   }
 
   renderCheck = () => {
+    const {ImageComponent} = this.props
     if (this.props.renderMessageCheck === undefined) {
       if (this.state.isSelect) {
         return (
           <View style={styles.check}>
-            {this.props.messageSelectIcon}
+            {this.props.messageSelectIcon ? this.props.messageSelectIcon :
+              <ImageComponent source={require('../source/image/check.png')} style={{ width: 14, height: 14 }} />
+            }
           </View>
         )
       } else {
@@ -272,7 +279,7 @@ export default class ChatItem extends PureComponent {
   }
 
   render () {
-    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle } = this.props
+    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle, ImageComponent } = this.props
     const isSelf = user.id === message.targetId
     const {type} = message
     const avatar = isSelf ? user.avatar : message.chatInfo.avatar
@@ -321,7 +328,7 @@ export default class ChatItem extends PureComponent {
                     {this.props.renderAvatar ? (
                       this.props.renderAvatar(message)
                     ) : (
-                      <Image source={avatarSource} style={[styles.avatar, avatarStyle]} />
+                      <ImageComponent source={avatarSource} style={[styles.avatar, avatarStyle]} />
                     )}
                   </TouchableOpacity>
               }

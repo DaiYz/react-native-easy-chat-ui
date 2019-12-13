@@ -11,8 +11,14 @@
 ## 安装
 - RN `>= 0.44.0` 使用   最新版本
 - RN `< 0.44.0` 使用  `0.1.x`版本
+* yarn add @react-native-community/viewpager
+* react-native link @react-native-community/viewpager
+* [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
+
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
+
+
 
 
 
@@ -232,8 +238,8 @@ react-native run-ios or react-native run-android
  renderMessageTime | (time) => {} | 自定义渲染消息上方的时间
  renderChatBg | (bg) => {} | 自定义当前聊天背景
  renderErrorMessage | (messageStatus) => {} | 自定义渲染当被拉黑或者被删除的时候显示的提示性消息
- panelSource | [{icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,title: '照片',onPress: () => { console.log('takePhoto') }}, {icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,title: '拍照',onPress: () => { console.log('takePhoto') }}] | 自定义最右侧面板数据源
- renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | 自定义渲染每个数据源的内容
+ panelSource | [] | 自定义最右侧面板数据源
+ renderPanelRow | () => {} | 自定义渲染每个数据源的内容
  allPanelHeight | 200 | 所有键盘下方面板的高度(表情面板，更多面板)
  messageErrorIcon | icon element | 自定义消息发送失败时显示的图标，默认为红色圆形感叹号
  leftMessageBackground | '#fffff' | 自定义左侧消息的背景色

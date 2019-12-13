@@ -61,11 +61,26 @@ export default class InputBar extends PureComponent {
   }
 
   renderIcon = () => {
-    const { sendIcon, plusIcon, usePlus, messageContent, sendUnableIcon } = this.props
+    const { sendIcon, plusIcon, usePlus, messageContent, sendUnableIcon, ImageComponent } = this.props
+    const sendAbleIcon = sendIcon ? sendIcon: <ImageComponent source={require('../source/image/sendAble.png')} style={{ width: 30, height: 30 }} />
+    const sendUnableIconDefault = sendUnableIcon ? sendUnableIcon : <ImageComponent source={require('../source/image/send.png')} style={{ width: 30, height: 30 }} />
     if (usePlus) {
-      return messageContent.trim().length ? sendIcon : plusIcon
+      if(messageContent.trim().length){
+        return sendAbleIcon
+      } else {
+        return plusIcon ? plusIcon : <ImageComponent source={require('../source/image/more.png')} style={{ width: 30, height: 30 }} />
+      }
     } else {
-      return messageContent.trim().length ? sendIcon : sendUnableIcon
+      return messageContent.trim().length ? sendAbleIcon : sendUnableIconDefault
+    }
+  }
+
+  renderEmojieIcon = () => {
+    const { isEmojiShow, keyboardIcon, emojiIcon, ImageComponent } = this.props
+    if(isEmojiShow) {
+      return keyboardIcon ?  keyboardIcon : <ImageComponent source={require('../source/image/keyboard.png')} style={{ width: 30, height: 30 }} />
+    } else {
+      return emojiIcon ? emojiIcon :  <ImageComponent source={require('../source/image/emoji.png')} style={{ width: 30, height: 30 }} />
     }
   }
 
@@ -93,7 +108,8 @@ export default class InputBar extends PureComponent {
       paddingHeight,
       onFocus,
       isEmojiShow,
-      isIphoneX
+      isIphoneX,
+      ImageComponent
     } = this.props
     const enabled = (() => {
       if (Platform.OS === 'android') {
@@ -124,7 +140,7 @@ export default class InputBar extends PureComponent {
           {
             useVoice ? <View style={{ height: 35 + inputHeightFix, justifyContent: 'center', alignItems: 'center' }} activeOpacity={0.7}>
               <TouchableOpacity onPress={onMethodChange} activeOpacity={0.7}>
-                {showVoice ? this.props.keyboardIcon : this.props.voiceIcon}
+                {showVoice ? this.props.keyboardIcon ? this.props.keyboardIcon :  <ImageComponent source={require('../source/image/keyboard.png')} style={{ width: 30, height: 30 }} /> : this.props.voiceIcon ? this.props.voiceIcon : <ImageComponent source={require('../source/image/voice.png')} style={{ width: 30, height: 30 }} />}
               </TouchableOpacity>
             </View> : null
           }
@@ -175,7 +191,7 @@ export default class InputBar extends PureComponent {
                   activeOpacity={0.7}
                   onPress={() => this.props.showEmoji()}
                 >
-                  {this.props.isEmojiShow ? this.props.keyboardIcon : this.props.emojiIcon}
+                  {this.renderEmojieIcon()}
                 </TouchableOpacity>
                 : null
             }

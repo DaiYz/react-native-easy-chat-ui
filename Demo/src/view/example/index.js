@@ -6,18 +6,18 @@ import {
   View,
   StatusBar,
   PermissionsAndroid,
-  TouchableOpacity
+  TouchableOpacity, Dimensions
 } from 'react-native';
 import { Header, NavigationActions } from 'react-navigation'
 import {AudioRecorder, AudioUtils} from 'react-native-audio'
+import FastImage from 'react-native-fast-image'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
 import Material from 'react-native-vector-icons/MaterialIcons'
-import { ChatScreen } from 'react-native-easy-chat-ui'
-
+import { ChatScreen } from '../../app/chat'
+const { width, height } = Dimensions.get('window')
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
-    console.log(navigation)
     let option = {
       headerTitle: '聊天'
     }
@@ -124,7 +124,7 @@ export default class Example extends Component {
           time: '1542264667161'
         },
       ],
-      // chatBg: require('../../source/bg.jpg'),
+      chatBg: require('../../source/bg.jpg'),
       inverted: false,  // require
       voiceHandle: true,
       currentTime: 0,
@@ -135,7 +135,16 @@ export default class Example extends Component {
       audioPath: '',
       voicePlaying: false,
       voiceLoading: false,
-      voiceVolume: 0
+      voiceVolume: 0,
+      panelSource: [
+        {
+          icon: <FastImage source={require('../../source/photo.png')} style={{ width: 30, height: 30 }} />,
+          title: '照片',
+        }, {
+          icon: <FastImage source={require('../../source/camera.png')} style={{ width: 30, height: 30 }} />,
+          title: '拍照'
+        }
+      ]
     }
     this.sound = null
     this.activeVoiceId = -1
@@ -393,15 +402,35 @@ export default class Example extends Component {
     })
   }
 
+  renderPanelRow = (data, index) =>
+    <TouchableOpacity
+      key={index}
+      style={{ width: (width - 30) / 4,
+        height: (width - 30) / 4,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20 }}
+      activeOpacity={0.7}
+      onPress={() => console.log('press')}
+    >
+      <View style={{ backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth }}>
+        {data.icon}
+      </View>
+      <Text style={{ color: '#7a7a7a', marginTop: 10 }}>{data.title}</Text>
+    </TouchableOpacity>
+
   render() {
     let statusHeight = StatusBar.currentHeight || 0
     let androidHeaderHeight = statusHeight + Header.HEIGHT
-    const {voiceLoading, voicePlaying, messages, chatBg, inverted, voiceVolume} = this.state
+    const {voiceLoading, voicePlaying, messages, chatBg, inverted, voiceVolume, panelSource} = this.state
     return (
       <View style={styles.container}>
         <ChatScreen
           ref={(e) => this.chat = e}
+          CustomImageComponent={FastImage}
           messageList={messages}
+          panelSource={panelSource}
+          renderPanelRow={this.renderPanelRow}
           inverted={inverted}
           chatBackgroundImage={chatBg}
           sendMessage={this.sendMessage}

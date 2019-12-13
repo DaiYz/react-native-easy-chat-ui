@@ -173,7 +173,7 @@ export interface ChatScreenPropsType {
   /**
    * 自定义最右侧面板数据源
    */
-  panelSource?: { icon: any; title: string; onPress: (e) => void }[]
+  panelSource?: []
   /**
    * 自定义渲染每个数据源的内容
    */

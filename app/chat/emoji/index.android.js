@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, ScrollView, StyleSheet, Platform, Dimensions, Animated, TouchableOpacity, Image } from 'react-native'
+import { View, ScrollView, StyleSheet, Platform, Dimensions, Animated, TouchableOpacity } from 'react-native'
 import ViewPagerAndroid from '@react-native-community/viewpager';
 import ViewPagerAndroidContainer from '../components/android-container'
 import Control from './control'
@@ -35,7 +35,7 @@ export default class EmojiPanel extends PureComponent {
   }
 
   render () {
-    const { allPanelHeight, HeaderHeight } = this.props
+    const { allPanelHeight, HeaderHeight, ImageComponent } = this.props
     const ContainerComponent = Platform.select({ ios: ScrollView, android: ViewPagerAndroid })
     this.total = 0
     return (
@@ -79,7 +79,7 @@ export default class EmojiPanel extends PureComponent {
                         }
                         }
                       >
-                        <Image source={list.value === '/{del}' ? require('../../source/emojis/ic_emoji_del.png') : EMOJIS_DATA[list.value]}
+                        <ImageComponent source={list.value === '/{del}' ? require('../../source/emojis/ic_emoji_del.png') : EMOJIS_DATA[list.value]}
                           resizeMode={'contain'} style={{ width: 30, height: 30 }} />
                       </TouchableOpacity>
                     )

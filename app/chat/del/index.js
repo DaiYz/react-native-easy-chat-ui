@@ -10,10 +10,8 @@ export default class DelPanel extends PureComponent {
     this.totalHeight = this.height + (isIphoneX ? iphoneXBottomPadding : 0)
   }
 
-  componentWillReceiveProps (nextProps, prveProps) {
-  }
-
   render () {
+    const { ImageComponent } = this.props
     return (
       <Animated.View
         style={[
@@ -39,7 +37,9 @@ export default class DelPanel extends PureComponent {
                 activeOpacity={1}
                 onPress={() => this.props.delMessage(this.props.messageSelected, this.props.isInverted)}
               >
-                {this.props.messageDelIcon}
+                {this.props.messageDelIcon
+                  ? this.props.messageDelIcon
+                   : <ImageComponent source={require('../../source/image/delete.png')} style={{ width: 22, height: 22 }} />}
               </TouchableOpacity>
               : this.props.renderDelPanel(this.props.messageSelected)
           }

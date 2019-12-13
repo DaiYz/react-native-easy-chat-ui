@@ -6,7 +6,6 @@ import {
   Dimensions,
   Text,
   ViewPropTypes as RNViewPropTypes,
-  Image,
   ActivityIndicator,
   Platform
 } from 'react-native'
@@ -169,17 +168,17 @@ export default class VoiceView extends PureComponent {
 
   _renderContent () {
     const { error } = this.state
-    const { errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView, voiceSpeakIcon, voiceVolume } = this.props
+    const { errorIcon, voiceStatus, cancelIcon, audioHandle, errorText, voiceCancelText, voiceNoteText, renderVoiceView, voiceSpeakIcon, voiceVolume, ImageComponent } = this.props
     if (renderVoiceView === undefined) {
       return (
         error ? (
           <View style={{ justifyContent: 'center', alignItems: 'center', width: 150, height: 150 }}>
-            { errorIcon }
+            { errorIcon ? errorIcon : <ImageComponent source={require('../source/image/voiceError.png')} style={{ width: 60, height: 60 }} /> }
             <Text style={{ color: '#fff', marginTop: 10, textAlign: 'center' }}>{errorText}</Text>
           </View>
         ) : !voiceStatus ? (
           <View style={{ justifyContent: 'center', alignItems: 'center', width: 150, height: 150 }}>
-            {cancelIcon}
+            { cancelIcon ? cancelIcon : <ImageComponent source={require('../source/image/voiceCancel.png')} style={{ width: 60, height: 60 }} />}
             <Text style={{ color: '#fff', marginTop: 10 }}>{voiceCancelText}</Text>
           </View>
         ) : (
@@ -192,6 +191,7 @@ export default class VoiceView extends PureComponent {
               ) : (
                 <View style={{ justifyContent: 'center', alignItems: 'center', padding: 10 }}>
                   <VoiceIcon
+                    ImageComponent={ImageComponent}
                     voiceSpeakIcon={voiceSpeakIcon}
                     voiceVolume={voiceVolume}
                   />
@@ -222,7 +222,7 @@ export default class VoiceView extends PureComponent {
 
 
 const VoiceIcon = (props) => {
-  const {voiceSpeakIcon, voiceVolume} = props
+  const {voiceSpeakIcon, voiceVolume, ImageComponent} = props
   let source = null
   if (voiceVolume >=0 && voiceVolume < 1){
     source = voiceSpeakIcon[0]
@@ -244,7 +244,7 @@ const VoiceIcon = (props) => {
     source = voiceSpeakIcon[8]
   }
   return (
-    <Image source={source} style={{ width: 60, height: 60, marginVertical: 25 }} />
+    <ImageComponent source={source} style={{ width: 60, height: 60, marginVertical: 25 }} />
   )
 }
 

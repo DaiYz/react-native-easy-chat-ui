@@ -18,7 +18,8 @@
 <img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/6.png" width="207" height="448" /></p>
 
 ## Installation
-
+* yarn add @react-native-community/viewpager
+* react-native link @react-native-community/viewpager
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
 
@@ -239,8 +240,8 @@ props | default | Info
  renderMessageTime | (time) => {} | Custom time inside above message
  renderChatBg | (bg) => {} | Custom chat background image
  renderErrorMessage | (messageStatus) => {} | Custom a message when the friend relationship is abnormal
- panelSource | [{icon: <Image source={require('../source/image/photo.png')} style={{width: 30, height: 30}}/>,title: '照片',onPress: () => { console.log('takePhoto') }}, {icon: <Image source={require('../source/image/camera.png')} style={{width: 30, height: 30}}/>,title: '拍照',onPress: () => { console.log('takePhoto') }}] | Custom panel source
- renderPanelRow | <TouchableOpacity key={index} style={{width: (width - 30) / 4, height: (width - 30) / 4, justifyContent: 'center', alignItems: 'center', marginBottom: 20}} activeOpacity={0.7} onPress={() => data.onPress()} > <View style={{backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth}}>{data.icon}</View><Text style={{color: '#7a7a7a', marginTop: 10}}>{data.title}</Text></TouchableOpacity> | Custom a tab icon
+ panelSource | [] | Custom panel source
+ renderPanelRow | () => {} | Custom a tab icon
  allPanelHeight | 200 | emojiPanel and plusPanel height
  messageErrorIcon | icon element | Custom a icon when message failed to be sent
  leftMessageBackground | '#fffff' | Custom background color on left

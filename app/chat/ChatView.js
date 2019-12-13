@@ -5,7 +5,6 @@ import {
   Image,
   TouchableOpacity,
   Keyboard,
-  StyleSheet,
   Platform,
   Animated,
   Easing,
@@ -26,6 +25,7 @@ import PlusPanel from './plus'
 import DelPanel from './del'
 const { height, width } = Dimensions.get('window')
 const ViewPropTypes = RNViewPropTypes || View.propTypes
+let ImageComponent = Image
 class ChatWindow extends PureComponent {
   static propTypes = {
     /* defaultProps */
@@ -59,11 +59,7 @@ class ChatWindow extends PureComponent {
       avatar: PropTypes.isRequired,
       nickName: PropTypes.string
     }),
-    panelSource: PropTypes.arrayOf(PropTypes.shape({
-      icon: PropTypes.element,
-      title: PropTypes.string,
-      onPress: PropTypes.func
-    })),
+    panelSource: PropTypes.array,
     renderPanelRow: PropTypes.func,
     panelContainerStyle: ViewPropTypes.style,
     allPanelHeight: PropTypes.number,
@@ -152,178 +148,11 @@ class ChatWindow extends PureComponent {
     delPanelButtonStyle: ViewPropTypes.style,
     flatListProps: PropTypes.object
   }
-
-  static defaultProps = {
-    renderLoadEarlier: () => (null),
-    extraData: null,
-    chatType: 'friend',
-    chatBackgroundImage: null,
-    inverted: false,
-    allPanelAnimateDuration: 100,
-    messageList: [],
-    showUserName: false,
-    panelContainerStyle: {},
-    sendMessage: (type, content, isInverted) => {
-      console.log(type, content, isInverted, 'send')
-    },
-    reSendMessage: (message) => {
-      console.log(message, 'reSend')
-    },
-    leftMessageBackground: '#fff',
-    rightMessageBackground: '#a0e75a',
-    useVoice: true,
-    useEmoji: true,
-    usePlus: true,
-    iphoneXHeaderPadding: 24, // 安全区域
-    iphoneXBottomPadding: 34, // 安全区域
-    onEndReachedThreshold: 0.1,
-    usePopView: true,
-    userProfile: {
-      id: '88886666',
-      avatar: require('../source/image/defaultAvatar.png'),
-      nickName: 'Test'
-    },
-    panelSource: [
-      {
-        icon: <Image source={require('../source/image/photo.png')} style={{ width: 30, height: 30 }} />,
-        title: '照片',
-        onPress: () => { console.log('takePhoto') }
-      }, {
-        icon: <Image source={require('../source/image/camera.png')} style={{ width: 30, height: 30 }} />,
-        title: '拍照',
-        onPress: () => { console.log('takePhoto') }
-      }
-    ],
-    renderPanelRow: (data, index) =>
-      <TouchableOpacity
-        key={index}
-        style={{ width: (width - 30) / 4,
-          height: (width - 30) / 4,
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginBottom: 20 }}
-        activeOpacity={0.7}
-        onPress={() => data.onPress()}
-      >
-        <View style={{ backgroundColor: '#fff', borderRadius: 8, padding: 15, borderColor: '#ccc', borderWidth: StyleSheet.hairlineWidth }}>
-          {data.icon}
-        </View>
-        <Text style={{ color: '#7a7a7a', marginTop: 10 }}>{data.title}</Text>
-      </TouchableOpacity>,
-    onScroll: () => {},
-    renderErrorMessage: (messageStatus) => {
-      switch (messageStatus) {
-        case -1:
-          return <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 80, backgroundColor: '#e6e6e6', paddingVertical: 8, borderRadius: 4, marginBottom: 10 }}>
-            <Text style={{ color: '#333', fontSize: 10 }}>好友关系异常，发送失败</Text>
-          </View>
-        default :
-          return null
-      }
-    },
-    popoverStyle: {
-      backgroundColor: '#333'
-    },
-    allPanelHeight: 200,
-    loadHistory: () => { console.log('loadMore') },
-    onMessagePress: (type, index, content, message) => { console.log(type, index, content, message) },
-    onMessageLongPress: (type, index, content, message) => { console.log('longPress', type, index, content, message) },
-    renderMessageTime: (time) =>
-      <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
-        <View style={{ backgroundColor: '#e6e6e6', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16 }}>
-          <Text style={{ color: '#333', fontSize: 10 }}>{getCurrentTime(parseInt(time))}</Text>
-        </View>
-      </View>,
-    placeholder: '请输入...',
-    pressInText: '按住 说话',
-    pressOutText: '送开 发送',
-    changeHeaderLeft: () => {
-      /* example */
-      // this.props.navigation.setParams({
-      //   headerLeft: (
-      //     <TouchableOpacity
-      //       activeOpacity={0.7}
-      //       style={{ top: 1, width: 54, paddingLeft: 12, justifyContent: 'center', alignItems: 'flex-start' }}
-      //       onPress={() => {
-      //         this.props.navigation.setParams({
-      //           headerLeft: (
-      //             <TouchableOpacity
-      //               activeOpacity={0.7}
-      //               style={{ top: 1, width: 54, paddingLeft: 8, justifyContent: 'center', alignItems: 'flex-start' }}
-      //               onPress={() => this.props.navigation.goBack()}
-      //             >
-      //               <Material name={'keyboard-arrow-left'} size={30} color={'#000'} />
-      //             </TouchableOpacity>
-      //           )
-      //         })
-      //         that._closeMultipleSelect()
-      //       }
-      //       }
-      //     >
-      //       <Text style={{fontSize: 15, fontWeight: '600'}}>取消</Text>
-      //     </TouchableOpacity>
-      //   )
-      // })
-    },
-    androidHeaderHeight: 66,
-    pressAvatar: (isSelf, targetId) => { console.log(isSelf, targetId) },
-    emojiIcon: <Image source={require('../source/image/emoji.png')} style={{ width: 30, height: 30 }} />,
-    messageSelectIcon: <Image source={require('../source/image/check.png')} style={{ width: 14, height: 14 }} />,
-    messageDelIcon: <Image source={require('../source/image/delete.png')} style={{ width: 22, height: 22 }} />,
-    keyboardIcon: <Image source={require('../source/image/keyboard.png')} style={{ width: 30, height: 30 }} />,
-    plusIcon: <Image source={require('../source/image/more.png')} style={{ width: 30, height: 30 }} />,
-    voiceIcon: <Image source={require('../source/image/voice.png')} style={{ width: 30, height: 30 }} />,
-    sendIcon: <Image source={require('../source/image/sendAble.png')} style={{ width: 30, height: 30 }} />,
-    sendUnableIcon: <Image source={require('../source/image/send.png')} style={{ width: 30, height: 30 }} />,
-    messageErrorIcon: <Image source={require('../source/image/waring.png')} style={{ width: 20, height: 20 }} />,
-    voiceErrorIcon: <Image source={require('../source/image/voiceError.png')} style={{ width: 60, height: 60 }} />,
-    voiceCancelIcon: <Image source={require('../source/image/voiceCancel.png')} style={{ width: 60, height: 60 }} />,
-    voiceSpeakIcon: [
-      require('../source/image/speak0.png'),
-      require('../source/image/speak1.png'),
-      require('../source/image/speak2.png'),
-      require('../source/image/speak3.png'),
-      require('../source/image/speak4.png'),
-      require('../source/image/speak5.png'),
-      require('../source/image/speak6.png'),
-      require('../source/image/speak7.png'),
-      require('../source/image/speak8.png'),
-    ],
-    voiceVolume: 10,
-    delMessage: (content, isInverted) => {
-      console.log(content, isInverted)
-    },
-    audioPath: '',
-    audioOnProgress: () => {},
-    audioOnFinish: () => {},
-    audioInitPath: () => {},
-    audioRecord: () => {},
-    audioStopRecord: () => {},
-    audioPauseRecord: () => {},
-    audioResumeRecord: () => {},
-    audioCurrentTime: 0,
-    audioHandle: true,
-    setAudioHandle: () => {},
-    audioHasPermission: false,
-    checkPermission: () => {},
-    requestAndroidPermission: () => {},
-    voiceErrorText: '说话时间太短',
-    voiceCancelText: '松开手指取消发送',
-    voiceNoteText: '手指上划，取消发送',
-    voiceLoading: false,
-    voicePlaying: false,
-    voiceLeftLoadingColor: '#ccc',
-    voiceRightLoadingColor: '#628b42',
-    inputHeightFix: 0,
-    containerBackgroundColor: '#f5f5f5',
-    showsVerticalScrollIndicator: false,
-    showIsRead: false
-  }
-
   constructor (props) {
     super(props)
-    const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding } = props
+    const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding, CustomImageComponent } = props
     this.time = null
+    ImageComponent = CustomImageComponent || Image
     this._userHasBeenInputed = false
     this.iosHeaderHeight = 64
     this.isIphoneX = isIPhoneX()
@@ -937,7 +766,7 @@ class ChatWindow extends PureComponent {
     if (renderChatBg === undefined) {
       const source = typeof(bg) === 'number' ? bg : {uri: bg}
       return (
-        <Image source={source} style={{position: 'absolute', width, top: 0, height}} resizeMode={'cover'} />
+        <ImageComponent source={source} style={{position: 'absolute', width, top: 0, height}} resizeMode={'cover'} />
       )
     } else {
       return renderChatBg(bg)
@@ -992,6 +821,7 @@ class ChatWindow extends PureComponent {
               onContentSizeChange={(contentWidth, contentHeight) => { this._scrollToBottom({ contentWidth, contentHeight }) }}
               renderItem={({ item, index }) =>
                 <ChatItem
+                  ImageComponent={ImageComponent}
                   ref={(e) => (this.messageItem = e)}
                   user={this.props.userProfile}
                   chatType={chatType}
@@ -1046,6 +876,7 @@ class ChatWindow extends PureComponent {
             />
           </TouchableOpacity>
           <InputBar
+            ImageComponent={ImageComponent}
             rootHeight={this.rootHeight}
             allPanelHeight={this.props.allPanelHeight}
             emojiIcon={this.props.emojiIcon}
@@ -1090,6 +921,7 @@ class ChatWindow extends PureComponent {
           {
             this.props.usePopView
               ? <DelPanel
+                ImageComponent={ImageComponent}
                 messageSelected={this.state.messageSelected}
                 isIphoneX={this.isIphoneX}
                 delPanelButtonStyle={this.props.delPanelButtonStyle}
@@ -1122,6 +954,7 @@ class ChatWindow extends PureComponent {
           {
             this.props.useEmoji
               ? <EmojiPanel
+                ImageComponent={ImageComponent}
                 emojiHeight={this.emojiHeight}
                 isIphoneX={this.isIphoneX}
                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
@@ -1136,6 +969,7 @@ class ChatWindow extends PureComponent {
           {
             this.state.showVoice
               ? <Voice
+                ImageComponent={ImageComponent}
                 ref={(e) => (this.voice = e)}
                 sendVoice={(type, content) => this._sendMessage(type, content)}
                 changeVoiceStatus={this.changeVoiceStatus}
@@ -1171,3 +1005,136 @@ class ChatWindow extends PureComponent {
 }
 
 export default ChatWindow
+
+
+ChatWindow.defaultProps = {
+  renderLoadEarlier: () => (null),
+  extraData: null,
+  chatType: 'friend',
+  chatBackgroundImage: null,
+  inverted: false,
+  allPanelAnimateDuration: 100,
+  messageList: [],
+  showUserName: false,
+  panelContainerStyle: {},
+  sendMessage: (type, content, isInverted) => {
+    console.log(type, content, isInverted, 'send')
+  },
+  reSendMessage: (message) => {
+    console.log(message, 'reSend')
+  },
+  leftMessageBackground: '#fff',
+  rightMessageBackground: '#a0e75a',
+  useVoice: true,
+  useEmoji: true,
+  usePlus: true,
+  iphoneXHeaderPadding: 24, // 安全区域
+  iphoneXBottomPadding: 34, // 安全区域
+  onEndReachedThreshold: 0.1,
+  usePopView: true,
+  userProfile: {
+    id: '88886666',
+    avatar: require('../source/image/defaultAvatar.png'),
+    nickName: 'Test'
+  },
+  panelSource: [],
+  renderPanelRow: () => {},
+  onScroll: () => {},
+  renderErrorMessage: (messageStatus) => {
+    switch (messageStatus) {
+      case -1:
+        return <View style={{ justifyContent: 'center', alignItems: 'center', marginHorizontal: 80, backgroundColor: '#e6e6e6', paddingVertical: 8, borderRadius: 4, marginBottom: 10 }}>
+          <Text style={{ color: '#333', fontSize: 10 }}>好友关系异常，发送失败</Text>
+        </View>
+      default :
+        return null
+    }
+  },
+  popoverStyle: {
+    backgroundColor: '#333'
+  },
+  allPanelHeight: 200,
+  loadHistory: () => { console.log('loadMore') },
+  onMessagePress: (type, index, content, message) => { console.log(type, index, content, message) },
+  onMessageLongPress: (type, index, content, message) => { console.log('longPress', type, index, content, message) },
+  renderMessageTime: (time) =>
+    <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
+      <View style={{ backgroundColor: '#e6e6e6', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16 }}>
+        <Text style={{ color: '#333', fontSize: 10 }}>{getCurrentTime(parseInt(time))}</Text>
+      </View>
+    </View>,
+  placeholder: '请输入...',
+  pressInText: '按住 说话',
+  pressOutText: '送开 发送',
+  changeHeaderLeft: () => {
+    /* example */
+    // this.props.navigation.setParams({
+    //   headerLeft: (
+    //     <TouchableOpacity
+    //       activeOpacity={0.7}
+    //       style={{ top: 1, width: 54, paddingLeft: 12, justifyContent: 'center', alignItems: 'flex-start' }}
+    //       onPress={() => {
+    //         this.props.navigation.setParams({
+    //           headerLeft: (
+    //             <TouchableOpacity
+    //               activeOpacity={0.7}
+    //               style={{ top: 1, width: 54, paddingLeft: 8, justifyContent: 'center', alignItems: 'flex-start' }}
+    //               onPress={() => this.props.navigation.goBack()}
+    //             >
+    //               <Material name={'keyboard-arrow-left'} size={30} color={'#000'} />
+    //             </TouchableOpacity>
+    //           )
+    //         })
+    //         that._closeMultipleSelect()
+    //       }
+    //       }
+    //     >
+    //       <Text style={{fontSize: 15, fontWeight: '600'}}>取消</Text>
+    //     </TouchableOpacity>
+    //   )
+    // })
+  },
+  androidHeaderHeight: 66,
+  pressAvatar: (isSelf, targetId) => { console.log(isSelf, targetId) },
+  voiceSpeakIcon: [
+    require('../source/image/speak0.png'),
+    require('../source/image/speak1.png'),
+    require('../source/image/speak2.png'),
+    require('../source/image/speak3.png'),
+    require('../source/image/speak4.png'),
+    require('../source/image/speak5.png'),
+    require('../source/image/speak6.png'),
+    require('../source/image/speak7.png'),
+    require('../source/image/speak8.png'),
+  ],
+  voiceVolume: 10,
+  delMessage: (content, isInverted) => {
+    console.log(content, isInverted)
+  },
+  audioPath: '',
+  audioOnProgress: () => {},
+  audioOnFinish: () => {},
+  audioInitPath: () => {},
+  audioRecord: () => {},
+  audioStopRecord: () => {},
+  audioPauseRecord: () => {},
+  audioResumeRecord: () => {},
+  audioCurrentTime: 0,
+  audioHandle: true,
+  setAudioHandle: () => {},
+  audioHasPermission: false,
+  checkPermission: () => {},
+  requestAndroidPermission: () => {},
+  voiceErrorText: '说话时间太短',
+  voiceCancelText: '松开手指取消发送',
+  voiceNoteText: '手指上划，取消发送',
+  voiceLoading: false,
+  voicePlaying: false,
+  voiceLeftLoadingColor: '#ccc',
+  voiceRightLoadingColor: '#628b42',
+  inputHeightFix: 0,
+  containerBackgroundColor: '#f5f5f5',
+  showsVerticalScrollIndicator: false,
+  showIsRead: false
+}
+

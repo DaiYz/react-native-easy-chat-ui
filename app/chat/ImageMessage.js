@@ -2,14 +2,13 @@ import React, { PureComponent } from 'react'
 import {
   View,
   TouchableOpacity,
-  Image,
   StyleSheet,
   ActivityIndicator,
   Text
 } from 'react-native'
 export default class ImageMessage extends PureComponent {
   render () {
-    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle } = this.props
+    const { message, messageErrorIcon, isSelf, isOpen, reSendMessage, chatType, showIsRead, isReadStyle, ImageComponent } = this.props
     return (
       <View style={[isSelf ? styles.right : styles.left]}>
         <TouchableOpacity
@@ -23,7 +22,7 @@ export default class ImageMessage extends PureComponent {
             this.props.onMessageLongPress(this[`item_${this.props.rowId}`], 'image', parseInt(this.props.rowId), message.content.uri, message)
           }} >
           <View style={{ maxHeight: 300, overflow: 'hidden', borderRadius: 5 }}>
-            <Image source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
+            <ImageComponent source={{ uri: message.content.uri }} style={[{ width: 100, height: message.content.height / (message.content.width / 100), borderRadius: 5 }]} />
             {showIsRead && chatType !== 'group' && isSelf && (
               <Text style={[{ textAlign: 'right', fontSize: 13 }, isReadStyle]}>
                 {this.props.lastReadAt && this.props.lastReadAt - message.time > 0 ? '已读' : '未读'}
