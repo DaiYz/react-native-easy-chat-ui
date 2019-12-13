@@ -14,7 +14,7 @@ import FastImage from 'react-native-fast-image'
 import RNFS from 'react-native-fs'
 import Sound from 'react-native-sound'
 import Material from 'react-native-vector-icons/MaterialIcons'
-import { ChatScreen } from '../../app/chat'
+import { ChatScreen } from 'react-native-easy-chat-ui'
 const { width, height } = Dimensions.get('window')
 export default class Example extends Component {
   static navigationOptions = ({ navigation }) => {
