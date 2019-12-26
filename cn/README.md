@@ -14,8 +14,6 @@
 * yarn add @react-native-community/viewpager
 * react-native link @react-native-community/viewpager
 * [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
-
-* [npm](https://www.npmjs.com/#getting-started): `npm install react-native-easy-chat-ui --save`
 * [Yarn](https://yarnpkg.com/): `yarn add react-native-easy-chat-ui`
 
 
