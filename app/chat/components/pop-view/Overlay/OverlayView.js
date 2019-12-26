@@ -39,8 +39,7 @@ export default class OverlayView extends Component {
       overlayOpacity: new Animated.Value(0)
     }
   }
-
-  componentWillMount () {
+  componentDidMount () {
     if (Platform.OS === 'android') {
       let BackHandler = ReactNative.BackHandler ? ReactNative.BackHandler : ReactNative.BackAndroid
       this.backListener = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -48,9 +47,6 @@ export default class OverlayView extends Component {
         return true
       })
     }
-  }
-
-  componentDidMount () {
     this.appearAfterMount && this.appear()
   }
 

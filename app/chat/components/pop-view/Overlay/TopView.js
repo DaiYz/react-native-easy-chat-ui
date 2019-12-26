@@ -42,7 +42,7 @@ export default class TopView extends Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount() {
     DeviceEventEmitter.addListener('addOverlay', e => this.add(e))
     DeviceEventEmitter.addListener('removeOverlay', e => this.remove(e))
     DeviceEventEmitter.addListener('removeAllOverlay', e => this.removeAll(e))
