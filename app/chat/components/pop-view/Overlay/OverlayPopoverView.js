@@ -46,8 +46,8 @@ export default class OverlayPopoverView extends OverlayView {
     })
   }
 
-  componentWillReceiveProps (nextProps) {
-    super.componentWillReceiveProps && super.componentWillReceiveProps(nextProps)
+  UNSAFE_componentWillReceiveProps (nextProps) {
+    super.UNSAFE_componentWillReceiveProps && super.UNSAFE_componentWillReceiveProps(nextProps)
     if (JSON.stringify(nextProps.fromBounds) != JSON.stringify(this.state.fromBounds)) {
       this.setState({fromBounds: nextProps.fromBounds})
     }

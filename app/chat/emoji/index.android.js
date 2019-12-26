@@ -17,9 +17,6 @@ export default class EmojiPanel extends PureComponent {
     this.total = 0
   }
 
-  componentWillReceiveProps (nextProps, prveProps) {
-  }
-
   switchComponent (e) {
     if (Platform.OS === 'ios') {
       let { x } = e.nativeEvent.contentOffset

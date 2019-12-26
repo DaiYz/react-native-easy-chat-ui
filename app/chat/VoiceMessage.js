@@ -18,7 +18,7 @@ export default class VoiceMessage extends PureComponent {
     }
   }
 
-  componentWillReceiveProps (next) {
+  UNSAFE_componentWillReceiveProps (next) {
     if (next.pressIndex === next.rowId) {
       this.setState({ loading: next.voiceLoading })
       if (next.voicePlaying) {

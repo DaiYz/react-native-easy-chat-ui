@@ -36,7 +36,7 @@ export default class ChatItem extends PureComponent {
     // this.subscription && this.subscription.remove()
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     if (!nextProps.isOpen) {
       this.setState({ isSelect: false })
     } else {

@@ -9,9 +9,6 @@ export default class PlusPanel extends PureComponent {
     this.totalHeight = allPanelHeight + (isIphoneX ? iphoneXBottomPadding : 0)
   }
 
-  componentWillReceiveProps (nextProps, prveProps) {
-  }
-
   render () {
     const { HeaderHeight, panelHeight, panelContainerStyle } = this.props
     return (

@@ -44,7 +44,7 @@ export default class VoiceView extends PureComponent {
     }
   }
 
-  componentWillReceiveProps (next) {
+  UNSAFE_componentWillReceiveProps (next) {
     if (!this.state.recording) return undefined
     if (Platform.OS === 'android') {
     } else {
