@@ -15,7 +15,7 @@
     "react": "16.9.0",
     "react-native": "0.61.5",
     "react-native-audio": "^4.3.0",
-    "react-native-easy-chat-ui": "^0.4.3",
+    "react-native-easy-chat-ui": "^0.4.4",
     "react-native-fast-image": "^7.0.2",
     "react-native-fs": "^2.16.2",
     "react-native-gesture-handler": "^1.5.2",
