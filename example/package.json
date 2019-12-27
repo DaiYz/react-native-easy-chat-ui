@@ -1,0 +1,39 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@react-native-community/viewpager": "^3.3.0",
+    "moment": "^2.24.0",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
+    "react-native-audio": "^4.3.0",
+    "react-native-easy-chat-ui": "^0.4.3",
+    "react-native-fast-image": "^7.0.2",
+    "react-native-fs": "^2.16.2",
+    "react-native-gesture-handler": "^1.5.2",
+    "react-native-sound": "^0.11.0",
+    "react-native-vector-icons": "^6.6.0",
+    "react-navigation": "^3.3.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "@babel/runtime": "^7.7.7",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.8.0",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.57.0",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
