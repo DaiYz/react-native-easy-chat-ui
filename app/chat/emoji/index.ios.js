@@ -42,7 +42,7 @@ export default class EmojiPanel extends PureComponent {
         backgroundColor: '#f5f5f5',
         top: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
-          outputRange: [height, height - HeaderHeight - this.totalHeight]
+          outputRange: [-this.totalHeight, 0]
         }),
         opacity: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],

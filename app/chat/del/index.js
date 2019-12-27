@@ -17,9 +17,9 @@ export default class DelPanel extends PureComponent {
         style={[
           { position: 'absolute', bottom: 0, right: 0, left: 0 },
           {
-            top: this.props.leftHeight.interpolate({
+            bottom: this.props.leftHeight.interpolate({
               inputRange: [0, 1],
-              outputRange: [ height, height - this.props.HeaderHeight - this.totalHeight ]
+              outputRange: [ -this.height, 0 ]
             }),
             opacity: this.props.leftHeight.interpolate({
               inputRange: [0, 1],
