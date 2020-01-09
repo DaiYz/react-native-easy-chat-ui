@@ -1,29 +1,24 @@
 import React, { PureComponent } from 'react'
-import { View, StyleSheet, Dimensions, Animated, Platform } from 'react-native'
-const { width, height } = Dimensions.get('window')
+import { View, StyleSheet, Dimensions, Animated } from 'react-native'
+const { width } = Dimensions.get('window')
 
 export default class PlusPanel extends PureComponent {
-  constructor (props) {
-    super(props)
-    const { allPanelHeight, isIphoneX, iphoneXBottomPadding } = props
-    this.totalHeight = allPanelHeight + (isIphoneX ? iphoneXBottomPadding : 0)
-  }
 
   render () {
-    const { HeaderHeight, panelHeight, panelContainerStyle } = this.props
+    const { panelContainerHeight, panelHeight, panelContainerStyle } = this.props
     return (
       <Animated.View
         style={[{
-          top: panelHeight.interpolate({
+          bottom: panelHeight.interpolate({
             inputRange: [0, 1],
-            outputRange: [-this.totalHeight, 0]
+            outputRange: [-panelContainerHeight, 0]
           }),
           opacity: panelHeight.interpolate({
             inputRange: [0, 1],
             outputRange: [0, 1]
           }),
           position: 'absolute',
-          height: this.totalHeight,
+          height: panelContainerHeight,
           width
         }
         ]}

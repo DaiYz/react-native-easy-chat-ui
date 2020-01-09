@@ -9,8 +9,6 @@ const { width, height } = Dimensions.get('window')
 export default class EmojiPanel extends PureComponent {
   constructor (props) {
     super(props)
-    const { allPanelHeight, isIphoneX, iphoneXBottomPadding } = props
-    this.totalHeight = allPanelHeight + (isIphoneX ? iphoneXBottomPadding : 0)
     this.state = {
       pageIndex: 0
     }
@@ -32,14 +30,14 @@ export default class EmojiPanel extends PureComponent {
   }
 
   render () {
-    const { allPanelHeight, HeaderHeight, ImageComponent } = this.props
+    const { panelContainerHeight,  ImageComponent } = this.props
     const ContainerComponent = Platform.select({ ios: ScrollView, android: ViewPagerAndroid })
     this.total = 0
     return (
       <Animated.View style={[styles.container, {
         height: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
-          outputRange: [0, this.totalHeight]
+          outputRange: [0, panelContainerHeight]
         }),
         backgroundColor: '#f5f5f5',
         opacity: this.props.emojiHeight.interpolate({
@@ -47,7 +45,7 @@ export default class EmojiPanel extends PureComponent {
           outputRange: [0, 1]
         })
       }]} >
-        <ViewPagerAndroidContainer style={{ height: allPanelHeight, width }}>
+        <ViewPagerAndroidContainer style={{ height: panelContainerHeight, width }}>
           {/* 视图容器 */}
           <ContainerComponent
             ref={e => { this.scroll = e }}

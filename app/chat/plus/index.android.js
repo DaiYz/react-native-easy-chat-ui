@@ -10,13 +10,13 @@ export default class PlusPanel extends PureComponent {
   }
 
   render () {
-    const { HeaderHeight, panelHeight, panelContainerStyle } = this.props
+    const { panelContainerHeight, panelHeight, panelContainerStyle } = this.props
     return (
       <Animated.View
         style={[ {
           height: panelHeight.interpolate({
             inputRange: [0, 1],
-            outputRange: [0, this.totalHeight],
+            outputRange: [0, panelContainerHeight],
           }),
           opacity: panelHeight.interpolate({
             inputRange: [0, 1],

@@ -19,11 +19,11 @@ export default class DelPanel extends PureComponent {
           {
             bottom: this.props.leftHeight.interpolate({
               inputRange: [0, 1],
-              outputRange: [ -this.height, 0 ]
+              outputRange: [ -this.totalHeight, 0 ]
             }),
             opacity: this.props.leftHeight.interpolate({
               inputRange: [0, 1],
-              outputRange: [0, 1]
+              outputRange: [1, 1]
             })
           }
         ]}
@@ -39,7 +39,7 @@ export default class DelPanel extends PureComponent {
               >
                 {this.props.messageDelIcon
                   ? this.props.messageDelIcon
-                   : <ImageComponent source={require('../../source/image/delete.png')} style={{ width: 22, height: 22 }} />}
+                  : <ImageComponent source={require('../../source/image/delete.png')} style={{ width: 22, height: 22 }} />}
               </TouchableOpacity>
               : this.props.renderDelPanel(this.props.messageSelected)
           }

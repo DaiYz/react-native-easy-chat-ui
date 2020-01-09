@@ -32,24 +32,24 @@ export default class EmojiPanel extends PureComponent {
   }
 
   render () {
-    const { allPanelHeight, HeaderHeight, ImageComponent } = this.props
+    const { panelContainerHeight, ImageComponent } = this.props
     const ContainerComponent = Platform.select({ ios: ScrollView, android: ViewPagerAndroid })
     this.total = 0
     return (
       <Animated.View style={[styles.container, {
         position: 'absolute',
-        height: this.totalHeight,
+        height: panelContainerHeight,
         backgroundColor: '#f5f5f5',
-        top: this.props.emojiHeight.interpolate({
+        bottom: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
-          outputRange: [-this.totalHeight, 0]
+          outputRange: [-panelContainerHeight, 0]
         }),
         opacity: this.props.emojiHeight.interpolate({
           inputRange: [0, 1],
           outputRange: [0, 1]
         })
       }]} >
-        <ViewPagerAndroidContainer style={{ height: allPanelHeight, width }}>
+        <ViewPagerAndroidContainer style={{ height: panelContainerHeight, width }}>
           {/* 视图容器 */}
           <ContainerComponent
             ref={e => { this.scroll = e }}
@@ -88,7 +88,7 @@ export default class EmojiPanel extends PureComponent {
               )
             }
           </ContainerComponent>
-          <View style={{ height: 30 }}>
+          <View style={{ height: 40 }}>
             <Control index={this.state.pageIndex} total={this.total} />
           </View>
           {/* <View style={{height: 40, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center'}}> */}

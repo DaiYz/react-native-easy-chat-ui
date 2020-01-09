@@ -19,135 +19,13 @@ import Voice from './VoiceView'
 import PopView from './components/pop-view'
 import ChatItem from './ChatItem'
 import { EMOJIS_ZH } from '../source/emojis'
-import EmojiPanel from './emoji'
 import InputBar from './InputBar'
-import PlusPanel from './plus'
+import PanelContainer from './panelContainer'
 import DelPanel from './del'
 const { height, width } = Dimensions.get('window')
 const ViewPropTypes = RNViewPropTypes || View.propTypes
 let ImageComponent = Image
 class ChatWindow extends PureComponent {
-  static propTypes = {
-    /* defaultProps */
-    messageList: PropTypes.array.isRequired,
-    inverted: PropTypes.bool,
-    lastReadAt: PropTypes.object,
-    chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-    onScroll: PropTypes.func,
-    onEndReachedThreshold: PropTypes.number,
-    chatWindowStyle: ViewPropTypes.style,
-    sendMessage: PropTypes.func,
-    renderAvatar: PropTypes.func,
-    avatarStyle: ViewPropTypes.style,
-    allPanelAnimateDuration: PropTypes.number,
-    chatType: PropTypes.oneOf(['friend', 'group']),
-    onMessagePress: PropTypes.func,
-    onMessageLongPress: PropTypes.func,
-    renderMessageTime: PropTypes.func,
-    pressAvatar: PropTypes.func,
-    renderErrorMessage: PropTypes.func,
-    renderChatBg: PropTypes.func,
-    reSendMessage: PropTypes.func,
-    androidHeaderHeight: PropTypes.number.isRequired,
-    iphoneXHeaderPadding: PropTypes.number,
-    iphoneXBottomPadding: PropTypes.number,
-    showUserName: PropTypes.bool,
-    showIsRead: PropTypes.bool,
-    isReadStyle: PropTypes.object,
-    userProfile: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      avatar: PropTypes.isRequired,
-      nickName: PropTypes.string
-    }),
-    panelSource: PropTypes.array,
-    renderPanelRow: PropTypes.func,
-    panelContainerStyle: ViewPropTypes.style,
-    allPanelHeight: PropTypes.number,
-    messageErrorIcon: PropTypes.element,
-    loadHistory: PropTypes.func,
-    leftMessageBackground: PropTypes.string,
-    rightMessageBackground: PropTypes.string,
-    leftMessageTextStyle: PropTypes.object,
-    rightMessageTextStyle: PropTypes.object,
-    renderLoadEarlier: PropTypes.func,
-    extraData: PropTypes.any,
-    containerBackgroundColor: PropTypes.string,
-    showsVerticalScrollIndicator: PropTypes.bool,
-    userNameStyle: PropTypes.object,
-    /* popProps */
-    usePopView: PropTypes.bool,
-    popoverStyle: ViewPropTypes.style,
-    renderDelPanel: PropTypes.func,
-    changeHeaderLeft: PropTypes.func,
-    setPopItems: PropTypes.func,
-    messageDelIcon: PropTypes.element,
-    messageSelectIcon: PropTypes.element,
-    delMessage: PropTypes.func,
-    renderMessageCheck: PropTypes.func,
-
-    /* inputBarProps */
-    emojiIcon: PropTypes.element,
-    placeholder: PropTypes.string,
-    keyboardIcon: PropTypes.element,
-    plusIcon: PropTypes.element,
-    sendIcon: PropTypes.element,
-    sendUnableIcon: PropTypes.element,
-    inputStyle: ViewPropTypes.style,
-    inputOutContainerStyle: ViewPropTypes.style,
-    inputContainerStyle: ViewPropTypes.style,
-    inputHeightFix: PropTypes.number,
-    useEmoji: PropTypes.bool,
-    usePlus: PropTypes.bool,
-    /* voiceProps */
-    useVoice: PropTypes.bool,
-    pressInText: PropTypes.string,
-    pressOutText: PropTypes.string,
-    voiceIcon: PropTypes.element,
-    voiceLeftIcon: PropTypes.element,
-    voiceRightIcon: PropTypes.element,
-    voiceErrorIcon: PropTypes.element,
-    voiceCancelIcon: PropTypes.element,
-    voiceSpeakIcon: PropTypes.array,
-    audioPath: PropTypes.string,
-    audioOnProgress: PropTypes.func,
-    audioOnFinish: PropTypes.func,
-    audioInitPath: PropTypes.func,
-    audioRecord: PropTypes.func,
-    audioStopRecord: PropTypes.func,
-    audioPauseRecord: PropTypes.func,
-    audioResumeRecord: PropTypes.func,
-    audioCurrentTime: PropTypes.number,
-    audioHandle: PropTypes.bool,
-    setAudioHandle: PropTypes.func,
-    audioHasPermission: PropTypes.bool,
-    checkPermission: PropTypes.func,
-    requestAndroidPermission: PropTypes.func,
-    voiceErrorText: PropTypes.string,
-    voiceCancelText: PropTypes.string,
-    voiceNoteText: PropTypes.string,
-    voiceLoading: PropTypes.bool,
-    voicePlaying: PropTypes.bool,
-    voiceLeftLoadingColor: PropTypes.string,
-    voiceVolume: PropTypes.number,
-    voiceRightLoadingColor: PropTypes.string,
-    /* bubbleProps */
-    renderTextMessage: PropTypes.func,
-    renderImageMessage: PropTypes.func,
-    renderVoiceMessage: PropTypes.func,
-    renderVoiceView: PropTypes.func,
-    renderVideoMessage: PropTypes.func,
-    renderLocationMessage: PropTypes.func,
-    renderShareMessage: PropTypes.func,
-    renderVideoCallMessage: PropTypes.func,
-    renderVoiceCallMessage: PropTypes.func,
-    renderRedEnvelopeMessage: PropTypes.func,
-    renderFileMessage: PropTypes.func,
-    renderSystemMessage: PropTypes.func,
-    /* delPanelProps */
-    delPanelStyle: ViewPropTypes.style,
-    delPanelButtonStyle: ViewPropTypes.style,
-    flatListProps: PropTypes.object
-  }
   constructor (props) {
     super(props)
     const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding, CustomImageComponent } = props
@@ -775,24 +653,25 @@ class ChatWindow extends PureComponent {
 
   render () {
     const { messageList, allPanelHeight, inverted, chatBackgroundImage, chatType } = this.props
-    const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow } = this.state
+    const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow, panelShow, emojiShow } = this.state
     const currentList = messageList.slice().sort((a, b) => inverted
       ? (b.time - a.time)
       : (a.time - b.time))
+    const panelContainerHeight = allPanelHeight + (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
     return (
-      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1 }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
+      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1, position: 'relative' }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
         { this.renderBg(chatBackgroundImage) }
         <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent'} : {
+          backgroundColor: 'transparent',
           height: this.visibleHeight.interpolate({
             inputRange: [0, 1],
             outputRange: [
               height - this.HeaderHeight,
               keyboardShow
                 ? height - keyboardHeight - this.HeaderHeight
-                : height - this.HeaderHeight - allPanelHeight - (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
+                : height - this.HeaderHeight - panelContainerHeight
             ]
           }),
-          backgroundColor: 'transparent'
         }
         } >
           <TouchableOpacity
@@ -936,36 +815,26 @@ class ChatWindow extends PureComponent {
               />
               : null
           }
-          {
-            this.props.usePlus
-              ? <PlusPanel
-                panelHeight={this.panelHeight}
-                isIphoneX={this.isIphoneX}
-                HeaderHeight={this.HeaderHeight}
-                allPanelHeight={this.props.allPanelHeight}
-                iphoneXBottomPadding={this.props.iphoneXBottomPadding}
-                panelSource={this.props.panelSource}
-                renderPanelRow={this.props.renderPanelRow}
-                panelContainerStyle={this.props.panelContainerStyle}
-              />
-              : null
-          }
-
-          {
-            this.props.useEmoji
-              ? <EmojiPanel
-                ImageComponent={ImageComponent}
-                emojiHeight={this.emojiHeight}
-                isIphoneX={this.isIphoneX}
-                iphoneXBottomPadding={this.props.iphoneXBottomPadding}
-                HeaderHeight={this.HeaderHeight}
-                allPanelHeight={this.props.allPanelHeight}
-                onPress={(item) => {
-                  this._onEmojiSelected(item.value)
-                }}
-              />
-              : null
-          }
+          <PanelContainer
+            panelContainerBackgroundColor={this.props.panelContainerBackgroundColor}
+            visibleHeight={this.visibleHeight}
+            panelContainerHeight={panelContainerHeight}
+            usePlus={this.props.usePlus}
+            useEmoji={this.props.useEmoji}
+            panelHeight={this.panelHeight}
+            isIphoneX={this.isIphoneX}
+            HeaderHeight={this.HeaderHeight}
+            allPanelHeight={this.props.allPanelHeight}
+            iphoneXBottomPadding={this.props.iphoneXBottomPadding}
+            panelSource={this.props.panelSource}
+            renderPanelRow={this.props.renderPanelRow}
+            panelContainerStyle={this.props.panelContainerStyle}
+            ImageComponent={ImageComponent}
+            emojiHeight={this.emojiHeight}
+            onPress={(item) => {
+              this._onEmojiSelected(item.value)
+            }}
+          />
           {
             this.state.showVoice
               ? <Voice
@@ -1005,7 +874,128 @@ class ChatWindow extends PureComponent {
 }
 
 export default ChatWindow
+ChatWindow.propTypes = {
+  /* defaultProps */
+  messageList: PropTypes.array.isRequired,
+  inverted: PropTypes.bool,
+  lastReadAt: PropTypes.object,
+  chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  onScroll: PropTypes.func,
+  onEndReachedThreshold: PropTypes.number,
+  chatWindowStyle: ViewPropTypes.style,
+  sendMessage: PropTypes.func,
+  renderAvatar: PropTypes.func,
+  avatarStyle: ViewPropTypes.style,
+  allPanelAnimateDuration: PropTypes.number,
+  chatType: PropTypes.oneOf(['friend', 'group']),
+  onMessagePress: PropTypes.func,
+  onMessageLongPress: PropTypes.func,
+  renderMessageTime: PropTypes.func,
+  pressAvatar: PropTypes.func,
+  renderErrorMessage: PropTypes.func,
+  renderChatBg: PropTypes.func,
+  reSendMessage: PropTypes.func,
+  androidHeaderHeight: PropTypes.number.isRequired,
+  iphoneXHeaderPadding: PropTypes.number,
+  iphoneXBottomPadding: PropTypes.number,
+  showUserName: PropTypes.bool,
+  showIsRead: PropTypes.bool,
+  isReadStyle: PropTypes.object,
+  userProfile: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    avatar: PropTypes.isRequired,
+    nickName: PropTypes.string
+  }),
+  panelSource: PropTypes.array,
+  renderPanelRow: PropTypes.func,
+  panelContainerStyle: ViewPropTypes.style,
+  allPanelHeight: PropTypes.number,
+  messageErrorIcon: PropTypes.element,
+  loadHistory: PropTypes.func,
+  leftMessageBackground: PropTypes.string,
+  rightMessageBackground: PropTypes.string,
+  leftMessageTextStyle: PropTypes.object,
+  rightMessageTextStyle: PropTypes.object,
+  renderLoadEarlier: PropTypes.func,
+  extraData: PropTypes.any,
+  containerBackgroundColor: PropTypes.string,
+  showsVerticalScrollIndicator: PropTypes.bool,
+  userNameStyle: PropTypes.object,
+  panelContainerBackgroundColor: PropTypes.string,
+  /* popProps */
+  usePopView: PropTypes.bool,
+  popoverStyle: ViewPropTypes.style,
+  renderDelPanel: PropTypes.func,
+  changeHeaderLeft: PropTypes.func,
+  setPopItems: PropTypes.func,
+  messageDelIcon: PropTypes.element,
+  messageSelectIcon: PropTypes.element,
+  delMessage: PropTypes.func,
+  renderMessageCheck: PropTypes.func,
 
+  /* inputBarProps */
+  emojiIcon: PropTypes.element,
+  placeholder: PropTypes.string,
+  keyboardIcon: PropTypes.element,
+  plusIcon: PropTypes.element,
+  sendIcon: PropTypes.element,
+  sendUnableIcon: PropTypes.element,
+  inputStyle: ViewPropTypes.style,
+  inputOutContainerStyle: ViewPropTypes.style,
+  inputContainerStyle: ViewPropTypes.style,
+  inputHeightFix: PropTypes.number,
+  useEmoji: PropTypes.bool,
+  usePlus: PropTypes.bool,
+  /* voiceProps */
+  useVoice: PropTypes.bool,
+  pressInText: PropTypes.string,
+  pressOutText: PropTypes.string,
+  voiceIcon: PropTypes.element,
+  voiceLeftIcon: PropTypes.element,
+  voiceRightIcon: PropTypes.element,
+  voiceErrorIcon: PropTypes.element,
+  voiceCancelIcon: PropTypes.element,
+  voiceSpeakIcon: PropTypes.array,
+  audioPath: PropTypes.string,
+  audioOnProgress: PropTypes.func,
+  audioOnFinish: PropTypes.func,
+  audioInitPath: PropTypes.func,
+  audioRecord: PropTypes.func,
+  audioStopRecord: PropTypes.func,
+  audioPauseRecord: PropTypes.func,
+  audioResumeRecord: PropTypes.func,
+  audioCurrentTime: PropTypes.number,
+  audioHandle: PropTypes.bool,
+  setAudioHandle: PropTypes.func,
+  audioHasPermission: PropTypes.bool,
+  checkPermission: PropTypes.func,
+  requestAndroidPermission: PropTypes.func,
+  voiceErrorText: PropTypes.string,
+  voiceCancelText: PropTypes.string,
+  voiceNoteText: PropTypes.string,
+  voiceLoading: PropTypes.bool,
+  voicePlaying: PropTypes.bool,
+  voiceLeftLoadingColor: PropTypes.string,
+  voiceVolume: PropTypes.number,
+  voiceRightLoadingColor: PropTypes.string,
+  /* bubbleProps */
+  renderTextMessage: PropTypes.func,
+  renderImageMessage: PropTypes.func,
+  renderVoiceMessage: PropTypes.func,
+  renderVoiceView: PropTypes.func,
+  renderVideoMessage: PropTypes.func,
+  renderLocationMessage: PropTypes.func,
+  renderShareMessage: PropTypes.func,
+  renderVideoCallMessage: PropTypes.func,
+  renderVoiceCallMessage: PropTypes.func,
+  renderRedEnvelopeMessage: PropTypes.func,
+  renderFileMessage: PropTypes.func,
+  renderSystemMessage: PropTypes.func,
+  /* delPanelProps */
+  delPanelStyle: ViewPropTypes.style,
+  delPanelButtonStyle: ViewPropTypes.style,
+  flatListProps: PropTypes.object
+}
 
 ChatWindow.defaultProps = {
   renderLoadEarlier: () => (null),
@@ -1112,6 +1102,7 @@ ChatWindow.defaultProps = {
     console.log(content, isInverted)
   },
   audioPath: '',
+  panelContainerBackgroundColor: '#f5f5f5',
   audioOnProgress: () => {},
   audioOnFinish: () => {},
   audioInitPath: () => {},
