@@ -9,7 +9,7 @@ export default class PanelContainer extends PureComponent {
   }
 
   render () {
-    const { panelContainerHeight, visibleHeight, ImageComponent, panelHeight, emojiHeight, panelContainerBackgroundColor} = this.props
+    const { panelContainerHeight, visibleHeight, ImageComponent, panelHeight, emojiHeight, panelContainerBackgroundColor, onEmojiSelected} = this.props
     return (
       <Animated.View
         style={[{
@@ -44,9 +44,7 @@ export default class PanelContainer extends PureComponent {
               ImageComponent={ImageComponent}
               emojiHeight={emojiHeight}
               panelContainerHeight={panelContainerHeight}
-              onPress={(item) => {
-                this._onEmojiSelected(item.value)
-              }}
+              onPress={onEmojiSelected}
             />
             : null
         }

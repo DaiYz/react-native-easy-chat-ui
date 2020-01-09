@@ -531,7 +531,7 @@ class ChatWindow extends PureComponent {
     await this.props.loadHistory()
   }
 
-  _onEmojiSelected (code) {
+  _onEmojiSelected = (code) => {
     let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g')
     if (code === '') {
       return
@@ -831,9 +831,7 @@ class ChatWindow extends PureComponent {
             panelContainerStyle={this.props.panelContainerStyle}
             ImageComponent={ImageComponent}
             emojiHeight={this.emojiHeight}
-            onPress={(item) => {
-              this._onEmojiSelected(item.value)
-            }}
+            onEmojiSelected={this._onEmojiSelected}
           />
           {
             this.state.showVoice

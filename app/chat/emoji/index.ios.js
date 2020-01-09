@@ -74,7 +74,7 @@ export default class EmojiPanel extends PureComponent {
                         key={i}
                         style={{ width: (width - 40) / 8, height: 45, justifyContent: 'center', alignItems: 'center', paddingTop: 15, paddingHorizontal: 20 }}
                         onPress={() => {
-                          this.props.onPress(list)
+                          this.props.onPress(list.value)
                         }
                         }
                       >
