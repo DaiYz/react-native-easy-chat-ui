@@ -279,7 +279,7 @@ export default class ChatItem extends PureComponent {
   }
 
   render () {
-    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle, ImageComponent } = this.props
+    const { user = {}, message, isOpen, selectMultiple, avatarStyle = {}, rowId, chatType, showUserName, userNameStyle, ImageComponent, itemContainerStyle = {} } = this.props
     const isSelf = user.id === message.targetId
     const {type} = message
     const avatar = isSelf ? user.avatar : message.chatInfo.avatar
@@ -309,7 +309,7 @@ export default class ChatItem extends PureComponent {
               onPress={() => this.props.closeAll()}
               disabled={isOpen}
               activeOpacity={1}
-              style={[styles.chat, isSelf ? styles.right : styles.left]} ref={(e) => (this.content = e)}
+              style={[styles.chat, isSelf ? styles.right : styles.left, itemContainerStyle]} ref={(e) => (this.content = e)}
             >
               {
                 !isSelf && isOpen &&  type !== 'system' &&

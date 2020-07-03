@@ -728,6 +728,7 @@ class ChatWindow extends PureComponent {
                   avatarStyle={this.props.avatarStyle}
                   showUserName={this.props.showUserName}
                   userNameStyle={this.props.userNameStyle}
+                  itemContainerStyle={this.props.itemContainerStyle}
                   renderErrorMessage={this.props.renderErrorMessage}
                   renderTextMessage={this.props.renderTextMessage}
                   renderImageMessage={this.props.renderImageMessage}
@@ -907,6 +908,7 @@ ChatWindow.propTypes = {
   panelSource: PropTypes.array,
   renderPanelRow: PropTypes.func,
   panelContainerStyle: ViewPropTypes.style,
+  itemContainerStyle: ViewPropTypes.style,
   allPanelHeight: PropTypes.number,
   messageErrorIcon: PropTypes.element,
   loadHistory: PropTypes.func,
