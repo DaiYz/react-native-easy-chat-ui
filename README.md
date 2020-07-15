@@ -461,8 +461,8 @@ android:windowSoftInputMode="adjustResize"
 ## Donation
 ☕️☕️
 <p>
-<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/alipay.jpg" width="200" height="200" />
-<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/wechatPay.jpg" width="200" height="200" />
+<img alt="react-native-easy-chat-ui" src="./screenshots/alipay.jpg" width="200" height="200" />
+<img alt="react-native-easy-chat-ui" src="./screenshots/wechatPay.jpg" width="200" height="200" />
 </p>
 
 ## License

@@ -465,8 +465,8 @@ android:windowSoftInputMode="adjustResize"
 ## 捐赠
 ☕️☕️
 <p>
-<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/alipay.jpg" width="200" height="200" />
-<img alt="react-native-easy-chat-ui" src="https://raw.githubusercontent.com/DaiYz/react-native-easy-chat-ui/master/screenshots/wechatPay.jpg" width="200" height="200" />
+<img alt="react-native-easy-chat-ui" src="../screenshots/alipay.jpg" width="200" height="200" />
+<img alt="react-native-easy-chat-ui" src="../screenshots/wechatPay.jpg" width="200" height="200" />
 </p>
 
 ## 需要视频或者语音通话可以访问react-native-agora库
