@@ -741,6 +741,8 @@ class ChatWindow extends PureComponent {
                   renderRedEnvelopeMessage={this.props.renderRedEnvelopeMessage}
                   renderFileMessage={this.props.renderFileMessage}
                   renderSystemMessage={this.props.renderSystemMessage}
+                  renderPatMessage={this.props.renderPatMessage}
+                  renderCustomMessage={this.props.renderCustomMessage}
                   rightMessageBackground={this.props.rightMessageBackground}
                   leftMessageBackground={this.props.leftMessageBackground}
                   voiceLoading={this.props.voiceLoading}
@@ -755,49 +757,54 @@ class ChatWindow extends PureComponent {
               }
             />
           </TouchableOpacity>
-          <InputBar
-            ImageComponent={ImageComponent}
-            rootHeight={this.rootHeight}
-            allPanelHeight={this.props.allPanelHeight}
-            emojiIcon={this.props.emojiIcon}
-            keyboardIcon={this.props.keyboardIcon}
-            plusIcon={this.props.plusIcon}
-            voiceIcon={this.props.voiceIcon}
-            sendIcon={this.props.sendIcon}
-            sendUnableIcon={this.props.sendUnableIcon}
-            ref={e => (this.InputBar = e)}
-            isIphoneX={this.isIphoneX}
-            placeholder={this.props.placeholder}
-            useVoice={this.props.useVoice}
-            onMethodChange={this._changeMethod.bind(this)}
-            showVoice={this.state.showVoice}
-            onSubmitEditing={(type, content) => this._sendMessage(type, content)}
-            messageContent={messageContent}
-            textChange={this._changeText.bind(this)}
-            onContentSizeChange={this._onContentSizeChange.bind(this)}
-            xHeight={xHeight}
-            onFocus={this._onFocus}
-            voiceStart={this._onVoiceStart}
-            voiceEnd={this._onVoiceEnd}
-            isVoiceEnd={voiceEnd}
-            voiceStatus={this.state.isVoiceContinue}
-            changeVoiceStatus={this.changeVoiceStatus}
-            inputChangeSize={inputChangeSize}
-            hasPermission={hasPermission}
-            pressInText={this.props.pressInText}
-            pressOutText={this.props.pressOutText}
-            isShowPanel={this.isShowPanel}
-            showEmoji={this.tabEmoji}
-            isEmojiShow={this.state.emojiShow}
-            isPanelShow={this.state.panelShow}
-            paddingHeight={this.paddingHeight}
-            useEmoji={this.props.useEmoji}
-            usePlus={this.props.usePlus}
-            inputStyle={this.props.inputStyle}
-            inputOutContainerStyle={this.props.inputOutContainerStyle}
-            inputContainerStyle={this.props.inputContainerStyle}
-            inputHeightFix={this.props.inputHeightFix}
-          />
+          {
+            this.props.showInput ?
+              <InputBar
+                ImageComponent={ImageComponent}
+                rootHeight={this.rootHeight}
+                allPanelHeight={this.props.allPanelHeight}
+                emojiIcon={this.props.emojiIcon}
+                keyboardIcon={this.props.keyboardIcon}
+                plusIcon={this.props.plusIcon}
+                voiceIcon={this.props.voiceIcon}
+                sendIcon={this.props.sendIcon}
+                sendUnableIcon={this.props.sendUnableIcon}
+                ref={e => (this.InputBar = e)}
+                isIphoneX={this.isIphoneX}
+                placeholder={this.props.placeholder}
+                useVoice={this.props.useVoice}
+                onMethodChange={this._changeMethod.bind(this)}
+                showVoice={this.state.showVoice}
+                onSubmitEditing={(type, content) => this._sendMessage(type, content)}
+                messageContent={messageContent}
+                textChange={this._changeText.bind(this)}
+                onContentSizeChange={this._onContentSizeChange.bind(this)}
+                xHeight={xHeight}
+                onFocus={this._onFocus}
+                voiceStart={this._onVoiceStart}
+                voiceEnd={this._onVoiceEnd}
+                isVoiceEnd={voiceEnd}
+                voiceStatus={this.state.isVoiceContinue}
+                changeVoiceStatus={this.changeVoiceStatus}
+                inputChangeSize={inputChangeSize}
+                hasPermission={hasPermission}
+                pressInText={this.props.pressInText}
+                pressOutText={this.props.pressOutText}
+                isShowPanel={this.isShowPanel}
+                showEmoji={this.tabEmoji}
+                isEmojiShow={this.state.emojiShow}
+                isPanelShow={this.state.panelShow}
+                paddingHeight={this.paddingHeight}
+                useEmoji={this.props.useEmoji}
+                usePlus={this.props.usePlus}
+                inputStyle={this.props.inputStyle}
+                inputOutContainerStyle={this.props.inputOutContainerStyle}
+                inputContainerStyle={this.props.inputContainerStyle}
+                inputHeightFix={this.props.inputHeightFix}
+              />
+              : null
+          }
+
           {
             this.props.usePopView
               ? <DelPanel
@@ -899,6 +906,7 @@ ChatWindow.propTypes = {
   iphoneXBottomPadding: PropTypes.number,
   showUserName: PropTypes.bool,
   showIsRead: PropTypes.bool,
+  showInput: PropTypes.bool,
   isReadStyle: PropTypes.object,
   userProfile: PropTypes.shape({
     id: PropTypes.string.isRequired,
@@ -991,6 +999,8 @@ ChatWindow.propTypes = {
   renderRedEnvelopeMessage: PropTypes.func,
   renderFileMessage: PropTypes.func,
   renderSystemMessage: PropTypes.func,
+  renderCustomMessage: PropTypes.func,
+  renderPatMessage: PropTypes.func,
   /* delPanelProps */
   delPanelStyle: ViewPropTypes.style,
   delPanelButtonStyle: ViewPropTypes.style,
@@ -1007,6 +1017,7 @@ ChatWindow.defaultProps = {
   messageList: [],
   showUserName: false,
   panelContainerStyle: {},
+  showInput: true,
   sendMessage: (type, content, isInverted) => {
     console.log(type, content, isInverted, 'send')
   },

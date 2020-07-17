@@ -244,6 +244,18 @@ export default class ChatItem extends PureComponent {
         } else {
           return this.props.renderFileMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
         }
+      case 'pat':
+        if (this.props.renderPatMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderPatMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
+      case 'custom':
+        if (this.props.renderCustomMessage === undefined) {
+          return null
+        } else {
+          return this.props.renderCustomMessage({ isOpen, isSelf, message, index: parseInt(rowId) })
+        }
       case 'system':
         if (this.props.renderSystemMessage === undefined) {
           return (
