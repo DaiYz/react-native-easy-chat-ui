@@ -96,6 +96,7 @@ class ChatWindow extends PureComponent {
       Animated.timing(this.visibleHeight, {
         duration: e.duration,
         toValue: 1,
+        useNativeDriver: false,
         easing: Easing.inOut(Easing.ease)
       }).start()
       if (emojiShow) {
@@ -121,6 +122,7 @@ class ChatWindow extends PureComponent {
       Animated.timing(this.visibleHeight, {
         duration: e.duration,
         toValue: 0,
+        useNativeDriver: false,
         easing: Easing.inOut(Easing.ease)
       }).start()
       this.setState({ xHeight: iphoneXBottomPadding })
@@ -261,11 +263,13 @@ class ChatWindow extends PureComponent {
     Animated.parallel([
       Animated.timing(Platform.OS === 'ios' ? this.visibleHeight : this.paddingHeight, {
         duration: this.props.allPanelAnimateDuration,
-        toValue: realClose ? 0 : 1
+        toValue: realClose ? 0 : 1,
+        useNativeDriver: false
       }),
       Animated.timing(this.panelHeight, {
         duration: this.props.allPanelAnimateDuration,
         toValue: 0,
+        useNativeDriver: false,
         easing: Easing.inOut(Easing.ease)
       })
     ]).start(() => {
@@ -279,12 +283,14 @@ class ChatWindow extends PureComponent {
     Animated.parallel([
       Animated.timing(Platform.OS === 'ios' ? this.visibleHeight : this.paddingHeight, {
         duration: this.props.allPanelAnimateDuration,
-        toValue: 1
+        toValue: 1,
+        useNativeDriver: false
       }),
       Animated.timing(this.panelHeight, {
         duration: this.props.allPanelAnimateDuration,
         toValue: 1,
-        easing: Easing.inOut(Easing.ease)
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false
       })
     ]).start(() => {
       callback && callback()
@@ -337,12 +343,14 @@ class ChatWindow extends PureComponent {
     Animated.parallel([
       Animated.timing(Platform.OS === 'ios' ? this.visibleHeight : this.paddingHeight, {
         duration: this.props.allPanelAnimateDuration,
-        toValue: 1
+        toValue: 1,
+        useNativeDriver: false
       }),
       Animated.timing(this.emojiHeight, {
         duration: this.props.allPanelAnimateDuration,
         toValue: 1,
-        easing: Easing.inOut(Easing.ease)
+        easing: Easing.inOut(Easing.ease),
+        useNativeDriver: false
       })
     ]).start(() => {
       this.setState({ emojiShow: true })
@@ -354,11 +362,13 @@ class ChatWindow extends PureComponent {
     Animated.parallel([
       Animated.timing(Platform.OS === 'ios' ? this.visibleHeight : this.paddingHeight, {
         duration: this.props.allPanelAnimateDuration,
-        toValue: realClose ? 0 : 1
+        toValue: realClose ? 0 : 1,
+        useNativeDriver: false
       }),
       Animated.timing(this.emojiHeight, {
         duration: this.props.allPanelAnimateDuration,
         toValue: 0,
+        useNativeDriver: false,
         easing: Easing.inOut(Easing.ease)
       })
     ]).start(() => {
@@ -411,7 +421,7 @@ class ChatWindow extends PureComponent {
   }
 
   selectMultiple = (isSelect, index, message) => {
-    let messageArr = this.state.messageSelected
+    const messageArr = this.state.messageSelected
     const existArr = messageArr.filter((item) => item.index === index)
     if (existArr.length === 0) {
       messageArr.push({ index, isSelect, message })
@@ -433,6 +443,7 @@ class ChatWindow extends PureComponent {
     Animated.timing(this.leftHeight, {
       duration: 200,
       toValue: 0,
+      useNativeDriver: false,
       easing: Easing.linear()
     }).start()
   }
@@ -442,6 +453,7 @@ class ChatWindow extends PureComponent {
     Animated.timing(this.leftHeight, {
       duration: 200,
       toValue: 1,
+      useNativeDriver: false,
       easing: Easing.linear()
     }).start()
   }
@@ -466,7 +478,8 @@ class ChatWindow extends PureComponent {
               title: '多选',
               onPress: () => {
                 this.multipleSelect(index, message)
-              } }
+              }
+            }
           ]
           if (type === 'text') {
             items = [
@@ -484,12 +497,13 @@ class ChatWindow extends PureComponent {
                 title: '多选',
                 onPress: () => {
                   this.multipleSelect(index, message)
-                } }
+                }
+              }
             ]
           }
         }
         if (items === null) console.error('need to return items')
-        if (items.length > 0 ) {
+        if (items.length > 0) {
           PopView.show({ x: pageX, y: pageY, width, height }, items, { popoverStyle: this.props.popoverStyle })
         }
       })
@@ -532,13 +546,13 @@ class ChatWindow extends PureComponent {
   }
 
   _onEmojiSelected = (code) => {
-    let emojiReg = new RegExp('\\[[^\\]]+\\]', 'g')
+    const emojiReg = new RegExp('\\[[^\\]]+\\]', 'g')
     if (code === '') {
       return
     }
 
     let lastText = ''
-    let currentTextLength = this.state.messageContent.length
+    const currentTextLength = this.state.messageContent.length
 
     if (code === '/{del}') { // 删除键
       if (currentTextLength === 0) {
@@ -546,26 +560,26 @@ class ChatWindow extends PureComponent {
       }
 
       if (this.state.cursorIndex < currentTextLength) { // 光标在字符串中间
-        let emojiIndex = this.state.messageContent.search(emojiReg) // 匹配到的第一个表情符位置
+        const emojiIndex = this.state.messageContent.search(emojiReg) // 匹配到的第一个表情符位置
 
         if (emojiIndex === -1) { // 没有匹配到表情符
-          let preStr = this.state.messageContent.substring(0, this.state.cursorIndex)
-          let nextStr = this.state.messageContent.substring(this.state.cursorIndex)
+          const preStr = this.state.messageContent.substring(0, this.state.cursorIndex)
+          const nextStr = this.state.messageContent.substring(this.state.cursorIndex)
           lastText = preStr.substring(0, preStr.length - 1) + nextStr
 
           this.setState({
             cursorIndex: preStr.length - 1
           })
         } else {
-          let preStr = this.state.messageContent.substring(0, this.state.cursorIndex)
-          let nextStr = this.state.messageContent.substring(this.state.cursorIndex)
+          const preStr = this.state.messageContent.substring(0, this.state.cursorIndex)
+          const nextStr = this.state.messageContent.substring(this.state.cursorIndex)
 
-          let lastChar = preStr.charAt(preStr.length - 1)
+          const lastChar = preStr.charAt(preStr.length - 1)
           if (lastChar === ']') {
-            let castArray = preStr.match(emojiReg)
+            const castArray = preStr.match(emojiReg)
 
             if (!castArray) {
-              let cast = castArray[castArray.length - 1]
+              const cast = castArray[castArray.length - 1]
 
               lastText = preStr.substring(0, preStr.length - cast.length) + nextStr
 
@@ -587,12 +601,12 @@ class ChatWindow extends PureComponent {
           }
         }
       } else { // 光标在字符串最后
-        let lastChar = this.state.messageContent.charAt(currentTextLength - 1)
+        const lastChar = this.state.messageContent.charAt(currentTextLength - 1)
         if (lastChar === ']') {
-          let castArray = this.state.messageContent.match(emojiReg)
+          const castArray = this.state.messageContent.match(emojiReg)
 
           if (castArray) {
-            let cast = castArray[castArray.length - 1]
+            const cast = castArray[castArray.length - 1]
             lastText = this.state.messageContent.substring(0, this.state.messageContent.length - cast.length)
 
             this.setState({
@@ -620,8 +634,8 @@ class ChatWindow extends PureComponent {
           cursorIndex: lastText.length
         })
       } else {
-        let preTemp = this.state.messageContent.substring(0, this.state.cursorIndex)
-        let nextTemp = this.state.messageContent.substring(this.state.cursorIndex, currentTextLength)
+        const preTemp = this.state.messageContent.substring(0, this.state.cursorIndex)
+        const nextTemp = this.state.messageContent.substring(this.state.cursorIndex, currentTextLength)
         lastText = preTemp + EMOJIS_ZH[code] + nextTemp
 
         this.setState({
@@ -639,12 +653,12 @@ class ChatWindow extends PureComponent {
   }
 
   renderBg = (bg) => {
-    const {renderChatBg} = this.props
+    const { renderChatBg } = this.props
     if (bg === null) return null
     if (renderChatBg === undefined) {
-      const source = typeof(bg) === 'number' ? bg : {uri: bg}
+      const source = typeof (bg) === 'number' ? bg : { uri: bg }
       return (
-        <ImageComponent source={source} style={{position: 'absolute', width, top: 0, height}} resizeMode={'cover'} />
+        <ImageComponent source={source} style={{ position: 'absolute', width, top: 0, height }} resizeMode='cover' />
       )
     } else {
       return renderChatBg(bg)
@@ -660,8 +674,8 @@ class ChatWindow extends PureComponent {
     const panelContainerHeight = allPanelHeight + (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
     return (
       <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1, position: 'relative' }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
-        { this.renderBg(chatBackgroundImage) }
-        <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent'} : {
+        {this.renderBg(chatBackgroundImage)}
+        <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent' } : {
           backgroundColor: 'transparent',
           height: this.visibleHeight.interpolate({
             inputRange: [0, 1],
@@ -671,13 +685,14 @@ class ChatWindow extends PureComponent {
                 ? height - keyboardHeight - this.HeaderHeight
                 : height - this.HeaderHeight - panelContainerHeight
             ]
-          }),
-        }
-        } >
+          })
+        }}
+        >
           <TouchableOpacity
             activeOpacity={1}
             onPress={() => this.closeAll()}
-            style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}>
+            style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}
+          >
             <FlatList
               {...this.props.flatListProps}
               ref={e => (this.chatList = e)}
@@ -753,13 +768,12 @@ class ChatWindow extends PureComponent {
                   voiceRightLoadingColor={this.props.voiceRightLoadingColor}
                   leftMessageTextStyle={this.props.leftMessageTextStyle}
                   rightMessageTextStyle={this.props.rightMessageTextStyle}
-                />
-              }
+                />}
             />
           </TouchableOpacity>
           {
-            this.props.showInput ?
-              <InputBar
+            this.props.showInput
+              ? <InputBar
                 ImageComponent={ImageComponent}
                 rootHeight={this.rootHeight}
                 allPanelHeight={this.props.allPanelHeight}
@@ -801,7 +815,7 @@ class ChatWindow extends PureComponent {
                 inputOutContainerStyle={this.props.inputOutContainerStyle}
                 inputContainerStyle={this.props.inputContainerStyle}
                 inputHeightFix={this.props.inputHeightFix}
-              />
+                />
               : null
           }
 
@@ -1106,7 +1120,7 @@ ChatWindow.defaultProps = {
     require('../source/image/speak5.png'),
     require('../source/image/speak6.png'),
     require('../source/image/speak7.png'),
-    require('../source/image/speak8.png'),
+    require('../source/image/speak8.png')
   ],
   voiceVolume: 10,
   delMessage: (content, isInverted) => {
@@ -1139,4 +1153,3 @@ ChatWindow.defaultProps = {
   showsVerticalScrollIndicator: false,
   showIsRead: false
 }
-

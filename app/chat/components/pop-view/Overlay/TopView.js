@@ -108,10 +108,10 @@ export default class TopView extends Component {
     } else {
       if (animatesOnly) {
         let animates = [
-          Animated.timing(translateX, {toValue: tx, duration: 1}),
-          Animated.timing(translateY, {toValue: ty, duration: 1}),
-          Animated.timing(scaleX, {toValue: sx, duration: 1}),
-          Animated.timing(scaleY, {toValue: sy, duration: 1})
+          Animated.timing(translateX, {toValue: tx, duration: 1, useNativeDriver: true}),
+          Animated.timing(translateY, {toValue: ty, duration: 1, useNativeDriver: true}),
+          Animated.timing(scaleX, {toValue: sx, duration: 1, useNativeDriver: true}),
+          Animated.timing(scaleY, {toValue: sy, duration: 1, useNativeDriver: true})
         ]
         animatesOnly(animates)
       } else {
@@ -137,10 +137,10 @@ export default class TopView extends Component {
     } else {
       if (animatesOnly) {
         let animates = [
-          Animated.timing(translateX, {toValue: 0, duration: 1}),
-          Animated.timing(translateY, {toValue: 0, duration: 1}),
-          Animated.timing(scaleX, {toValue: 1, duration: 1}),
-          Animated.timing(scaleY, {toValue: 1, duration: 1})
+          Animated.timing(translateX, {toValue: 0, duration: 1, useNativeDriver: true}),
+          Animated.timing(translateY, {toValue: 0, duration: 1, useNativeDriver: true}),
+          Animated.timing(scaleX, {toValue: 1, duration: 1, useNativeDriver: true}),
+          Animated.timing(scaleY, {toValue: 1, duration: 1, useNativeDriver: true})
         ]
         animatesOnly(animates)
       } else {

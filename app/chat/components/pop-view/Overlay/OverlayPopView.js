@@ -46,23 +46,28 @@ export default class OverlayPopView extends OverlayView {
     animates = animates.concat([
       Animated.timing(this.state.opacity, {
         toValue: 1,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.translateX, {
         toValue: 0,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.translateY, {
         toValue: 0,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.scaleX, {
         toValue: 1,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.scaleY, {
         toValue: 1,
-        duration
+        duration,
+        useNativeDriver: true
       })
     ])
     return animates
@@ -75,23 +80,28 @@ export default class OverlayPopView extends OverlayView {
     animates = animates.concat([
       Animated.timing(this.state.opacity, {
         toValue: 0,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.translateX, {
         toValue: ft.translateX,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.translateY, {
         toValue: ft.translateY,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.scaleX, {
         toValue: ft.scaleX,
-        duration
+        duration,
+        useNativeDriver: true
       }),
       Animated.timing(this.state.scaleY, {
         toValue: ft.scaleY,
-        duration
+        duration,
+        useNativeDriver: true
       })
     ])
     return animates

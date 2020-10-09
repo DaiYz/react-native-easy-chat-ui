@@ -71,7 +71,8 @@ export default class OverlayView extends Component {
     let animates = [
       Animated.timing(this.state.overlayOpacity, {
         toValue: this.overlayOpacity,
-        duration
+        duration,
+        useNativeDriver: true
       })
     ]
     return animates
@@ -82,7 +83,8 @@ export default class OverlayView extends Component {
     let animates = [
       Animated.timing(this.state.overlayOpacity, {
         toValue: 0,
-        duration
+        duration,
+        useNativeDriver: true
       })
     ]
     return animates

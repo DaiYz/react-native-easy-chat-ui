@@ -66,6 +66,7 @@ export default class VoiceView extends PureComponent {
       this.state.opacityValue,
       {
         toValue: this.props.opacity,
+        useNativeDriver: true,
         duration: this.props.fadeInDuration
       }
     ).start()
@@ -102,6 +103,7 @@ export default class VoiceView extends PureComponent {
       this.state.opacityValue,
       {
         toValue: 0.0,
+        useNativeDriver: true,
         duration: this.props.fadeOutDuration
       }
     ).start(() => {

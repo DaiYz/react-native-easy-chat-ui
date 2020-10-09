@@ -383,8 +383,8 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth
   },
   subEmojiStyle: {
-    width: 25,
-    height: 25
+    width: 20,
+    height: 20
   },
   commentBar__input: {
     borderRadius: 18,

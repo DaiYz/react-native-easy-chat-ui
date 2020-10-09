@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react'
 import { View, StyleSheet, Dimensions, Animated, Platform } from 'react-native'
-const { width, height } = Dimensions.get('window')
 import EmojiPanel from '../emoji'
 import PlusPanel from '../plus'
+const { width, height } = Dimensions.get('window')
 export default class PanelContainer extends PureComponent {
   constructor (props) {
     super(props)
   }
 
   render () {
-    const { panelContainerHeight, visibleHeight, ImageComponent, panelHeight, emojiHeight, panelContainerBackgroundColor, onEmojiSelected} = this.props
+    const { panelContainerHeight, visibleHeight, ImageComponent, panelHeight, emojiHeight, panelContainerBackgroundColor, onEmojiSelected } = this.props
     return (
       <Animated.View
         style={[{
@@ -24,7 +24,7 @@ export default class PanelContainer extends PureComponent {
           position: 'absolute',
           height: panelContainerHeight,
           width
-        }, {backgroundColor: panelContainerBackgroundColor}
+        }, { backgroundColor: panelContainerBackgroundColor }
         ]}
       >
         {
