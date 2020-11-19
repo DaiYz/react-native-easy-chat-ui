@@ -165,7 +165,6 @@ class Example extends React.Component {
       <ChatScreen
         ref={(e) => this.chat = e}
         messageList={this.state.messages}
-        androidHeaderHeight={androidHeaderHeight}
         sendMessage={this.sendMessage}
       />
     )
@@ -219,6 +218,7 @@ props | default | Info
 ----- |  ------- | -----
  messageList | [] | Messages to display
  inverted | false |  When messageList exceeds the screen height, set it to true otherwise false (You can change this value when componentWillUnmount or delete message)
+ isIPhoneX | false |  Is it full screen
  chatBackgroundImage | null | Custom BackgroundImage
  onScroll | () => {} | ListView Props
  onEndReachedThreshold | 0.1 | ListView Props
@@ -233,7 +233,7 @@ props | default | Info
  onMessagePress | (type, index, content) => {} |  Callback when press a message
  onMessageLongPress | (type, index, content) => {} | Callback when longPress a message and usePopView is false
  pressAvatar | (isSelf, targetId) => {} |  Callback when press avatar
- androidHeaderHeight | 66 | Android navigation bar height + statusBar height
+ headerHeight | 66 | navigation bar height + statusBar height
  userProfile | {id: '88888888', avatar: 'default.png'} | Your own profile
  showUserName | false | Whether show userName
  loadHistory | () => {} | Callback when loading earlier messages
@@ -334,6 +334,7 @@ renderSystemMessage| undefined | Custom message system, (data) => {}
       /* defaultProps */
       messageList: PropTypes.array.isRequired,
       inverted: PropTypes.bool,
+      isIPhoneX: PropTypes.bool.isRequired,
       lastReadAt: PropTypes.object,
       chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
       onScroll: PropTypes.func,
@@ -351,8 +352,7 @@ renderSystemMessage| undefined | Custom message system, (data) => {}
       renderErrorMessage: PropTypes.func,
       renderChatBg: PropTypes.func,
       reSendMessage: PropTypes.func,
-      androidHeaderHeight: PropTypes.number.isRequired,
-      iphoneXHeaderPadding: PropTypes.number,
+      headerHeight: PropTypes.number.isRequired,
       iphoneXBottomPadding: PropTypes.number,
       showUserName: PropTypes.bool,
       showIsRead: PropTypes.bool,

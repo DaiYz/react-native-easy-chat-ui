@@ -14,7 +14,7 @@ import {
   ViewPropTypes as RNViewPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types'
-import { getCurrentTime, changeEmojiText, isIPhoneX } from './utils'
+import { getCurrentTime, changeEmojiText } from './utils'
 import Voice from './VoiceView'
 import PopView from './components/pop-view'
 import ChatItem from './ChatItem'
@@ -28,18 +28,19 @@ let ImageComponent = Image
 class ChatWindow extends PureComponent {
   constructor (props) {
     super(props)
-    const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding, CustomImageComponent } = props
+    const { headerHeight, chatType, iphoneXBottomPadding, CustomImageComponent, isIPhoneX } = props
     this.time = null
     ImageComponent = CustomImageComponent || Image
     this._userHasBeenInputed = false
     this.iosHeaderHeight = 64
-    this.isIphoneX = isIPhoneX()
+    this.isIphoneX = isIPhoneX
     this.visibleHeight = new Animated.Value(0)
     this.panelHeight = new Animated.Value(0)
     this.leftHeight = new Animated.Value(0)
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
-    this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
+    // this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
+    this.HeaderHeight = headerHeight
     this.listHeight = height - this.HeaderHeight - 64
     this.isInverted = false
     this.rootHeight = 0
@@ -898,6 +899,7 @@ ChatWindow.propTypes = {
   /* defaultProps */
   messageList: PropTypes.array.isRequired,
   inverted: PropTypes.bool,
+  isIPhoneX: PropTypes.bool.isRequired,
   lastReadAt: PropTypes.object,
   chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onScroll: PropTypes.func,
@@ -915,8 +917,7 @@ ChatWindow.propTypes = {
   renderErrorMessage: PropTypes.func,
   renderChatBg: PropTypes.func,
   reSendMessage: PropTypes.func,
-  androidHeaderHeight: PropTypes.number.isRequired,
-  iphoneXHeaderPadding: PropTypes.number,
+  headerHeight: PropTypes.number.isRequired,
   iphoneXBottomPadding: PropTypes.number,
   showUserName: PropTypes.bool,
   showIsRead: PropTypes.bool,
@@ -1027,6 +1028,7 @@ ChatWindow.defaultProps = {
   chatType: 'friend',
   chatBackgroundImage: null,
   inverted: false,
+  headerHeight: 44,
   allPanelAnimateDuration: 100,
   messageList: [],
   showUserName: false,
@@ -1043,7 +1045,6 @@ ChatWindow.defaultProps = {
   useVoice: true,
   useEmoji: true,
   usePlus: true,
-  iphoneXHeaderPadding: 24, // 安全区域
   iphoneXBottomPadding: 34, // 安全区域
   onEndReachedThreshold: 0.1,
   usePopView: true,
@@ -1109,7 +1110,6 @@ ChatWindow.defaultProps = {
     //   )
     // })
   },
-  androidHeaderHeight: 66,
   pressAvatar: (isSelf, targetId) => { console.log(isSelf, targetId) },
   voiceSpeakIcon: [
     require('../source/image/speak0.png'),

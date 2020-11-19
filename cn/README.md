@@ -163,7 +163,6 @@ class Example extends React.Component {
       <ChatScreen
         ref={(e) => this.chat = e}
         messageList={this.state.msg}
-        androidHeaderHeight={androidHeaderHeight}
         sendMessage={this.sendMessage}
       />
     )
@@ -186,7 +185,7 @@ react-native run-ios or react-native run-android
     {
       id: `${new Date().getTime()}`,
       type: 'text',
-      content: 'hello world'
+      content: 'hello world',
       targetId: '12345678',
       chatInfo: {
         avatar: require('./app/source/image/avatar.png'),
@@ -216,6 +215,7 @@ react-native run-ios or react-native run-android
 ----- |  ------- | -----
  messageList | [] | 渲染消息列表
   inverted | false |  是否倒置
+  isIphoneX | false |  是否全面屏
   chatBackgroundImage | null | 聊天背景图片
  onScroll | () => {} | 同ListView属性
  onEndReachedThreshold | 0.1 | 同ListView属性
@@ -230,7 +230,7 @@ react-native run-ios or react-native run-android
  onMessagePress | (type, index, content, message) => {} | 点击消息的回调
  onMessageLongPress | (type, index, content, message) => {} | 长按消息的回调(usePopView为false时候触发，默认显示一个弹出层)
  pressAvatar | (isSelf, targetId) => {} | 点击头像的回调
- androidHeaderHeight | 66 | android的导航头高度(加上statusBar高度)
+ androidHeaderHeight | 66 | 导航头高度(加上statusBar高度)
  userProfile | {id: '88888888', avatar: 'default.png'} | 你自己的个人资料
  loadHistory | () => {} | 下拉获取历史记录的回调
  renderMessageTime | (time) => {} | 自定义渲染消息上方的时间
@@ -350,8 +350,7 @@ renderSystemMessage| undefined | 自定义系统消息, (data) => {}
    renderErrorMessage: PropTypes.func,
    renderChatBg: PropTypes.func,
    reSendMessage: PropTypes.func,
-   androidHeaderHeight: PropTypes.number.isRequired,
-   iphoneXHeaderPadding: PropTypes.number,
+   headerHeight: PropTypes.number.isRequired,
    iphoneXBottomPadding: PropTypes.number,
    showUserName: PropTypes.bool,
    showIsRead: PropTypes.bool,
