@@ -1,6 +1,6 @@
 {
-  "name": "react-native-easy-chat-ui",
-  "version": "0.4.12",
+  "name": "@yz1311/react-native-easy-chat-ui",
+  "version": "0.4.13",
   "description": "chat UI for React Native",
   "main": "index.js",
   "directories": {
@@ -12,6 +12,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DaiYz/react-native-chat.git"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "keywords": [
     "ios",
