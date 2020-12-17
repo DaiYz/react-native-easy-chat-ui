@@ -14,7 +14,7 @@ import {
   ViewPropTypes as RNViewPropTypes
 } from 'react-native'
 import PropTypes from 'prop-types'
-import { getCurrentTime, changeEmojiText } from './utils'
+import { getCurrentTime, changeEmojiText, isIPhoneX } from './utils'
 import Voice from './VoiceView'
 import PopView from './components/pop-view'
 import ChatItem from './ChatItem'
@@ -28,19 +28,18 @@ let ImageComponent = Image
 class ChatWindow extends PureComponent {
   constructor (props) {
     super(props)
-    const { headerHeight, chatType, iphoneXBottomPadding, CustomImageComponent, isIPhoneX } = props
+    const { androidHeaderHeight, chatType, iphoneXHeaderPadding, iphoneXBottomPadding, CustomImageComponent } = props
     this.time = null
     ImageComponent = CustomImageComponent || Image
     this._userHasBeenInputed = false
     this.iosHeaderHeight = 64
-    this.isIphoneX = isIPhoneX
+    this.isIphoneX = isIPhoneX()
     this.visibleHeight = new Animated.Value(0)
     this.panelHeight = new Animated.Value(0)
     this.leftHeight = new Animated.Value(0)
     this.paddingHeight = new Animated.Value(0)
     this.emojiHeight = new Animated.Value(0)
-    // this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
-    this.HeaderHeight = headerHeight
+    this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
     this.listHeight = height - this.HeaderHeight - 64
     this.isInverted = false
     this.rootHeight = 0
@@ -184,15 +183,15 @@ class ChatWindow extends PureComponent {
 
   _changeMethod () {
     this.setState({ showVoice: !this.state.showVoice },
-      async () => {
-        if (Platform.OS === 'android' && this.state.showVoice && !this.androidHasAudioPermission) {
-          const hasPermission = await this.props.checkPermission()
-          this.androidHasAudioPermission = hasPermission
-          if (!hasPermission) {
-            this.props.requestAndroidPermission()
+        async () => {
+          if (Platform.OS === 'android' && this.state.showVoice && !this.androidHasAudioPermission) {
+            const hasPermission = await this.props.checkPermission()
+            this.androidHasAudioPermission = hasPermission
+            if (!hasPermission) {
+              this.props.requestAndroidPermission()
+            }
           }
         }
-      }
     )
     this.setState({ saveChangeSize: this.state.inputChangeSize })
     this.time && clearTimeout(this.time)
@@ -659,7 +658,7 @@ class ChatWindow extends PureComponent {
     if (renderChatBg === undefined) {
       const source = typeof (bg) === 'number' ? bg : { uri: bg }
       return (
-        <ImageComponent source={source} style={{ position: 'absolute', width, top: 0, height }} resizeMode='cover' />
+          <ImageComponent source={source} style={{ position: 'absolute', width, top: 0, height }} resizeMode='cover' />
       )
     } else {
       return renderChatBg(bg)
@@ -670,226 +669,226 @@ class ChatWindow extends PureComponent {
     const { messageList, allPanelHeight, inverted, chatBackgroundImage, chatType } = this.props
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow, panelShow, emojiShow } = this.state
     const currentList = messageList.slice().sort((a, b) => inverted
-      ? (b.time - a.time)
-      : (a.time - b.time))
+        ? (b.time - a.time)
+        : (a.time - b.time))
     const panelContainerHeight = allPanelHeight + (this.isIphoneX ? this.props.iphoneXBottomPadding : 0)
     return (
-      <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1, position: 'relative' }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
-        {this.renderBg(chatBackgroundImage)}
-        <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent' } : {
-          backgroundColor: 'transparent',
-          height: this.visibleHeight.interpolate({
-            inputRange: [0, 1],
-            outputRange: [
-              height - this.HeaderHeight,
-              keyboardShow
-                ? height - keyboardHeight - this.HeaderHeight
-                : height - this.HeaderHeight - panelContainerHeight
-            ]
-          })
-        }}
-        >
-          <TouchableOpacity
-            activeOpacity={1}
-            onPress={() => this.closeAll()}
-            style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}
+        <View style={{ backgroundColor: this.props.containerBackgroundColor, flex: 1, position: 'relative' }} onLayout={(e) => this.rootHeight = e.nativeEvent.layout.height}>
+          {this.renderBg(chatBackgroundImage)}
+          <Animated.View style={Platform.OS === 'android' ? { flex: 1, backgroundColor: 'transparent' } : {
+            backgroundColor: 'transparent',
+            height: this.visibleHeight.interpolate({
+              inputRange: [0, 1],
+              outputRange: [
+                height - this.HeaderHeight,
+                keyboardShow
+                    ? height - keyboardHeight - this.HeaderHeight
+                    : height - this.HeaderHeight - panelContainerHeight
+              ]
+            })
+          }}
           >
-            <FlatList
-              {...this.props.flatListProps}
-              ref={e => (this.chatList = e)}
-              inverted={inverted}
-              data={currentList}
-              ListFooterComponent={this.props.renderLoadEarlier}
-              extraData={this.props.extraData}
-              automaticallyAdjustContentInsets={false}
-              onScroll={(e) => { this.props.onScroll(e) }}
-              showsVerticalScrollIndicator={this.props.showsVerticalScrollIndicator}
-              onEndReachedThreshold={this.props.onEndReachedThreshold}
-              enableEmptySections
-              scrollEventThrottle={100}
-              keyExtractor={(item) => `${item.id}`}
-              onEndReached={() => this._loadHistory()}
-              onLayout={(e) => {
-                this._scrollToBottom()
-                this.listHeight = e.nativeEvent.layout.height
-              }}
-              onContentSizeChange={(contentWidth, contentHeight) => { this._scrollToBottom({ contentWidth, contentHeight }) }}
-              renderItem={({ item, index }) =>
-                <ChatItem
-                  ImageComponent={ImageComponent}
-                  ref={(e) => (this.messageItem = e)}
-                  user={this.props.userProfile}
-                  chatType={chatType}
-                  lastReadAt={this.props.lastReadAt}
-                  showIsRead={this.props.showIsRead}
-                  isReadStyle={this.props.isReadStyle}
-                  reSendMessage={this.props.reSendMessage}
-                  renderMessageCheck={this.props.renderMessageCheck}
-                  message={item}
-                  currentIndex={this.state.currentIndex}
-                  isOpen={this.state.selectMultiple}
-                  selectMultiple={this.selectMultiple}
-                  rowId={index}
-                  popShow={this.show}
-                  messageSelectIcon={this.props.messageSelectIcon}
-                  renderMessageTime={this.props.renderMessageTime}
-                  onMessageLongPress={this.show}
-                  onMessagePress={this.props.onMessagePress}
-                  onPressAvatar={this._PressAvatar}
-                  messageErrorIcon={this.props.messageErrorIcon}
-                  voiceLeftIcon={this.props.voiceLeftIcon}
-                  voiceRightIcon={this.props.voiceRightIcon}
-                  closeAll={this.closeAll}
-                  renderAvatar={this.props.renderAvatar}
-                  avatarStyle={this.props.avatarStyle}
-                  showUserName={this.props.showUserName}
-                  userNameStyle={this.props.userNameStyle}
-                  itemContainerStyle={this.props.itemContainerStyle}
-                  renderErrorMessage={this.props.renderErrorMessage}
-                  renderTextMessage={this.props.renderTextMessage}
-                  renderImageMessage={this.props.renderImageMessage}
-                  renderVoiceMessage={this.props.renderVoiceMessage}
-                  renderVideoMessage={this.props.renderVideoMessage}
-                  renderLocationMessage={this.props.renderLocationMessage}
-                  renderShareMessage={this.props.renderShareMessage}
-                  renderVideoCallMessage={this.props.renderVideoCallMessage}
-                  renderVoiceCallMessage={this.props.renderVoiceCallMessage}
-                  renderRedEnvelopeMessage={this.props.renderRedEnvelopeMessage}
-                  renderFileMessage={this.props.renderFileMessage}
-                  renderSystemMessage={this.props.renderSystemMessage}
-                  renderPatMessage={this.props.renderPatMessage}
-                  renderCustomMessage={this.props.renderCustomMessage}
-                  rightMessageBackground={this.props.rightMessageBackground}
-                  leftMessageBackground={this.props.leftMessageBackground}
-                  voiceLoading={this.props.voiceLoading}
-                  voicePlaying={this.props.voicePlaying}
-                  savePressIndex={this.savePressIndex}
-                  pressIndex={this.state.pressIndex}
-                  voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
-                  voiceRightLoadingColor={this.props.voiceRightLoadingColor}
-                  leftMessageTextStyle={this.props.leftMessageTextStyle}
-                  rightMessageTextStyle={this.props.rightMessageTextStyle}
-                />}
-            />
-          </TouchableOpacity>
-          {
-            this.props.showInput
-              ? <InputBar
-                ImageComponent={ImageComponent}
-                rootHeight={this.rootHeight}
-                allPanelHeight={this.props.allPanelHeight}
-                emojiIcon={this.props.emojiIcon}
-                keyboardIcon={this.props.keyboardIcon}
-                plusIcon={this.props.plusIcon}
-                voiceIcon={this.props.voiceIcon}
-                sendIcon={this.props.sendIcon}
-                sendUnableIcon={this.props.sendUnableIcon}
-                ref={e => (this.InputBar = e)}
-                isIphoneX={this.isIphoneX}
-                placeholder={this.props.placeholder}
-                useVoice={this.props.useVoice}
-                onMethodChange={this._changeMethod.bind(this)}
-                showVoice={this.state.showVoice}
-                onSubmitEditing={(type, content) => this._sendMessage(type, content)}
-                messageContent={messageContent}
-                textChange={this._changeText.bind(this)}
-                onContentSizeChange={this._onContentSizeChange.bind(this)}
-                xHeight={xHeight}
-                onFocus={this._onFocus}
-                voiceStart={this._onVoiceStart}
-                voiceEnd={this._onVoiceEnd}
-                isVoiceEnd={voiceEnd}
-                voiceStatus={this.state.isVoiceContinue}
-                changeVoiceStatus={this.changeVoiceStatus}
-                inputChangeSize={inputChangeSize}
-                hasPermission={hasPermission}
-                pressInText={this.props.pressInText}
-                pressOutText={this.props.pressOutText}
-                isShowPanel={this.isShowPanel}
-                showEmoji={this.tabEmoji}
-                isEmojiShow={this.state.emojiShow}
-                isPanelShow={this.state.panelShow}
-                paddingHeight={this.paddingHeight}
-                useEmoji={this.props.useEmoji}
-                usePlus={this.props.usePlus}
-                inputStyle={this.props.inputStyle}
-                inputOutContainerStyle={this.props.inputOutContainerStyle}
-                inputContainerStyle={this.props.inputContainerStyle}
-                inputHeightFix={this.props.inputHeightFix}
-                />
-              : null
-          }
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={() => this.closeAll()}
+                style={[{ flex: 1, backgroundColor: 'transparent' }, this.props.chatWindowStyle]}
+            >
+              <FlatList
+                  {...this.props.flatListProps}
+                  ref={e => (this.chatList = e)}
+                  inverted={inverted}
+                  data={currentList}
+                  ListFooterComponent={this.props.renderLoadEarlier}
+                  extraData={this.props.extraData}
+                  automaticallyAdjustContentInsets={false}
+                  onScroll={(e) => { this.props.onScroll(e) }}
+                  showsVerticalScrollIndicator={this.props.showsVerticalScrollIndicator}
+                  onEndReachedThreshold={this.props.onEndReachedThreshold}
+                  enableEmptySections
+                  scrollEventThrottle={100}
+                  keyExtractor={(item) => `${item.id}`}
+                  onEndReached={() => this._loadHistory()}
+                  onLayout={(e) => {
+                    this._scrollToBottom()
+                    this.listHeight = e.nativeEvent.layout.height
+                  }}
+                  onContentSizeChange={(contentWidth, contentHeight) => { this._scrollToBottom({ contentWidth, contentHeight }) }}
+                  renderItem={({ item, index }) =>
+                      <ChatItem
+                          ImageComponent={ImageComponent}
+                          ref={(e) => (this.messageItem = e)}
+                          user={this.props.userProfile}
+                          chatType={chatType}
+                          lastReadAt={this.props.lastReadAt}
+                          showIsRead={this.props.showIsRead}
+                          isReadStyle={this.props.isReadStyle}
+                          reSendMessage={this.props.reSendMessage}
+                          renderMessageCheck={this.props.renderMessageCheck}
+                          message={item}
+                          currentIndex={this.state.currentIndex}
+                          isOpen={this.state.selectMultiple}
+                          selectMultiple={this.selectMultiple}
+                          rowId={index}
+                          popShow={this.show}
+                          messageSelectIcon={this.props.messageSelectIcon}
+                          renderMessageTime={this.props.renderMessageTime}
+                          onMessageLongPress={this.show}
+                          onMessagePress={this.props.onMessagePress}
+                          onPressAvatar={this._PressAvatar}
+                          messageErrorIcon={this.props.messageErrorIcon}
+                          voiceLeftIcon={this.props.voiceLeftIcon}
+                          voiceRightIcon={this.props.voiceRightIcon}
+                          closeAll={this.closeAll}
+                          renderAvatar={this.props.renderAvatar}
+                          avatarStyle={this.props.avatarStyle}
+                          showUserName={this.props.showUserName}
+                          userNameStyle={this.props.userNameStyle}
+                          itemContainerStyle={this.props.itemContainerStyle}
+                          renderErrorMessage={this.props.renderErrorMessage}
+                          renderTextMessage={this.props.renderTextMessage}
+                          renderImageMessage={this.props.renderImageMessage}
+                          renderVoiceMessage={this.props.renderVoiceMessage}
+                          renderVideoMessage={this.props.renderVideoMessage}
+                          renderLocationMessage={this.props.renderLocationMessage}
+                          renderShareMessage={this.props.renderShareMessage}
+                          renderVideoCallMessage={this.props.renderVideoCallMessage}
+                          renderVoiceCallMessage={this.props.renderVoiceCallMessage}
+                          renderRedEnvelopeMessage={this.props.renderRedEnvelopeMessage}
+                          renderFileMessage={this.props.renderFileMessage}
+                          renderSystemMessage={this.props.renderSystemMessage}
+                          renderPatMessage={this.props.renderPatMessage}
+                          renderCustomMessage={this.props.renderCustomMessage}
+                          rightMessageBackground={this.props.rightMessageBackground}
+                          leftMessageBackground={this.props.leftMessageBackground}
+                          voiceLoading={this.props.voiceLoading}
+                          voicePlaying={this.props.voicePlaying}
+                          savePressIndex={this.savePressIndex}
+                          pressIndex={this.state.pressIndex}
+                          voiceLeftLoadingColor={this.props.voiceLeftLoadingColor}
+                          voiceRightLoadingColor={this.props.voiceRightLoadingColor}
+                          leftMessageTextStyle={this.props.leftMessageTextStyle}
+                          rightMessageTextStyle={this.props.rightMessageTextStyle}
+                      />}
+              />
+            </TouchableOpacity>
+            {
+              this.props.showInput
+                  ? <InputBar
+                      ImageComponent={ImageComponent}
+                      rootHeight={this.rootHeight}
+                      allPanelHeight={this.props.allPanelHeight}
+                      emojiIcon={this.props.emojiIcon}
+                      keyboardIcon={this.props.keyboardIcon}
+                      plusIcon={this.props.plusIcon}
+                      voiceIcon={this.props.voiceIcon}
+                      sendIcon={this.props.sendIcon}
+                      sendUnableIcon={this.props.sendUnableIcon}
+                      ref={e => (this.InputBar = e)}
+                      isIphoneX={this.isIphoneX}
+                      placeholder={this.props.placeholder}
+                      useVoice={this.props.useVoice}
+                      onMethodChange={this._changeMethod.bind(this)}
+                      showVoice={this.state.showVoice}
+                      onSubmitEditing={(type, content) => this._sendMessage(type, content)}
+                      messageContent={messageContent}
+                      textChange={this._changeText.bind(this)}
+                      onContentSizeChange={this._onContentSizeChange.bind(this)}
+                      xHeight={xHeight}
+                      onFocus={this._onFocus}
+                      voiceStart={this._onVoiceStart}
+                      voiceEnd={this._onVoiceEnd}
+                      isVoiceEnd={voiceEnd}
+                      voiceStatus={this.state.isVoiceContinue}
+                      changeVoiceStatus={this.changeVoiceStatus}
+                      inputChangeSize={inputChangeSize}
+                      hasPermission={hasPermission}
+                      pressInText={this.props.pressInText}
+                      pressOutText={this.props.pressOutText}
+                      isShowPanel={this.isShowPanel}
+                      showEmoji={this.tabEmoji}
+                      isEmojiShow={this.state.emojiShow}
+                      isPanelShow={this.state.panelShow}
+                      paddingHeight={this.paddingHeight}
+                      useEmoji={this.props.useEmoji}
+                      usePlus={this.props.usePlus}
+                      inputStyle={this.props.inputStyle}
+                      inputOutContainerStyle={this.props.inputOutContainerStyle}
+                      inputContainerStyle={this.props.inputContainerStyle}
+                      inputHeightFix={this.props.inputHeightFix}
+                  />
+                  : null
+            }
 
-          {
-            this.props.usePopView
-              ? <DelPanel
-                ImageComponent={ImageComponent}
-                messageSelected={this.state.messageSelected}
+            {
+              this.props.usePopView
+                  ? <DelPanel
+                      ImageComponent={ImageComponent}
+                      messageSelected={this.state.messageSelected}
+                      isIphoneX={this.isIphoneX}
+                      delPanelButtonStyle={this.props.delPanelButtonStyle}
+                      delPanelStyle={this.props.delPanelStyle}
+                      renderDelPanel={this.props.renderDelPanel}
+                      HeaderHeight={this.HeaderHeight}
+                      iphoneXBottomPadding={this.props.iphoneXBottomPadding}
+                      messageDelIcon={this.props.messageDelIcon}
+                      delMessage={this.props.delMessage}
+                      isInverted={this.isInverted}
+                      leftHeight={this.leftHeight}
+                  />
+                  : null
+            }
+            <PanelContainer
+                panelContainerBackgroundColor={this.props.panelContainerBackgroundColor}
+                visibleHeight={this.visibleHeight}
+                panelContainerHeight={panelContainerHeight}
+                usePlus={this.props.usePlus}
+                useEmoji={this.props.useEmoji}
+                panelHeight={this.panelHeight}
                 isIphoneX={this.isIphoneX}
-                delPanelButtonStyle={this.props.delPanelButtonStyle}
-                delPanelStyle={this.props.delPanelStyle}
-                renderDelPanel={this.props.renderDelPanel}
                 HeaderHeight={this.HeaderHeight}
+                allPanelHeight={this.props.allPanelHeight}
                 iphoneXBottomPadding={this.props.iphoneXBottomPadding}
-                messageDelIcon={this.props.messageDelIcon}
-                delMessage={this.props.delMessage}
-                isInverted={this.isInverted}
-                leftHeight={this.leftHeight}
-              />
-              : null
-          }
-          <PanelContainer
-            panelContainerBackgroundColor={this.props.panelContainerBackgroundColor}
-            visibleHeight={this.visibleHeight}
-            panelContainerHeight={panelContainerHeight}
-            usePlus={this.props.usePlus}
-            useEmoji={this.props.useEmoji}
-            panelHeight={this.panelHeight}
-            isIphoneX={this.isIphoneX}
-            HeaderHeight={this.HeaderHeight}
-            allPanelHeight={this.props.allPanelHeight}
-            iphoneXBottomPadding={this.props.iphoneXBottomPadding}
-            panelSource={this.props.panelSource}
-            renderPanelRow={this.props.renderPanelRow}
-            panelContainerStyle={this.props.panelContainerStyle}
-            ImageComponent={ImageComponent}
-            emojiHeight={this.emojiHeight}
-            onEmojiSelected={this._onEmojiSelected}
-          />
-          {
-            this.state.showVoice
-              ? <Voice
+                panelSource={this.props.panelSource}
+                renderPanelRow={this.props.renderPanelRow}
+                panelContainerStyle={this.props.panelContainerStyle}
                 ImageComponent={ImageComponent}
-                ref={(e) => (this.voice = e)}
-                sendVoice={(type, content) => this._sendMessage(type, content)}
-                changeVoiceStatus={this.changeVoiceStatus}
-                voiceStatus={this.state.isVoiceContinue}
-                audioPath={this.props.audioPath}
-                audioHasPermission={this.androidHasAudioPermission}
-                audioPermissionState={this.props.audioHasPermission}
-                voiceSpeakIcon={this.props.voiceSpeakIcon}
-                audioOnProgress={this.props.audioOnProgress}
-                audioOnFinish={this.props.audioOnFinish}
-                audioInitPath={this.props.audioInitPath}
-                audioRecord={this.props.audioRecord}
-                audioStopRecord={this.props.audioStopRecord}
-                audioPauseRecord={this.props.audioPauseRecord}
-                audioCurrentTime={this.props.audioCurrentTime}
-                audioResumeRecord={this.props.audioResumeRecord}
-                audioHandle={this.props.audioHandle}
-                setAudioHandle={this.props.setAudioHandle}
-                errorIcon={this.props.voiceErrorIcon}
-                cancelIcon={this.props.voiceCancelIcon}
-                errorText={this.props.voiceErrorText}
-                voiceCancelText={this.props.voiceCancelText}
-                voiceNoteText={this.props.voiceNoteText}
-                renderVoiceView={this.props.renderVoiceView}
-                voiceVolume={this.props.voiceVolume}
-              />
-              : null
-          }
-        </Animated.View>
-      </View>
+                emojiHeight={this.emojiHeight}
+                onEmojiSelected={this._onEmojiSelected}
+            />
+            {
+              this.state.showVoice
+                  ? <Voice
+                      ImageComponent={ImageComponent}
+                      ref={(e) => (this.voice = e)}
+                      sendVoice={(type, content) => this._sendMessage(type, content)}
+                      changeVoiceStatus={this.changeVoiceStatus}
+                      voiceStatus={this.state.isVoiceContinue}
+                      audioPath={this.props.audioPath}
+                      audioHasPermission={this.androidHasAudioPermission}
+                      audioPermissionState={this.props.audioHasPermission}
+                      voiceSpeakIcon={this.props.voiceSpeakIcon}
+                      audioOnProgress={this.props.audioOnProgress}
+                      audioOnFinish={this.props.audioOnFinish}
+                      audioInitPath={this.props.audioInitPath}
+                      audioRecord={this.props.audioRecord}
+                      audioStopRecord={this.props.audioStopRecord}
+                      audioPauseRecord={this.props.audioPauseRecord}
+                      audioCurrentTime={this.props.audioCurrentTime}
+                      audioResumeRecord={this.props.audioResumeRecord}
+                      audioHandle={this.props.audioHandle}
+                      setAudioHandle={this.props.setAudioHandle}
+                      errorIcon={this.props.voiceErrorIcon}
+                      cancelIcon={this.props.voiceCancelIcon}
+                      errorText={this.props.voiceErrorText}
+                      voiceCancelText={this.props.voiceCancelText}
+                      voiceNoteText={this.props.voiceNoteText}
+                      renderVoiceView={this.props.renderVoiceView}
+                      voiceVolume={this.props.voiceVolume}
+                  />
+                  : null
+            }
+          </Animated.View>
+        </View>
     )
   }
 }
@@ -899,7 +898,6 @@ ChatWindow.propTypes = {
   /* defaultProps */
   messageList: PropTypes.array.isRequired,
   inverted: PropTypes.bool,
-  isIPhoneX: PropTypes.bool.isRequired,
   lastReadAt: PropTypes.object,
   chatBackgroundImage: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onScroll: PropTypes.func,
@@ -917,7 +915,8 @@ ChatWindow.propTypes = {
   renderErrorMessage: PropTypes.func,
   renderChatBg: PropTypes.func,
   reSendMessage: PropTypes.func,
-  headerHeight: PropTypes.number.isRequired,
+  androidHeaderHeight: PropTypes.number.isRequired,
+  iphoneXHeaderPadding: PropTypes.number,
   iphoneXBottomPadding: PropTypes.number,
   showUserName: PropTypes.bool,
   showIsRead: PropTypes.bool,
@@ -1028,7 +1027,6 @@ ChatWindow.defaultProps = {
   chatType: 'friend',
   chatBackgroundImage: null,
   inverted: false,
-  headerHeight: 44,
   allPanelAnimateDuration: 100,
   messageList: [],
   showUserName: false,
@@ -1045,6 +1043,7 @@ ChatWindow.defaultProps = {
   useVoice: true,
   useEmoji: true,
   usePlus: true,
+  iphoneXHeaderPadding: 24, // 安全区域
   iphoneXBottomPadding: 34, // 安全区域
   onEndReachedThreshold: 0.1,
   usePopView: true,
@@ -1074,11 +1073,11 @@ ChatWindow.defaultProps = {
   onMessagePress: (type, index, content, message) => { console.log(type, index, content, message) },
   onMessageLongPress: (type, index, content, message) => { console.log('longPress', type, index, content, message) },
   renderMessageTime: (time) =>
-    <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
-      <View style={{ backgroundColor: '#e6e6e6', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16 }}>
-        <Text style={{ color: '#333', fontSize: 10 }}>{getCurrentTime(parseInt(time))}</Text>
-      </View>
-    </View>,
+      <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }}>
+        <View style={{ backgroundColor: '#e6e6e6', paddingVertical: 4, paddingHorizontal: 8, borderRadius: 16 }}>
+          <Text style={{ color: '#333', fontSize: 10 }}>{getCurrentTime(parseInt(time))}</Text>
+        </View>
+      </View>,
   placeholder: '请输入...',
   pressInText: '按住 说话',
   pressOutText: '送开 发送',
@@ -1110,6 +1109,7 @@ ChatWindow.defaultProps = {
     //   )
     // })
   },
+  androidHeaderHeight: 66,
   pressAvatar: (isSelf, targetId) => { console.log(isSelf, targetId) },
   voiceSpeakIcon: [
     require('../source/image/speak0.png'),
