@@ -432,6 +432,7 @@ export default class Example extends Component {
           panelSource={panelSource}
           renderPanelRow={this.renderPanelRow}
           inverted={inverted}
+          isIPhoneX
           chatBackgroundImage={chatBg}
           sendMessage={this.sendMessage}
           androidHeaderHeight={androidHeaderHeight}

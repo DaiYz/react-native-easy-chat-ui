@@ -41,7 +41,7 @@ class ChatWindow extends PureComponent {
     this.emojiHeight = new Animated.Value(0)
     // this.HeaderHeight = this.isIphoneX ? iphoneXHeaderPadding + this.iosHeaderHeight : Platform.OS === 'android' ? androidHeaderHeight : this.iosHeaderHeight
     this.HeaderHeight = headerHeight
-    this.listHeight = height - this.HeaderHeight - 64
+    this.listHeight = height - this.HeaderHeight
     this.isInverted = false
     this.rootHeight = 0
     this.androidHasAudioPermission = false
