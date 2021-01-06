@@ -215,7 +215,7 @@ react-native run-ios or react-native run-android
 ----- |  ------- | -----
  messageList | [] | 渲染消息列表
   inverted | false |  是否倒置
-  isIphoneX | false |  是否全面屏
+  isIPhoneX | false |  是否全面屏
   chatBackgroundImage | null | 聊天背景图片
  onScroll | () => {} | 同ListView属性
  onEndReachedThreshold | 0.1 | 同ListView属性
