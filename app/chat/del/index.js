@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, StyleSheet, Dimensions, Animated, TouchableOpacity } from 'react-native'
-const { height } = Dimensions.get('window')
+import { View, StyleSheet, Animated, TouchableOpacity } from 'react-native'
 
 export default class DelPanel extends PureComponent {
   constructor (props) {

@@ -19,7 +19,8 @@ import Voice from './VoiceView'
 import PopView from './components/pop-view'
 import ChatItem from './ChatItem'
 import { EMOJIS_ZH } from '../source/emojis'
-import InputBar from './InputBar'
+import InputBar from './InputBarControl'
+// import InputBar from './InputBar'
 import PanelContainer from './panelContainer'
 import DelPanel from './del'
 const { height, width } = Dimensions.get('window')
@@ -222,8 +223,15 @@ class ChatWindow extends PureComponent {
   }
 
   _onVoiceStart = () => {
-    this.setState({ voiceEnd: true })
-    this.voice.show()
+    if (Platform.OS === 'android') {
+      if (this.androidHasAudioPermission) {
+        this.setState({ voiceEnd: true })
+        this.voice.show()
+      }
+    } else {
+      this.setState({ voiceEnd: true })
+      this.voice.show()
+    }
   }
 
   _onVoiceEnd = () => {
@@ -667,7 +675,7 @@ class ChatWindow extends PureComponent {
   }
 
   render () {
-    const { messageList, allPanelHeight, inverted, chatBackgroundImage, chatType } = this.props
+    const { messageList, allPanelHeight, inverted, chatBackgroundImage, chatType, voiceCustom } = this.props
     const { messageContent, voiceEnd, inputChangeSize, hasPermission, xHeight, keyboardHeight, keyboardShow, panelShow, emojiShow } = this.state
     const currentList = messageList.slice().sort((a, b) => inverted
       ? (b.time - a.time)
@@ -816,6 +824,7 @@ class ChatWindow extends PureComponent {
                 inputOutContainerStyle={this.props.inputOutContainerStyle}
                 inputContainerStyle={this.props.inputContainerStyle}
                 inputHeightFix={this.props.inputHeightFix}
+                audioHasPermission={this.androidHasAudioPermission}
                 />
               : null
           }
@@ -857,36 +866,37 @@ class ChatWindow extends PureComponent {
             onEmojiSelected={this._onEmojiSelected}
           />
           {
-            this.state.showVoice
-              ? <Voice
-                ImageComponent={ImageComponent}
-                ref={(e) => (this.voice = e)}
-                sendVoice={(type, content) => this._sendMessage(type, content)}
-                changeVoiceStatus={this.changeVoiceStatus}
-                voiceStatus={this.state.isVoiceContinue}
-                audioPath={this.props.audioPath}
-                audioHasPermission={this.androidHasAudioPermission}
-                audioPermissionState={this.props.audioHasPermission}
-                voiceSpeakIcon={this.props.voiceSpeakIcon}
-                audioOnProgress={this.props.audioOnProgress}
-                audioOnFinish={this.props.audioOnFinish}
-                audioInitPath={this.props.audioInitPath}
-                audioRecord={this.props.audioRecord}
-                audioStopRecord={this.props.audioStopRecord}
-                audioPauseRecord={this.props.audioPauseRecord}
-                audioCurrentTime={this.props.audioCurrentTime}
-                audioResumeRecord={this.props.audioResumeRecord}
-                audioHandle={this.props.audioHandle}
-                setAudioHandle={this.props.setAudioHandle}
-                errorIcon={this.props.voiceErrorIcon}
-                cancelIcon={this.props.voiceCancelIcon}
-                errorText={this.props.voiceErrorText}
-                voiceCancelText={this.props.voiceCancelText}
-                voiceNoteText={this.props.voiceNoteText}
-                renderVoiceView={this.props.renderVoiceView}
-                voiceVolume={this.props.voiceVolume}
-              />
-              : null
+            voiceCustom ? null
+              : this.state.showVoice
+                ? <Voice
+                  ImageComponent={ImageComponent}
+                  ref={(e) => (this.voice = e)}
+                  sendVoice={(type, content) => this._sendMessage(type, content)}
+                  changeVoiceStatus={this.changeVoiceStatus}
+                  voiceStatus={this.state.isVoiceContinue}
+                  audioPath={this.props.audioPath}
+                  audioHasPermission={this.androidHasAudioPermission}
+                  audioPermissionState={this.props.audioHasPermission}
+                  voiceSpeakIcon={this.props.voiceSpeakIcon}
+                  audioOnProgress={this.props.audioOnProgress}
+                  audioOnFinish={this.props.audioOnFinish}
+                  audioInitPath={this.props.audioInitPath}
+                  audioRecord={this.props.audioRecord}
+                  audioStopRecord={this.props.audioStopRecord}
+                  audioPauseRecord={this.props.audioPauseRecord}
+                  audioCurrentTime={this.props.audioCurrentTime}
+                  audioResumeRecord={this.props.audioResumeRecord}
+                  audioHandle={this.props.audioHandle}
+                  setAudioHandle={this.props.setAudioHandle}
+                  errorIcon={this.props.voiceErrorIcon}
+                  cancelIcon={this.props.voiceCancelIcon}
+                  errorText={this.props.voiceErrorText}
+                  voiceCancelText={this.props.voiceCancelText}
+                  voiceNoteText={this.props.voiceNoteText}
+                  renderVoiceView={this.props.renderVoiceView}
+                  voiceVolume={this.props.voiceVolume}
+                  />
+                : null
           }
         </Animated.View>
       </View>
@@ -971,6 +981,7 @@ ChatWindow.propTypes = {
   usePlus: PropTypes.bool,
   /* voiceProps */
   useVoice: PropTypes.bool,
+  voiceCustom: PropTypes.bool,
   pressInText: PropTypes.string,
   pressOutText: PropTypes.string,
   voiceIcon: PropTypes.element,
@@ -1151,5 +1162,6 @@ ChatWindow.defaultProps = {
   inputHeightFix: 0,
   containerBackgroundColor: '#f5f5f5',
   showsVerticalScrollIndicator: false,
-  showIsRead: false
+  showIsRead: false,
+  voiceCustom: false
 }
