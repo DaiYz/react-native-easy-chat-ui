@@ -13,7 +13,7 @@
     "@react-native-community/viewpager": "^3.3.0",
     "moment": "^2.24.0",
     "react": "16.9.0",
-    "react-native": "0.61.5",
+    "react-native": "0.62.3",
     "react-native-audio": "^4.3.0",
     "react-native-device-info": "^8.0.1",
     "react-native-fast-image": "^7.0.2",
